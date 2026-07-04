@@ -1,0 +1,48 @@
+@font-face {
+  font-family: 'mc-font';
+  src: url('../fonts/mc_font.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --dw-font-family: 'mc-font', -apple-system, BlinkMacSystemFont, sans-serif;
+  // button 默认
+  --dw-color-bg: #6F6F6F;
+  --dw-color-bg-active: #2C2C2C;
+  --dw-color-bg-disabled: #2C2C2C;
+  --dw-color-text: #FFFFFF;
+  --dw-color-border: #000000;
+  --dw-color-hover-border: #ffffff;
+
+  // 主色调
+  --ui-color-primary: #4A90D9;
+  --ui-color-primary-hover: #357ABD;
+  --ui-color-primary-active: #2A5F9E;
+
+  // 功能色
+  --ui-color-success: #52C41A;
+  --ui-color-success-hover: #3DA012;
+  --ui-color-danger: #FF4D4F;
+  --ui-color-danger-hover: #D9363E;
+
+  // 中性色
+  --ui-color-text-secondary: #666666;
+  --ui-color-bg-disabled: #F5F5F5;
+
+  // 间距
+  --dw-spacing-xs: 4px;
+  --dw-spacing-sm: 8px;
+  --dw-spacing-md: 12px;
+  --dw-spacing-lg: 16px;
+  --dw-spacing-xl: 24px;
+
+  // 字号
+  --ui-font-size-sm: 12px;
+  --dw-font-size-base: 16px;
+  --ui-font-size-lg: 18px;
+
+  // 阴影
+  --ui-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.08);
+}

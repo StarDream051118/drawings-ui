@@ -1,0 +1,11 @@
+{
+  "name": "drawings-ui",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @drawings-ui/play dev",
+    "build": "pnpm --filter @drawings-ui/components build",
+    "docs:dev": "pnpm --filter @drawings-ui/docs dev",
+    "docs:build": "pnpm --filter @drawings-ui/docs build"
+  }
+}
