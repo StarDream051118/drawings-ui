@@ -9,14 +9,14 @@
 ::: details 查看代码
 ```vue
 <script setup lang="ts">
-import { UiButton } from '@drawings-ui/components'
+import { DwButton } from '@drawings-ui/components'
 </script>
 
 <template>
-  <UiButton>默认按钮</UiButton>
-  <UiButton type="primary">主要按钮</UiButton>
-  <UiButton type="success">成功按钮</UiButton>
-  <UiButton type="danger">危险按钮</UiButton>
+  <DwButton>默认按钮</DwButton>
+  <DwButton type="primary">主要按钮</DwButton>
+  <DwButton type="success">成功按钮</DwButton>
+  <DwButton type="danger">危险按钮</DwButton>
 </template>
 ```
 :::
@@ -28,9 +28,9 @@ import { UiButton } from '@drawings-ui/components'
 ::: details 查看代码
 ```vue
 <template>
-  <UiButton size="small">小号</UiButton>
-  <UiButton>中号</UiButton>
-  <UiButton size="large">大号</UiButton>
+  <DwButton size="small">小号</DwButton>
+  <DwButton>中号</DwButton>
+  <DwButton size="large">大号</DwButton>
 </template>
 ```
 :::
@@ -42,8 +42,8 @@ import { UiButton } from '@drawings-ui/components'
 ::: details 查看代码
 ```vue
 <template>
-  <UiButton disabled>禁用</UiButton>
-  <UiButton type="primary" disabled>禁用</UiButton>
+  <DwButton disabled>禁用</DwButton>
+  <DwButton type="primary" disabled>禁用</DwButton>
 </template>
 ```
 :::
@@ -55,8 +55,8 @@ import { UiButton } from '@drawings-ui/components'
 ::: details 查看代码
 ```vue
 <template>
-  <UiButton loading>加载中</UiButton>
-  <UiButton type="primary" loading>加载中</UiButton>
+  <DwButton loading>加载中</DwButton>
+  <DwButton type="primary" loading>加载中</DwButton>
 </template>
 ```
 :::

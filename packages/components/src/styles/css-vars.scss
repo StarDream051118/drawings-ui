@@ -12,9 +12,25 @@
   --dw-color-bg: #6F6F6F;
   --dw-color-bg-active: #2C2C2C;
   --dw-color-bg-disabled: #2C2C2C;
+
   --dw-color-text: #FFFFFF;
+  --dw-color-text-diabled: #A0A0A0;
+
   --dw-color-border: #000000;
   --dw-color-hover-border: #ffffff;
+
+  --dw-text-color-shadow: #3F3F3F;
+  --dw-text-disabled-color-shadow: #282828;
+
+  // button 主要
+  --dw-color-bg-primary: #00AA00;
+  --dw-color-bg-primary-active: #002A00;
+  --dw-color-bg-primary-disabled: #002A00;
+
+  // button 危险
+  --dw-color-bg-danger: #AA0000;
+  --dw-color-bg-danger-active: #2A0000;
+  --dw-color-bg-danger-disabled: #2A0000;
 
   // 主色调
   --ui-color-primary: #4A90D9;
@@ -36,7 +52,10 @@
   --dw-spacing-sm: 8px;
   --dw-spacing-md: 12px;
   --dw-spacing-lg: 16px;
-  --dw-spacing-xl: 24px;
+
+  // 宽度
+  --dw-width-md: 150px;
+  --dw-width--xl: 300px;
 
   // 字号
   --ui-font-size-sm: 12px;

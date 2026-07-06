@@ -1,13 +1,14 @@
 @use '../styles/variables.scss' as *;
 @use '../styles/mixins.scss' as *;
 
-.ui-button {
+.dw-button {
   @include flex-center;
-  gap: var(--ui-spacing-xs);
-  padding: var(--dw-spacing-md) var(--dw-spacing-xl);
+  gap: 4px;
+  padding: var(--dw-spacing-md) var(--dw-spacing-md);
   font-size: var(--dw-font-size-base);
   border: 3px solid var(--dw-color-border);
-  box-shadow: inset -3px 0 #00000038, inset 0 -6px #00000038, inset 0 3px #AAAAAA, inset 3px 0 #AAAAAA;
+  box-shadow: inset -3px 0 #00000038 ,inset 0 -6px #00000038, inset 3px 3px #FFFFFF66;
+  text-shadow: 1px 1px var(--dw-text-color-shadow);
   background: var(--dw-color-bg);
   color: var(--dw-color-text);
   user-select: none;
@@ -19,25 +20,25 @@
 
   &:active:not(:disabled) {
     background: var(--dw-color-bg-active);
+    border-color: var(--dw-color-hover-border);
     box-shadow: none;
   }
 
   &:disabled {
-    background: var(--ui-color-bg-disabled);
-    color: var(--ui-color-text-secondary);
+    background: var(--dw-color-bg-disabled);
+    color: var(--dw-color-text-diabled);
+    box-shadow: none;
+    text-shadow: 1px 1px var(--dw-text-disabled-color-shadow);
     cursor: not-allowed;
   }
 
   // 尺寸变体
   @each $size in $sizes {
     &--#{$size} {
-      @if $size == small {
-        padding: 2px 8px;
-        font-size: var(--ui-font-size-sm);
-        border-radius: var(--ui-radius-small);
+      @if $size == medium {
+        width: var(--dw-width-md);
       } @else if $size == large {
-        padding: var(--ui-spacing-md) var(--ui-spacing-xl);
-        font-size: var(--ui-font-size-lg);
+        width: var(--dw-width--xl);
       }
     }
   }
@@ -46,35 +47,22 @@
   @each $type in $types {
     &--#{$type} {
       @if $type == primary {
-        background: var(--dw-color-primary);
-        border-color: var(--dw-color-primary);
-        color: #fff;
+        background: var(--dw-color-bg-primary);
 
-        &:hover:not(:disabled) {
-          background: var(--dw-color-primary-hover);
-          border-color: var(--dw-color-primary-hover);
-        }
         &:active:not(:disabled) {
-          background: var(--dw-color-primary-active);
-          border-color: var(--dw-color-primary-active);
+          background: var(--dw-color-bg-primary-active);
         }
-      } @else if $type == success {
-        background: var(--ui-color-success);
-        border-color: var(--ui-color-success);
-        color: #fff;
-
-        &:hover:not(:disabled) {
-          background: var(--ui-color-success-hover);
-          border-color: var(--ui-color-success-hover);
+        &:disabled {
+          background: var(--dw-color-bg-primary-disabled);
         }
       } @else if $type == danger {
-        background: var(--ui-color-danger);
-        border-color: var(--ui-color-danger);
-        color: #fff;
+        background: var(--dw-color-bg-danger);
 
-        &:hover:not(:disabled) {
-          background: var(--ui-color-danger-hover);
-          border-color: var(--ui-color-danger-hover);
+        &:active:not(:disabled) {
+          background: var(--dw-color-bg-danger-active);
+        }
+        &:disabled {
+          background: var(--dw-color-bg-danger-disabled);
         }
       }
     }
@@ -87,6 +75,26 @@
     border-top-color: transparent;
     border-radius: 50%;
     animation: ui-spin 0.6s linear infinite;
+  }
+
+  &__icon {
+    display: inline-flex;
+    width: 1em;
+    height: 1em;
+    margin-right: var(--dw-spacing-xs);
+    vertical-align: middle;
+    filter: drop-shadow(1px 1px 0 var(--dw-text-color-shadow));
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 }
 

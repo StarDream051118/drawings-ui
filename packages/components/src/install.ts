@@ -1,7 +1,7 @@
 import type { App } from 'vue'
-import { UiButton } from './button'
+import { DwButton } from './button'
 
-const components = [UiButton]
+const components = [DwButton]
 
 function install(app: App) {
   components.forEach((comp) => {

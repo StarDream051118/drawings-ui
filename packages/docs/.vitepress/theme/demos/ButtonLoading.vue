@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { UiButton } from '@drawings-ui/components'
+import { DwButton } from '@drawings-ui/components'
 </script>
 
 <template>
   <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-    <UiButton loading>加载中</UiButton>
-    <UiButton type="primary" loading>加载中</UiButton>
-    <UiButton type="success" loading>加载中</UiButton>
-    <UiButton type="danger" loading>加载中</UiButton>
+    <DwButton loading>加载中</DwButton>
+    <DwButton type="primary" loading>加载中</DwButton>
+    <DwButton type="success" loading>加载中</DwButton>
+    <DwButton type="danger" loading>加载中</DwButton>
   </div>
 </template>

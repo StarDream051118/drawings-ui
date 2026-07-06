@@ -19,18 +19,18 @@ import '@drawings-ui/components/dist/style.css'
 createApp(App).use(DrawingsUI).mount('#app')
 ```
 
-**导入一次，全局可用** —— `.use(DrawingsUI)` 后所有组件已全局注册，模板里直接写 `<UiButton>` 即可，无需再单独 import。
+**导入一次，全局可用** —— `.use(DrawingsUI)` 后所有组件已全局注册，模板里直接写 `<DwButton>` 即可，无需再单独 import。
 
 ## 按需引入
 
 ```vue
 <script setup lang="ts">
-import { UiButton } from '@drawings-ui/components'
+import { DwButton } from '@drawings-ui/components'
 import '@drawings-ui/components/dist/style.css'
 </script>
 
 <template>
-  <UiButton type="primary">提交</UiButton>
+  <DwButton type="primary">提交</DwButton>
 </template>
 ```
 
@@ -44,7 +44,7 @@ import '@drawings-ui/components/dist/style.css'
 
 | 组件 | 标签名 |
 |------|--------|
-| Button | `<UiButton>` |
+| Button | `<DwButton>` |
 | Input | `<UiInput>` |
 | Dialog | `<UiDialog>` |
 
