@@ -7,7 +7,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@drawings-ui/components": "workspace:*",
+    "drawings-ui": "workspace:*",
     "vue": "^3.5.0"
   },
   "devDependencies": {

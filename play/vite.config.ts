@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@drawings-ui/components': resolve(__dirname, '../packages/components/src'),
+      'drawings-ui': resolve(__dirname, '../packages/components/src'),
     },
   },
   css: {

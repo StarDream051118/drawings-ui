@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { DwButton } from '@drawings-ui/components'
-import '@drawings-ui/components/styles/index.scss'
+import { DwButton } from 'drawings-ui'
+import 'drawings-ui/styles/index.scss'
 </script>
 
 <template>

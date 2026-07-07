@@ -1,5 +1,8 @@
 import { defineConfig } from 'vitepress'
-import { resolve } from 'path'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   title: 'DrawingsUI',
@@ -9,7 +12,7 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        '@drawings-ui/components': resolve(__dirname, '../../components/src'),
+        'drawings-ui': resolve(__dirname, '../../components/src'),
       },
     },
     css: {

@@ -8,10 +8,11 @@
     "preview": "vitepress preview"
   },
   "dependencies": {
-    "@drawings-ui/components": "workspace:*",
+    "drawings-ui": "workspace:*",
     "vue": "^3.5.0"
   },
   "devDependencies": {
+    "@types/node": "^26.1.0",
     "sass": "^1.80.0",
     "vitepress": "^1.5.0"
   }

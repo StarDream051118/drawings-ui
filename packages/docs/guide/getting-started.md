@@ -3,7 +3,7 @@
 ## 安装
 
 ```bash
-npm install @drawings-ui/components
+npm install drawings-ui
 ```
 
 需要 Vue `^3.4`（peerDependency）。
@@ -13,8 +13,8 @@ npm install @drawings-ui/components
 ```ts
 import { createApp } from 'vue'
 import App from './App.vue'
-import DrawingsUI from '@drawings-ui/components'
-import '@drawings-ui/components/dist/style.css'
+import DrawingsUI from 'drawings-ui'
+import 'drawings-ui/dist/style.css'
 
 createApp(App).use(DrawingsUI).mount('#app')
 ```
@@ -25,8 +25,8 @@ createApp(App).use(DrawingsUI).mount('#app')
 
 ```vue
 <script setup lang="ts">
-import { DwButton } from '@drawings-ui/components'
-import '@drawings-ui/components/dist/style.css'
+import { DwButton } from 'drawings-ui'
+import 'drawings-ui/dist/style.css'
 </script>
 
 <template>
@@ -51,7 +51,7 @@ import '@drawings-ui/components/dist/style.css'
 按钮按下时自动播放音效，全局关闭：
 
 ```ts
-import { useSound } from '@drawings-ui/components'
+import { useSound } from 'drawings-ui'
 
 const { setEnabled } = useSound()
 setEnabled(false) // 关闭所有按钮音效

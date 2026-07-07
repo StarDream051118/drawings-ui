@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DwButton } from '@drawings-ui/components'
+import { DwButton } from 'drawings-ui'
 </script>
 
 <template>

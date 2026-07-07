@@ -1,6 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
 import type { EnhanceAppContext } from 'vitepress'
-import '@drawings-ui/components/styles/index.scss'
+import 'drawings-ui/styles/index.scss'
 import ButtonBasic from './demos/ButtonBasic.vue'
 import ButtonSize from './demos/ButtonSize.vue'
 import ButtonActive from './demos/ButtonActive.vue'
