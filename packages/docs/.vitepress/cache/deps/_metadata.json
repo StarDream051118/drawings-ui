@@ -1,43 +1,43 @@
 {
-  "hash": "29cc2831",
-  "configHash": "0aa4b86d",
+  "hash": "f1c01a1b",
+  "configHash": "a5541573",
   "lockfileHash": "62173734",
-  "browserHash": "86077b20",
+  "browserHash": "f5cf230d",
   "optimized": {
     "vue": {
       "src": "../../../../../node_modules/.pnpm/vue@3.5.39_typescript@5.9.3/node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "24d0fe4a",
+      "fileHash": "7eaabcdc",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../../node_modules/.pnpm/@vue+devtools-api@7.7.10/node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "b6a85ce8",
+      "fileHash": "4c321c08",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../../node_modules/.pnpm/@vueuse+core@12.8.2_typescript@5.9.3/node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "b2d16902",
+      "fileHash": "d957593a",
       "needsInterop": false
     },
     "vitepress > @vueuse/integrations/useFocusTrap": {
       "src": "../../../../../node_modules/.pnpm/@vueuse+integrations@12.8.2_e93a2f3752a31cdaf1544453fe94dd44/node_modules/@vueuse/integrations/useFocusTrap.mjs",
       "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
-      "fileHash": "8de9bcc3",
+      "fileHash": "c05e2709",
       "needsInterop": false
     },
     "vitepress > mark.js/src/vanilla.js": {
       "src": "../../../../../node_modules/.pnpm/mark.js@8.11.1/node_modules/mark.js/src/vanilla.js",
       "file": "vitepress___mark__js_src_vanilla__js.js",
-      "fileHash": "2c98027f",
+      "fileHash": "75e0778f",
       "needsInterop": false
     },
     "vitepress > minisearch": {
       "src": "../../../../../node_modules/.pnpm/minisearch@7.2.0/node_modules/minisearch/dist/es/index.js",
       "file": "vitepress___minisearch.js",
-      "fileHash": "cff71e21",
+      "fileHash": "82145155",
       "needsInterop": false
     }
   },

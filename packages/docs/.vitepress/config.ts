@@ -1,9 +1,25 @@
 import { defineConfig } from 'vitepress'
+import { resolve } from 'path'
 
 export default defineConfig({
   title: 'DrawingsUI',
   description: 'Vue 3 + SCSS 组件库',
   base: '/drawings-ui/',
+
+  vite: {
+    resolve: {
+      alias: {
+        '@drawings-ui/components': resolve(__dirname, '../../components/src'),
+      },
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          silenceDeprecations: ['legacy-js-api'],
+        },
+      },
+    },
+  },
 
   themeConfig: {
     logo: '/logo.svg',

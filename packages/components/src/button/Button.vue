@@ -10,7 +10,7 @@ type IconProp = BuiltInIcon | (string & {})
 
 interface Props {
   type?: 'default' | 'primary' | 'danger'
-  size?: 'medium' | 'large'
+  size?: 'default' | 'medium' | 'large'
   disabled?: boolean
   loading?: boolean
   sound?: boolean
@@ -18,13 +18,16 @@ interface Props {
   bgColor?: string
   iconColor?: string
   color?: string
+  active?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'default',
+  size: 'default',
   disabled: false,
   loading: false,
   sound: true,
+  active: false,
 })
 
 const { play } = useSound()
@@ -52,7 +55,7 @@ function onPointerDown() {
 <template>
   <button
     class="dw-button"
-    :class="[`dw-button--${type}`, `dw-button--${size}`]"
+    :class="[`dw-button--${type}`, `dw-button--${size}`, active && 'dw-button--active-bg']"
     :style="buttonStyle"
     :disabled="disabled || loading"
     @pointerdown="onPointerDown"

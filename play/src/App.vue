@@ -5,16 +5,28 @@ import '@drawings-ui/components/styles/index.scss'
 
 <template>
   <div class="demo">
-    <h1>DrawingsUI Button 组件预览</h1>
+    <h1>DrawingsUI 组件预览</h1>
 
     <section>
-      <h2>类型：两种原生 + 两种定制</h2>
+      <h2>类型：一种原生 + 两种定制</h2>
       <div class="row2">
-        <DwButton class="row-item">默认</DwButton>
-        <DwButton class="row-item" disabled>默认（禁用）</DwButton>
+        <DwButton>默认</DwButton>
+        <DwButton disabled>默认（禁用）</DwButton>
         <DwButton type="danger">危险</DwButton>
         <DwButton type="danger" disabled>危险（禁用）</DwButton>
         <DwButton type="primary">主要</DwButton>
+        <DwButton type="primary" disabled>主要（禁用）</DwButton>
+      </div>
+    </section>
+
+    <section>
+      <h2>具有 active 的 Button</h2>
+      <div class="row2">
+        <DwButton :active="true">默认</DwButton>
+        <DwButton disabled>默认（禁用）</DwButton>
+        <DwButton :active="true" type="danger">危险</DwButton>
+        <DwButton type="danger" disabled>危险（禁用）</DwButton>
+        <DwButton :active="true" type="primary">主要</DwButton>
         <DwButton type="primary" disabled>主要（禁用）</DwButton>
       </div>
     </section>

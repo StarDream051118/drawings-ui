@@ -4,11 +4,11 @@
 .dw-button {
   @include flex-center;
   gap: 4px;
-  padding: var(--dw-spacing-md) var(--dw-spacing-md);
+  padding: var(--dw-spacing-md) var(--dw-spacing-lg);
   font-size: var(--dw-font-size-base);
   border: 3px solid var(--dw-color-border);
-  box-shadow: inset -3px 0 #00000038 ,inset 0 -6px #00000038, inset 3px 3px #FFFFFF66;
-  text-shadow: 1px 1px var(--dw-text-color-shadow);
+  box-shadow: var(--dw-shadow-base);
+  text-shadow: var(--dw-text-color-shadow);
   background: var(--dw-color-bg);
   color: var(--dw-color-text);
   user-select: none;
@@ -18,7 +18,7 @@
     border-color: var(--dw-color-hover-border);
   }
 
-  &:active:not(:disabled) {
+  &--active-bg:active:not(:disabled) {
     background: var(--dw-color-bg-active);
     border-color: var(--dw-color-hover-border);
     box-shadow: none;
@@ -28,7 +28,7 @@
     background: var(--dw-color-bg-disabled);
     color: var(--dw-color-text-diabled);
     box-shadow: none;
-    text-shadow: 1px 1px var(--dw-text-disabled-color-shadow);
+    text-shadow: var(--dw-text-disabled-color-shadow);
     cursor: not-allowed;
   }
 
@@ -49,7 +49,7 @@
       @if $type == primary {
         background: var(--dw-color-bg-primary);
 
-        &:active:not(:disabled) {
+        &.dw-button--active-bg:active:not(:disabled) {
           background: var(--dw-color-bg-primary-active);
         }
         &:disabled {
@@ -58,7 +58,7 @@
       } @else if $type == danger {
         background: var(--dw-color-bg-danger);
 
-        &:active:not(:disabled) {
+        &.dw-button--active-bg:active:not(:disabled) {
           background: var(--dw-color-bg-danger-active);
         }
         &:disabled {
