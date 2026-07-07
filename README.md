@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="packages/docs/components/title.png" alt="DrawingsUI" />
+  <img src="title.png" alt="DrawingsUI" />
 </p>
 
 <p align="center">
