@@ -14,7 +14,7 @@ npm install drawings-ui
 import { createApp } from 'vue'
 import App from './App.vue'
 import DrawingsUI from 'drawings-ui'
-import 'drawings-ui/dist/style.css'
+import 'drawings-ui/style.css'
 
 createApp(App).use(DrawingsUI).mount('#app')
 ```
@@ -26,7 +26,7 @@ createApp(App).use(DrawingsUI).mount('#app')
 ```vue
 <script setup lang="ts">
 import { DwButton } from 'drawings-ui'
-import 'drawings-ui/dist/style.css'
+import 'drawings-ui/style.css'
 </script>
 
 <template>
@@ -37,6 +37,16 @@ import 'drawings-ui/dist/style.css'
 ::: tip
 样式文件 `style.css` 必须引入一次，包含所有组件的样式。
 :::
+
+## 字体
+
+组件库使用 Minecraft 像素字体，如需使用请额外引入：
+
+```ts
+import 'drawings-ui/fonts.css'
+```
+
+不引入则使用系统默认字体。
 
 ## 组件命名
 

@@ -21,7 +21,7 @@ declare module 'drawings-ui/styles/index.scss' {
   export default content
 }
 
-declare module 'drawings-ui/dist/style.css' {
+declare module 'drawings-ui/style.css' {
   const content: string
   export default content
 }
