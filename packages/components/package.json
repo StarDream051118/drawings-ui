@@ -1,6 +1,6 @@
 {
   "name": "drawings-ui",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "main": "./dist/drawings-ui.cjs",
   "module": "./dist/drawings-ui.js",
