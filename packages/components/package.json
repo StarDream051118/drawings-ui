@@ -1,5 +1,5 @@
 {
-  "name": "@stardream051118/drawings-ui",
+  "name": "@star-dream051118/drawings-ui",
   "version": "0.0.1",
   "type": "module",
   "main": "./dist/drawings-ui.cjs",

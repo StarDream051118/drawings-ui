@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm --filter @drawings-ui/play dev",
-    "build": "pnpm --filter @stardream051118/drawings-ui build",
+    "build": "pnpm --filter @star-dream051118/drawings-ui build",
     "docs:dev": "pnpm --filter @drawings-ui/docs dev",
     "docs:build": "pnpm --filter @drawings-ui/docs build"
   }

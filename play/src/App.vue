@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { DwButton } from '@stardream051118/drawings-ui'
-import '@stardream051118/drawings-ui/styles/index.scss'
+import { DwButton } from '@star-dream051118/drawings-ui'
+import '@star-dream051118/drawings-ui/styles/index.scss'
 </script>
 
 <template>

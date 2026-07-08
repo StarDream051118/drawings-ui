@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DwButton } from '@stardream051118/drawings-ui'
+import { DwButton } from '@star-dream051118/drawings-ui'
 import rightIcon from '../icons/right.svg'
 import closeIcon from '../icons/close.svg'
 import heartIcon from '../icons/heart.svg'

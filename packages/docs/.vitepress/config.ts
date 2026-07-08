@@ -12,7 +12,7 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        '@stardream051118/drawings-ui': resolve(__dirname, '../../components/src'),
+        '@star-dream051118/drawings-ui': resolve(__dirname, '../../components/src'),
       },
     },
     css: {
