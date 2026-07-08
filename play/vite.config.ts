@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      'drawings-ui': resolve(__dirname, '../packages/components/src'),
+      '@stardream051118/drawings-ui': resolve(__dirname, '../packages/components/src'),
     },
   },
   css: {

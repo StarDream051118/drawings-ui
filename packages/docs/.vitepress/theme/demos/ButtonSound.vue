@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { DwButton } from 'drawings-ui'
+import { DwButton } from '@stardream051118/drawings-ui'
 </script>
 
 <template>
   <div class="row1">
-  <DwButton>有音效</DwButton>
-  <DwButton :sound="false">无音效</DwButton>
+    <DwButton>有音效</DwButton>
+    <DwButton :sound="false">无音效</DwButton>
   </div>
 </template>

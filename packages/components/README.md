@@ -21,7 +21,7 @@ DrawingsUI 是一套基于 Vue 3 + TypeScript + SCSS 的 UI 组件库，采用 M
 ### 安装
 
 ```bash
-npm install drawings-ui
+npm install @stardream051118/drawings-ui
 ```
 
 需要 Vue `^3.4`（peerDependency）。
@@ -31,8 +31,8 @@ npm install drawings-ui
 ```ts
 import { createApp } from 'vue'
 import App from './App.vue'
-import DrawingsUI from 'drawings-ui'
-import 'drawings-ui/style.css'
+import DrawingsUI from '@stardream051118/drawings-ui'
+import '@stardream051118/drawings-ui/style.css'
 
 createApp(App).use(DrawingsUI).mount('#app')
 ```
@@ -43,8 +43,8 @@ createApp(App).use(DrawingsUI).mount('#app')
 
 ```vue
 <script setup lang="ts">
-import { DwButton } from 'drawings-ui'
-import 'drawings-ui/style.css'
+import { DwButton } from '@stardream051118/drawings-ui'
+import '@stardream051118/drawings-ui/style.css'
 </script>
 
 <template>
@@ -59,7 +59,7 @@ import 'drawings-ui/style.css'
 组件库使用 Minecraft 像素字体，如需使用请额外引入：
 
 ```ts
-import 'drawings-ui/fonts.css'
+import '@stardream051118/drawings-ui/fonts.css'
 ```
 
 不引入则使用系统默认字体。
@@ -77,7 +77,7 @@ import 'drawings-ui/fonts.css'
 按钮按下时自动播放音效，全局关闭：
 
 ```ts
-import { useSound } from 'drawings-ui'
+import { useSound } from '@stardream051118/drawings-ui'
 
 const { setEnabled } = useSound()
 setEnabled(false) // 关闭所有按钮音效
@@ -101,7 +101,7 @@ setEnabled(false) // 关闭所有按钮音效
 }
 ```
 
-详见 [设计 Token](https://shenyuanor.github.io/drawings-ui/guide/design-tokens)。
+详见 [设计 Token](https://shenyuanor.github.io/@stardream051118/drawings-ui/guide/design-tokens)。
 
 ## 许可
 

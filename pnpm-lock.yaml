@@ -31,7 +31,7 @@ importers:
 
   packages/docs:
     dependencies:
-      drawings-ui:
+      '@stardream051118/drawings-ui':
         specifier: workspace:*
         version: link:../components
       vue:
@@ -50,7 +50,7 @@ importers:
 
   play:
     dependencies:
-      drawings-ui:
+      '@stardream051118/drawings-ui':
         specifier: workspace:*
         version: link:../packages/components
       vue:

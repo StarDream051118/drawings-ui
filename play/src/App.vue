@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { DwButton } from 'drawings-ui'
-import 'drawings-ui/styles/index.scss'
+import { DwButton } from '@stardream051118/drawings-ui'
+import '@stardream051118/drawings-ui/styles/index.scss'
 </script>
 
 <template>
@@ -8,7 +8,7 @@ import 'drawings-ui/styles/index.scss'
     <h1>DrawingsUI 组件预览</h1>
 
     <section>
-      <h2>类型：一种原生 + 两种定制</h2>
+      <h2>类型：一种原�?+ 两种定制</h2>
       <div class="row2">
         <DwButton>默认</DwButton>
         <DwButton disabled>默认（禁用）</DwButton>
@@ -20,7 +20,7 @@ import 'drawings-ui/styles/index.scss'
     </section>
 
     <section>
-      <h2>具有 active 的 Button</h2>
+      <h2>具有 active �?Button</h2>
       <div class="row2">
         <DwButton :active="true">默认</DwButton>
         <DwButton disabled>默认（禁用）</DwButton>
@@ -51,7 +51,7 @@ import 'drawings-ui/styles/index.scss'
         <DwButton icon="right">确认</DwButton>
         <DwButton icon="close">关闭</DwButton>
         <DwButton icon="settings">设置</DwButton>
-        <DwButton icon="state">状态</DwButton>
+        <DwButton icon="state">状�?/DwButton>
         <DwButton icon="search">搜索</DwButton>
         <DwButton icon="chest">箱子</DwButton>
         <DwButton icon="heart">收藏</DwButton>
@@ -59,7 +59,7 @@ import 'drawings-ui/styles/index.scss'
     </section>
 
     <section>
-      <h2>自定义Icon 与 Button颜色 与 Color颜色</h2>
+      <h2>自定义Icon �?Button颜色 �?Color颜色</h2>
       <div class="row1">
         <DwButton style="width: 200px;" bgColor="#FF55FF" iconColor="#C700C7" color="#FFBEFF" icon="heart">收藏</DwButton>
       </div>

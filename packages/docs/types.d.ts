@@ -1,4 +1,9 @@
-declare module 'drawings-ui' {
+declare module '*.svg' {
+  const content: string
+  export default content
+}
+
+declare module '@stardream051118/drawings-ui' {
   import type { App, DefineComponent } from 'vue'
 
   export const DwButton: DefineComponent<any, any, any>
@@ -16,12 +21,12 @@ declare module 'drawings-ui' {
   export default { install: typeof install }
 }
 
-declare module 'drawings-ui/styles/index.scss' {
+declare module '@stardream051118/drawings-ui/styles/index.scss' {
   const content: string
   export default content
 }
 
-declare module 'drawings-ui/style.css' {
+declare module '@stardream051118/drawings-ui/style.css' {
   const content: string
   export default content
 }

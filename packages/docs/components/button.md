@@ -120,10 +120,16 @@
 <button-demos-custom />
 
 ```vue
+<script setup lang="ts">
+import rightIcon from '../icons/right.svg'
+import closeIcon from '../icons/close.svg'
+import heartIcon from '../icons/heart.svg'
+</script>
+
 <template>
-  <DwButton icon="./icons/right.svg">确认</DwButton>
-  <DwButton icon="./icons/close.svg">关闭</DwButton>
-  <DwButton icon="./icons/heart.svg">收藏</DwButton>
+  <DwButton :icon="rightIcon">确认</DwButton>
+  <DwButton :icon="closeIcon">关闭</DwButton>
+  <DwButton :icon="heartIcon">收藏</DwButton>
 </template>
 ```
 
