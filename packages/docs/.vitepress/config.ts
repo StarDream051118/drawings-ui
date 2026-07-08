@@ -50,7 +50,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/your-name/drawings-ui' },
+      { icon: 'github', link: 'https://github.com/StarDream051118/drawings-ui' },
     ],
 
     footer: {
