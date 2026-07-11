@@ -105,7 +105,7 @@ setEnabled(false) // 关闭所有按钮音效
 }
 ```
 
-详见 [设计 Token](https://shenyuanor.github.io/@star-dream051118/drawings-ui/guide/design-tokens)。
+详见 [设计 Token](https://stardream051118.github.io/drawings-ui/guide/design-tokens.html)。
 
 ## 许可
 
