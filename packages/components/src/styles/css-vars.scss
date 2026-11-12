@@ -9,7 +9,9 @@
   --dw-color-text-diabled: #A0A0A0;
 
   --dw-color-border: #000000;
-  --dw-color-hover-border: #ffffff;
+  // hover 与选中态共用的高亮描边；旧名 --dw-color-hover-border 保留为别名，避免破坏已有主题定制
+  --dw-color-border-active: #ffffff;
+  --dw-color-hover-border: var(--dw-color-border-active);
 
   // button 主要
   --dw-color-bg-primary: #00AA00;

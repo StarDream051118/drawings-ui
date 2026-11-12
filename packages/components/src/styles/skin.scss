@@ -1,0 +1,97 @@
+// Minecraft 风格「皮肤」层
+// 只描述外观（描边、立体阴影、文字压印、配色），不绑定元素、不绑定状态选择器，
+// 由各组件决定在什么选择器上 @include，避免 Button / Tab 各写一套重复样式。
+@use './mixins.scss' as *;
+
+// 基础皮肤：布局 + 描边 + 立体阴影 + 默认配色 + hover 描边
+// $padding / $font-size / $gap 开放为参数，默认值等于 Button 的现有取值
+@mixin dw-skin-base(
+  $padding: var(--dw-spacing-md) var(--dw-spacing-lg),
+  $font-size: var(--dw-font-size-base),
+  $gap: 4px
+) {
+  @include flex-center;
+  gap: $gap;
+  padding: $padding;
+  font-size: $font-size;
+  border: 3px solid var(--dw-color-border);
+  box-shadow: var(--dw-shadow-base);
+  text-shadow: var(--dw-text-color-shadow);
+  background: var(--dw-color-bg);
+  color: var(--dw-color-text);
+  user-select: none;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    border-color: var(--dw-color-border-active);
+  }
+}
+
+// 按下观感：底色变深、去掉立体投影（像被按进去）
+@mixin dw-skin-pressed {
+  background: var(--dw-color-bg-active);
+  border-color: var(--dw-color-border-active);
+  box-shadow: none;
+}
+
+// 禁用观感
+@mixin dw-skin-disabled {
+  background: var(--dw-color-bg-disabled);
+  color: var(--dw-color-text-diabled);
+  box-shadow: none;
+  text-shadow: var(--dw-text-disabled-color-shadow);
+  cursor: not-allowed;
+}
+
+// 类型底色
+@mixin dw-skin-type($type) {
+  @if $type == primary {
+    background: var(--dw-color-bg-primary);
+  } @else if $type == danger {
+    background: var(--dw-color-bg-danger);
+  }
+}
+
+// 类型底色 · 按下
+@mixin dw-skin-type-pressed($type) {
+  @if $type == primary {
+    background: var(--dw-color-bg-primary-active);
+  } @else if $type == danger {
+    background: var(--dw-color-bg-danger-active);
+  }
+}
+
+// 类型底色 · 禁用
+@mixin dw-skin-type-disabled($type) {
+  @if $type == primary {
+    background: var(--dw-color-bg-primary-disabled);
+  } @else if $type == danger {
+    background: var(--dw-color-bg-danger-disabled);
+  }
+}
+
+// 尺寸：现有 size 只控制固定宽度，靠 $fixed 开关。
+// Button 传 true 保持 150px / 300px；Tab 这类需要自适应宽度的组件不要开启。
+@mixin dw-skin-size($size, $fixed: false) {
+  @if $fixed {
+    @if $size == medium {
+      width: var(--dw-width-md);
+    } @else if $size == large {
+      width: var(--dw-width--xl);
+    }
+  }
+}
+
+// 选中观感 · 描边式（默认）：只高亮描边
+@mixin dw-skin-selected-border {
+  border-color: var(--dw-color-border-active);
+}
+
+// 选中观感 · 按压式：借用 Button 禁用态的深底 + 去投影，但保留白字与文字压印
+@mixin dw-skin-selected-pressed {
+  background: var(--dw-color-bg-active);
+  border-color: var(--dw-color-border-active);
+  box-shadow: none;
+  color: var(--dw-color-text);
+  text-shadow: var(--dw-text-color-shadow);
+}

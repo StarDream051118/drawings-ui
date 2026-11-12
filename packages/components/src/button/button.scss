@@ -1,71 +1,36 @@
 @use '../styles/variables.scss' as *;
-@use '../styles/mixins.scss' as *;
+@use '../styles/skin.scss' as *;
 @use '../styles/css-vars.scss';
 @use '../styles/reset.scss';
 
 .dw-button {
-  @include flex-center;
-  gap: 4px;
-  padding: var(--dw-spacing-md) var(--dw-spacing-lg);
-  font-size: var(--dw-font-size-base);
-  border: 3px solid var(--dw-color-border);
-  box-shadow: var(--dw-shadow-base);
-  text-shadow: var(--dw-text-color-shadow);
-  background: var(--dw-color-bg);
-  color: var(--dw-color-text);
-  user-select: none;
-  white-space: nowrap;
-
-  &:hover:not(:disabled) {
-    border-color: var(--dw-color-hover-border);
-  }
+  @include dw-skin-base;
 
   &--active-bg:active:not(:disabled) {
-    background: var(--dw-color-bg-active);
-    border-color: var(--dw-color-hover-border);
-    box-shadow: none;
+    @include dw-skin-pressed;
   }
 
   &:disabled {
-    background: var(--dw-color-bg-disabled);
-    color: var(--dw-color-text-diabled);
-    box-shadow: none;
-    text-shadow: var(--dw-text-disabled-color-shadow);
-    cursor: not-allowed;
+    @include dw-skin-disabled;
   }
 
   // 尺寸变体
   @each $size in $sizes {
     &--#{$size} {
-      @if $size == medium {
-        width: var(--dw-width-md);
-      } @else if $size == large {
-        width: var(--dw-width--xl);
-      }
+      @include dw-skin-size($size, $fixed: true);
     }
   }
 
   // 类型变体
   @each $type in $types {
     &--#{$type} {
-      @if $type == primary {
-        background: var(--dw-color-bg-primary);
+      @include dw-skin-type($type);
 
-        &.dw-button--active-bg:active:not(:disabled) {
-          background: var(--dw-color-bg-primary-active);
-        }
-        &:disabled {
-          background: var(--dw-color-bg-primary-disabled);
-        }
-      } @else if $type == danger {
-        background: var(--dw-color-bg-danger);
-
-        &.dw-button--active-bg:active:not(:disabled) {
-          background: var(--dw-color-bg-danger-active);
-        }
-        &:disabled {
-          background: var(--dw-color-bg-danger-disabled);
-        }
+      &.dw-button--active-bg:active:not(:disabled) {
+        @include dw-skin-type-pressed($type);
+      }
+      &:disabled {
+        @include dw-skin-type-disabled($type);
       }
     }
   }

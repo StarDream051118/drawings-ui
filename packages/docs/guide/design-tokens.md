@@ -14,7 +14,8 @@ DrawingsUI 通过 CSS 自定义属性实现主题系统，你可以在运行时�
 | `--dw-color-text` | `#FFFFFF` | 文字颜色 |
 | `--dw-color-text-diabled` | `#A0A0A0` | 禁用文字颜色 |
 | `--dw-color-border` | `#000000` | 边框色 |
-| `--dw-color-hover-border` | `#FFFFFF` | 悬浮边框色 |
+| `--dw-color-border-active` | `#FFFFFF` | hover / 选中描边色 |
+| `--dw-color-hover-border` | `var(--dw-color-border-active)` | 旧名，保留兼容 |
 | `--dw-text-color-shadow` | `#3F3F3F` | 文字阴影色 |
 | `--dw-text-disabled-color-shadow` | `#282828` | 禁用阴影色 |
 
