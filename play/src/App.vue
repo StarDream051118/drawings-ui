@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { DwButton } from '@star-dream051118/drawings-ui'
+import { ref } from 'vue'
+import { DwButton, DwTabs } from '@star-dream051118/drawings-ui'
 import '@star-dream051118/drawings-ui/styles/index.scss'
+import '@star-dream051118/drawings-ui/styles/font.scss'
+
+const tab = ref(0)
+const pressedTab = ref(0)
 </script>
 
 <template>
@@ -62,6 +67,15 @@ import '@star-dream051118/drawings-ui/styles/index.scss'
       <h2>自定义 Icon 与 Button 颜色 与 Color 颜色</h2>
       <div class="row1">
         <DwButton style="width: 200px;" bgColor="#FF55FF" iconColor="#C700C7" color="#FFBEFF" icon="heart">收藏</DwButton>
+      </div>
+    </section>
+
+    <section>
+      <h2>Tabs</h2>
+      <div class="row2">
+        <DwTabs v-model="tab" :labels="['标签一', '标签二', '标签三']" />
+        <DwTabs v-model="pressedTab" :labels="['按压式', '选中', '效果']" active-effect="pressed" />
+        <DwTabs v-model="tab" :labels="['120px', '数值宽度', '测试']" :size="120" />
       </div>
     </section>
   </div>

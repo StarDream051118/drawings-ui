@@ -1,0 +1,81 @@
+@use '../styles/variables.scss' as *;
+@use '../styles/skin.scss' as *;
+
+.dw-tab-button {
+  @include dw-skin-base($padding: var(--dw-spacing-sm) var(--dw-spacing-md));
+  flex: 0 0 auto;
+
+  // 键盘可见焦点（鼠标点击不显示）
+  &:focus-visible {
+    outline: 2px solid var(--dw-color-border-active);
+    outline-offset: 2px;
+  }
+
+  // 按下瞬间
+  &:active:not(:disabled):not([aria-disabled='true']) {
+    @include dw-skin-pressed;
+  }
+
+  // 禁用：用 aria-disabled 而不是 disabled，保证仍可被键盘聚焦
+  &:disabled,
+  &[aria-disabled='true'] {
+    @include dw-skin-disabled;
+
+    // 盖掉 base 里的 hover 描边
+    &:hover {
+      border-color: var(--dw-color-border);
+    }
+  }
+
+  @each $type in $types {
+    &--#{$type} {
+      @include dw-skin-type($type);
+
+      &:active:not(:disabled):not([aria-disabled='true']) {
+        @include dw-skin-type-pressed($type);
+      }
+
+      &:disabled,
+      &[aria-disabled='true'] {
+        @include dw-skin-type-disabled($type);
+      }
+
+      // 按压式选中 + 类型底色：取该类型的深色底，但文字仍是白色
+      @if $type != default {
+        &.dw-tab-button--active-pressed[aria-selected='true'] {
+          background: var(--dw-color-bg-#{$type}-active);
+        }
+      }
+    }
+  }
+
+  // 选中态必须放在类型循环之后：同权重，靠书写顺序覆盖类型底色
+  &[aria-selected='true'] {
+    @include dw-skin-selected-border;
+  }
+
+  // 按压式选中优先级更高（0,3,0），不受上面顺序影响
+  &--active-pressed[aria-selected='true'] {
+    @include dw-skin-selected-pressed;
+  }
+
+  &__icon {
+    display: inline-flex;
+    width: 1em;
+    height: 1em;
+    margin-right: var(--dw-spacing-xs);
+    vertical-align: middle;
+    filter: drop-shadow(1px 1px 0 var(--dw-text-color-shadow));
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}

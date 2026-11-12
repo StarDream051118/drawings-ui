@@ -59,6 +59,7 @@
 | `size` | `default` | `auto` |
 | `size` | `medium` | `150px` |
 | `size` | `large` | `300px` |
+| `size` | `number` | 该数值 `px`，例如 `:size="120"` |
 
 ```vue
 <template>
@@ -183,7 +184,7 @@ import heartIcon from '../icons/heart.svg'
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | `type` | 按钮类型 | `'default' \| 'primary' \| 'danger'` | `'default'` |
-| `size` | 按钮尺寸 | `'default' \| 'medium' \| 'large'` | `'default'` |
+| `size` | 按钮尺寸，数字表示宽度 px | `'default' \| 'medium' \| 'large' \| number` | `'default'` |
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `active` | 是否激活状态 | `boolean` | `false` |
 | `sound` | 是否播放音效 | `boolean` | `true` |
@@ -238,7 +239,7 @@ import heartIcon from '../icons/heart.svg'
 | `--dw-color-text` | 文字颜色 |
 | `--dw-color-text-diabled` | 禁用文字颜色 |
 | `--dw-color-border` | 边框色 |
-| `--dw-color-hover-border` | 悬浮边框色 |
+| `--dw-color-border-active` | hover / 选中描边色（原 `--dw-color-hover-border`，旧名保留为别名） |
 | `--dw-color-bg-primary` | primary 背景色 |
 | `--dw-color-bg-primary-active` | primary 按下背景色 |
 | `--dw-color-bg-primary-disabled` | primary 禁用背景色 |

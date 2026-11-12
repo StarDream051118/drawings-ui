@@ -1,0 +1,9 @@
+@use '../styles/variables.scss' as *;
+
+.dw-tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--dw-spacing-xs);
+  max-width: 100%;
+}

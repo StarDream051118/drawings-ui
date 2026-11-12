@@ -7,10 +7,12 @@ import { SOUNDS } from '../utils/sounds'
 defineOptions({ name: 'DwButton' })
 
 type IconProp = BuiltInIcon | (string & {})
+// 固定尺寸用字符串，自定义宽度直接传数字（单位 px）
+type SizeProp = 'default' | 'medium' | 'large' | number
 
 interface Props {
   type?: 'default' | 'primary' | 'danger'
-  size?: 'default' | 'medium' | 'large'
+  size?: SizeProp
   disabled?: boolean
   loading?: boolean
   sound?: boolean
@@ -39,10 +41,13 @@ const isUrl = computed(() => {
 })
 const iconSvg = computed(() => props.icon ? getIconSvg(props.icon) : null)
 
+const sizeClass = computed(() => typeof props.size === 'string' ? `dw-button--${props.size}` : '')
+
 const buttonStyle = computed(() => {
   const style: Record<string, string> = {}
   if (props.bgColor) style.background = props.bgColor
   if (props.color) style.color = props.color
+  if (typeof props.size === 'number') style.width = `${props.size}px`
   return style
 })
 
@@ -55,7 +60,7 @@ function onPointerDown() {
 <template>
   <button
     class="dw-button"
-    :class="[`dw-button--${type}`, `dw-button--${size}`, active && 'dw-button--active-bg']"
+    :class="[`dw-button--${type}`, sizeClass, active && 'dw-button--active-bg']"
     :style="buttonStyle"
     :disabled="disabled || loading"
     @pointerdown="onPointerDown"
