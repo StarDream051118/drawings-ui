@@ -6,6 +6,10 @@ import '@star-dream051118/drawings-ui/styles/font.scss'
 
 const tab = ref(0)
 const pressedTab = ref(0)
+const sizeTab = ref(0)
+const mediumTab = ref(0)
+const largeTab = ref(0)
+const equalTab = ref(0)
 </script>
 
 <template>
@@ -83,20 +87,20 @@ const pressedTab = ref(0)
           <DwTabButton>选中</DwTabButton>
           <DwTabButton>效果</DwTabButton>
         </DwTabs>
-        <DwTabs v-model="tab" :size="120">
+        <DwTabs v-model="sizeTab" :size="120">
           <DwTabButton>120px</DwTabButton>
           <DwTabButton>数值宽度</DwTabButton>
           <DwTabButton>测试</DwTabButton>
         </DwTabs>
-        <DwTabs v-model="tab" size="medium">
+        <DwTabs v-model="mediumTab" size="medium">
           <DwTabButton>中号</DwTabButton>
           <DwTabButton>150px</DwTabButton>
         </DwTabs>
-        <DwTabs v-model="tab" size="large">
+        <DwTabs v-model="largeTab" size="large">
           <DwTabButton>大号</DwTabButton>
           <DwTabButton>300px</DwTabButton>
         </DwTabs>
-        <DwTabs v-model="tab" width-mode="equal">
+        <DwTabs v-model="equalTab" width-mode="equal">
           <DwTabButton>首页</DwTabButton>
           <DwTabButton>个人设置</DwTabButton>
           <DwTabButton>关于我们团队</DwTabButton>

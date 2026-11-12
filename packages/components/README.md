@@ -71,6 +71,7 @@ import '@star-dream051118/drawings-ui/fonts.css'
 | 组件 | 标签名 |
 |------|--------|
 | Button | `<DwButton>` |
+| Tabs | `<DwTabs>` + `<DwTabButton>` |
 
 ### 音效
 

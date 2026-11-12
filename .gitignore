@@ -2,3 +2,6 @@ node_modules
 dist
 .vite
 *.local
+
+# VitePress 生成物
+packages/docs/.vitepress/cache
