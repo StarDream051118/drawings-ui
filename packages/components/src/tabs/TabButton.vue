@@ -7,11 +7,8 @@ import { TABS_CONTEXT } from './context'
 
 defineOptions({ name: 'DwTabButton' })
 
-type SizeProp = 'default' | 'medium' | 'large' | number
-
 interface Props {
   type?: 'default' | 'primary' | 'danger'
-  size?: SizeProp
   disabled?: boolean
   sound?: boolean
   icon?: string
@@ -42,7 +39,8 @@ const index = computed(() => tabs ? tabs.order.value.indexOf(self) : -1)
 const isActive = computed(() => tabs ? tabs.activeIndex.value === index.value : false)
 
 const resolvedType = computed(() => props.type ?? tabs?.defaults.type ?? 'default')
-const resolvedSize = computed(() => props.size ?? tabs?.defaults.size ?? 'default')
+// 尺寸只由 DwTabs 控制：整条标签栏统一宽度，子标签不单独设置
+const resolvedSize = computed(() => tabs?.defaults.size ?? 'default')
 const resolvedDisabled = computed(() => props.disabled || (tabs?.defaults.disabled ?? false))
 const resolvedSound = computed(() => props.sound && (tabs?.defaults.sound ?? true))
 const resolvedEffect = computed(() => props.activeEffect ?? tabs?.defaults.activeEffect ?? 'border')

@@ -54,7 +54,7 @@ const active = ref(0)
 
 ## 尺寸
 
-`size` 与 Button 一致：字符串档位走 token，数字表示**宽度多少 px**。默认值可以写在 `DwTabs` 上，也可以写在单个 `DwTabButton` 上（后者优先）：
+`size` 只在 `DwTabs` 上设置，作用于整条标签栏里的每个标签；`DwTabButton` 不提供 `size`。取值与 Button 一致：字符串走 token，数字表示**每个标签的宽度多少 px**。
 
 <tabs-demos-size />
 
@@ -62,28 +62,30 @@ const active = ref(0)
 <template>
   <DwTabs v-model="active">
     <DwTabButton>默认</DwTabButton>
-    <DwTabButton size="medium">中号</DwTabButton>
-    <DwTabButton size="large">大号</DwTabButton>
+    <DwTabButton>自适应宽度</DwTabButton>
+    <DwTabButton>按钮</DwTabButton>
   </DwTabs>
 
-  <DwTabs v-model="active" :size="120">
-    <DwTabButton>120px</DwTabButton>
-    <DwTabButton>数值宽度</DwTabButton>
+  <DwTabs v-model="active" size="medium">
+    <DwTabButton>中号</DwTabButton>
+    <DwTabButton>150px</DwTabButton>
   </DwTabs>
 
-  <DwTabs v-model="active" disabled>
-    <DwTabButton>禁用</DwTabButton>
-    <DwTabButton>全部不可点</DwTabButton>
+  <DwTabs v-model="active" size="large">
+    <DwTabButton>大号</DwTabButton>
+    <DwTabButton>300px</DwTabButton>
   </DwTabs>
 </template>
 ```
 
-| `size` | 宽度 |
+| `size` | 每个标签宽度 |
 |--------|------|
 | `'default'`（默认） | 由内容撑开 |
 | `'medium'` | `150px` |
 | `'large'` | `300px` |
 | `number` | 该数值 px，例如 `:size="120"` |
+
+整条栏的宽度 = 标签数 × 单标签宽度 + 标签之间的间距（`--dw-spacing-xs`）。
 
 ## 禁用
 
@@ -161,7 +163,6 @@ useSound().setEnabled(false)
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | `type` | 标签类型 | `'default' \| 'primary' \| 'danger'` | 跟随 `DwTabs` |
-| `size` | 标签尺寸 | `'default' \| 'medium' \| 'large' \| number` | 跟随 `DwTabs` |
 | `disabled` | 是否禁用（与 `DwTabs` 的 `disabled` 取或） | `boolean` | `false` |
 | `sound` | 是否播放音效（与 `DwTabs` 的 `sound` 取与，只能单方面关闭） | `boolean` | `true` |
 | `icon` | 图标名称或 URL | `string` | 跟随 `DwTabs` |

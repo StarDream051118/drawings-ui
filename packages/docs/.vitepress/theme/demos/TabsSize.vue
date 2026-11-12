@@ -9,16 +9,16 @@ const active = ref(0)
   <div class="row2">
     <DwTabs v-model="active">
       <DwTabButton>默认</DwTabButton>
-      <DwTabButton size="medium">中号</DwTabButton>
-      <DwTabButton size="large">大号</DwTabButton>
+      <DwTabButton>自适应宽度</DwTabButton>
+      <DwTabButton>按钮</DwTabButton>
     </DwTabs>
-    <DwTabs v-model="active" :size="120">
-      <DwTabButton>120px</DwTabButton>
-      <DwTabButton>数值宽度</DwTabButton>
+    <DwTabs v-model="active" size="medium">
+      <DwTabButton>中号</DwTabButton>
+      <DwTabButton>150px</DwTabButton>
     </DwTabs>
-    <DwTabs v-model="active" disabled>
-      <DwTabButton>禁用</DwTabButton>
-      <DwTabButton>全部不可点</DwTabButton>
+    <DwTabs v-model="active" size="large">
+      <DwTabButton>大号</DwTabButton>
+      <DwTabButton>300px</DwTabButton>
     </DwTabs>
   </div>
 </template>
