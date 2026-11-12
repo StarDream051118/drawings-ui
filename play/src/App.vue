@@ -88,6 +88,19 @@ const pressedTab = ref(0)
           <DwTabButton>数值宽度</DwTabButton>
           <DwTabButton>测试</DwTabButton>
         </DwTabs>
+        <DwTabs v-model="tab" size="medium">
+          <DwTabButton>中号</DwTabButton>
+          <DwTabButton>150px</DwTabButton>
+        </DwTabs>
+        <DwTabs v-model="tab" size="large">
+          <DwTabButton>大号</DwTabButton>
+          <DwTabButton>300px</DwTabButton>
+        </DwTabs>
+        <DwTabs v-model="tab" width-mode="equal">
+          <DwTabButton>首页</DwTabButton>
+          <DwTabButton>个人设置</DwTabButton>
+          <DwTabButton>关于我们团队</DwTabButton>
+        </DwTabs>
       </div>
     </section>
   </div>

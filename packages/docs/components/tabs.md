@@ -87,6 +87,37 @@ const active = ref(0)
 
 整条栏的宽度 = 标签数 × 单标签宽度 + 标签之间的间距（`--dw-spacing-xs`）。
 
+## 等宽
+
+`width-mode` 控制自适应宽度（`size="default"`）下每个标签怎么定宽：
+
+| 值 | 表现 |
+|----|------|
+| `'auto'`（默认） | 每个标签按自己的文字宽度撑开，长短不一 |
+| `'equal'` | 先量出最宽的那个标签，所有标签都取这个宽度 |
+
+<tabs-demos-width-mode />
+
+```vue
+<template>
+  <DwTabs v-model="autoActive" width-mode="auto">
+    <DwTabButton>首页</DwTabButton>
+    <DwTabButton>个人设置</DwTabButton>
+    <DwTabButton>关于我们团队</DwTabButton>
+  </DwTabs>
+
+  <DwTabs v-model="equalActive" width-mode="equal">
+    <DwTabButton>首页</DwTabButton>
+    <DwTabButton>个人设置</DwTabButton>
+    <DwTabButton>关于我们团队</DwTabButton>
+  </DwTabs>
+</template>
+```
+
+::: tip
+`equal` 依赖测量：挂载、标签增删、窗口缩放、像素字体加载完成后都会重新量一次。如果标签一开始渲染在 `display: none` 的容器里，量到的宽度是 0，会先按 `auto` 显示，等容器可见并触发上述任一事件后才变成等宽。`size` 为 `medium` / `large` / 数字时不生效（已经是固定宽度）。
+:::
+
 ## 禁用
 
 禁用态只改变背景色：文字颜色、描边和立体阴影都保持不变，**hover 时描边依然会高亮**，方便用户确认自己指到了哪一项。禁用项不会触发选中，也不会播放音效。
@@ -134,6 +165,7 @@ useSound().setEnabled(false)
 |------|------|------|--------|
 | `modelValue` | 当前选中项索引，支持 `v-model` | `number` | `0` |
 | `active-effect` | 选中视觉 | `'border' \| 'pressed'` | `'border'` |
+| `width-mode` | 自适应宽度下的定宽方式 | `'auto' \| 'equal'` | `'auto'` |
 | `type` | 整条标签栏的类型默认值 | `'default' \| 'primary' \| 'danger'` | `'default'` |
 | `size` | 整条标签栏的尺寸默认值 | `'default' \| 'medium' \| 'large' \| number` | `'default'` |
 | `disabled` | 是否整体禁用 | `boolean` | `false` |

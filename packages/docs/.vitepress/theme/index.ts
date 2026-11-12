@@ -15,6 +15,7 @@ import ButtonSound from './demos/ButtonSound.vue'
 import TabsBasic from './demos/TabsBasic.vue'
 import TabsActiveEffect from './demos/TabsActiveEffect.vue'
 import TabsSize from './demos/TabsSize.vue'
+import TabsWidthMode from './demos/TabsWidthMode.vue'
 
 export default {
   extends: DefaultTheme,
@@ -32,5 +33,6 @@ export default {
     app.component('tabs-demos-basic', TabsBasic)
     app.component('tabs-demos-active-effect', TabsActiveEffect)
     app.component('tabs-demos-size', TabsSize)
+    app.component('tabs-demos-width-mode', TabsWidthMode)
   },
 }

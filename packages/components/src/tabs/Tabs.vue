@@ -5,6 +5,10 @@ import {
   Text,
   defineComponent,
   h,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  onUpdated,
   provide,
   ref,
   shallowRef,
@@ -13,7 +17,7 @@ import {
   type VNode,
 } from 'vue'
 import DwTabButton from './TabButton.vue'
-import { TABS_CONTEXT, type TabActiveEffect, type TabInstance, type TabSize, type TabType, type TabsDefaults } from './context'
+import { TABS_CONTEXT, type TabActiveEffect, type TabInstance, type TabSize, type TabType, type TabWidthMode, type TabsDefaults } from './context'
 
 export default defineComponent({
   name: 'DwTabs',
@@ -32,6 +36,8 @@ export default defineComponent({
     color: { type: String, default: undefined },
     /** 选中视觉：border 只高亮描边（默认），pressed 借用禁用态的深底 + 去投影 */
     activeEffect: { type: String as PropType<TabActiveEffect>, default: 'border' },
+    /** 自适应宽度下：auto 各自按内容撑开，equal 以最宽标签为准 */
+    widthMode: { type: String as PropType<TabWidthMode>, default: 'auto' },
   },
 
   emits: {
@@ -81,6 +87,44 @@ export default defineComponent({
         emit('update:modelValue', length - 1)
         emit('change', length - 1)
       }
+    })
+
+    // 等宽模式：量出最宽的那个标签，让所有标签统一宽度
+    function syncEqualWidth() {
+      const el = listRef.value
+      if (!el) return
+
+      el.style.removeProperty('--dw-tab-width')
+
+      // 只有「自适应 + 等宽」才需要测量；其它 size 已经有固定宽度
+      if (props.widthMode !== 'equal' || props.size !== 'default') return
+
+      let max = 0
+      el.querySelectorAll<HTMLElement>('[role="tab"]').forEach((tab) => {
+        max = Math.max(max, tab.getBoundingClientRect().width)
+      })
+
+      if (max > 0) {
+        el.style.setProperty('--dw-tab-width', `${Math.ceil(max)}px`)
+      }
+    }
+
+    onMounted(() => {
+      syncEqualWidth()
+      window.addEventListener('resize', syncEqualWidth)
+      // 像素字体加载完之前量出来的是回退字体宽度，加载完再量一次
+      document.fonts?.ready.then(() => syncEqualWidth()).catch(() => {})
+    })
+
+    // 标签增删、文字变化都会走到这里
+    onUpdated(syncEqualWidth)
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', syncEqualWidth)
+    })
+
+    watch(() => [props.widthMode, props.size], () => {
+      nextTick(syncEqualWidth)
     })
 
     function focusTab(index: number) {
@@ -151,7 +195,7 @@ export default defineComponent({
 
       return h('div', {
         ref: listRef,
-        class: 'dw-tabs',
+        class: ['dw-tabs', props.widthMode === 'equal' && props.size === 'default' && 'dw-tabs--equal'],
         role: 'tablist',
         'aria-orientation': 'horizontal',
         onKeydown,

@@ -7,3 +7,8 @@
   gap: var(--dw-spacing-xs);
   max-width: 100%;
 }
+
+// 等宽：宽度由 DwTabs 量出最宽标签后写进 --dw-tab-width
+.dw-tabs--equal .dw-tab-button {
+  width: var(--dw-tab-width, auto);
+}
