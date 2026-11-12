@@ -47,9 +47,10 @@ export default defineComponent({
 
   setup(props, { slots, emit }) {
     const listRef = ref<HTMLElement | null>(null)
-    const activeIndex = ref(props.modelValue)
+    const activeIndex = ref(Math.max(props.modelValue, 0))
     const order = shallowRef<TabInstance[]>([])
     let warned = false
+    let observer: IntersectionObserver | null = null
 
     function register(tab: TabInstance) {
       order.value = [...order.value, tab]
@@ -59,9 +60,16 @@ export default defineComponent({
       order.value = order.value.filter(item => item !== tab)
     }
 
+    function clampIndex(value: number) {
+      const next = Math.max(0, value)
+      const max = order.value.length - 1
+      return max >= 0 ? Math.min(next, max) : next
+    }
+
     function select(index: number) {
       if (props.disabled) return
-      if (index < 0 || index === activeIndex.value) return
+      const tab = order.value[index]
+      if (!tab || tab.disabled.value || index === activeIndex.value) return
       activeIndex.value = index
       emit('update:modelValue', index)
       emit('change', index)
@@ -77,7 +85,7 @@ export default defineComponent({
     })
 
     watch(() => props.modelValue, (value) => {
-      activeIndex.value = value
+      activeIndex.value = clampIndex(value)
     })
 
     // 子元素增删后把越界的选中项收回
@@ -94,10 +102,16 @@ export default defineComponent({
       const el = listRef.value
       if (!el) return
 
-      el.style.removeProperty('--dw-tab-width')
+      const needed = props.widthMode === 'equal' && props.size === 'default'
 
-      // 只有「自适应 + 等宽」才需要测量；其它 size 已经有固定宽度
-      if (props.widthMode !== 'equal' || props.size !== 'default') return
+      // auto 模式不测量；只有之前设过变量时才清理一次
+      if (!needed) {
+        if (el.style.getPropertyValue('--dw-tab-width')) el.style.removeProperty('--dw-tab-width')
+        return
+      }
+
+      // 先撤掉统一宽度，量到的才是各标签自己的内容宽度
+      el.style.removeProperty('--dw-tab-width')
 
       let max = 0
       el.querySelectorAll<HTMLElement>('[role="tab"]').forEach((tab) => {
@@ -114,6 +128,14 @@ export default defineComponent({
       window.addEventListener('resize', syncEqualWidth)
       // 像素字体加载完之前量出来的是回退字体宽度，加载完再量一次
       document.fonts?.ready.then(() => syncEqualWidth()).catch(() => {})
+
+      // 容器从不可见变为可见时补测一次（这种情况不会有 window resize）
+      if (typeof IntersectionObserver !== 'undefined' && listRef.value) {
+        observer = new IntersectionObserver((entries) => {
+          if (entries.some(entry => entry.isIntersecting)) syncEqualWidth()
+        })
+        observer.observe(listRef.value)
+      }
     })
 
     // 标签增删、文字变化都会走到这里
@@ -121,6 +143,7 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       window.removeEventListener('resize', syncEqualWidth)
+      observer?.disconnect()
     })
 
     watch(() => [props.widthMode, props.size], () => {
@@ -128,39 +151,49 @@ export default defineComponent({
     })
 
     function focusTab(index: number) {
-      const tabs = listRef.value?.querySelectorAll<HTMLElement>('[role="tab"]')
-      tabs?.[index]?.focus()
+      order.value[index]?.el.value?.focus()
+    }
+
+    function enabledIndexes() {
+      const list: number[] = []
+      order.value.forEach((tab, index) => {
+        if (!tab.disabled.value) list.push(index)
+      })
+      return list
     }
 
     function onKeydown(event: KeyboardEvent) {
       if (props.disabled) return
 
-      const length = order.value.length
-      if (length === 0) return
+      // 方向键和 Home/End 只在可选标签之间移动，跳过禁用项
+      const enabled = enabledIndexes()
+      if (enabled.length === 0) return
 
-      const last = length - 1
-      let next = activeIndex.value
+      const current = enabled.indexOf(activeIndex.value)
+      let target: number
 
       switch (event.key) {
         case 'ArrowRight':
-          next = activeIndex.value >= last ? 0 : activeIndex.value + 1
+          target = current === -1 ? enabled[0] : enabled[(current + 1) % enabled.length]
           break
         case 'ArrowLeft':
-          next = activeIndex.value <= 0 ? last : activeIndex.value - 1
+          target = current === -1
+            ? enabled[enabled.length - 1]
+            : enabled[(current - 1 + enabled.length) % enabled.length]
           break
         case 'Home':
-          next = 0
+          target = enabled[0]
           break
         case 'End':
-          next = last
+          target = enabled[enabled.length - 1]
           break
         default:
           return
       }
 
       event.preventDefault()
-      if (next !== activeIndex.value) select(next)
-      focusTab(next)
+      if (target !== activeIndex.value) select(target)
+      focusTab(target)
     }
 
     // 收集插槽节点：展开 Fragment，丢掉注释和空白文本

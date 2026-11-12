@@ -146,9 +146,10 @@ const largeActive = ref(0)
 
 标签栏遵循 WAI-ARIA 的 tablist 模式：
 
-- `←` / `→` 在标签间循环移动，`Home` / `End` 跳到首尾
+- `←` / `→` 在可选标签间循环移动，`Home` / `End` 跳到首尾，**禁用项会被跳过**
 - 只有选中项 `tabindex="0"`，其余为 `-1`（roving tabindex）
 - 禁用项使用 `aria-disabled="true"` 而不是原生 `disabled`，保证键盘用户仍能聚焦到它
+- `v-model` 传入越界索引时会自动夹到有效范围，不会出现"一个都没选中"
 
 ## 子元素校验
 

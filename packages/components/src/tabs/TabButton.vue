@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, inject, onUnmounted } from 'vue'
+import { computed, inject, onUnmounted, ref } from 'vue'
 import { useSound } from '../composables/useSound'
 import { useIcon } from '../composables/useIcon'
 import { SOUNDS } from '../utils/sounds'
-import { TABS_CONTEXT } from './context'
+import { TABS_CONTEXT, type TabInstance } from './context'
 
 defineOptions({ name: 'DwTabButton' })
 
@@ -27,16 +27,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const tabs = inject(TABS_CONTEXT, null)
-const self: object = {}
-
-if (tabs) {
-  tabs.register(self)
-  onUnmounted(() => tabs.unregister(self))
-}
-
-// 选中状态完全由 DwTabs 决定，TabButton 自己不持有
-const index = computed(() => tabs ? tabs.order.value.indexOf(self) : -1)
-const isActive = computed(() => tabs ? tabs.activeIndex.value === index.value : false)
 
 const resolvedType = computed(() => props.type ?? tabs?.defaults.type ?? 'default')
 // 尺寸只由 DwTabs 控制：整条标签栏统一宽度，子标签不单独设置
@@ -48,6 +38,19 @@ const resolvedIcon = computed(() => props.icon ?? tabs?.defaults.icon)
 const resolvedIconColor = computed(() => props.iconColor ?? tabs?.defaults.iconColor)
 const resolvedBgColor = computed(() => props.bgColor ?? tabs?.defaults.bgColor)
 const resolvedColor = computed(() => props.color ?? tabs?.defaults.color)
+
+// 注册给 DwTabs：顺序索引、禁用状态和元素都由容器统一管理
+const elRef = ref<HTMLElement | null>(null)
+const instance: TabInstance = { disabled: resolvedDisabled, el: elRef }
+
+if (tabs) {
+  tabs.register(instance)
+  onUnmounted(() => tabs.unregister(instance))
+}
+
+// 选中状态完全由 DwTabs 决定，TabButton 自己不持有
+const index = computed(() => tabs ? tabs.order.value.indexOf(instance) : -1)
+const isActive = computed(() => tabs ? tabs.activeIndex.value === index.value : false)
 
 const { play } = useSound()
 const { getIconSvg } = useIcon()
@@ -86,6 +89,7 @@ function onClick() {
 
 <template>
   <button
+    ref="elRef"
     type="button"
     role="tab"
     class="dw-tab-button"

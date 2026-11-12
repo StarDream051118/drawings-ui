@@ -20,7 +20,12 @@ export interface TabsDefaults {
   widthMode: TabWidthMode
 }
 
-export type TabInstance = object
+export interface TabInstance {
+  /** 是否禁用：点击与键盘导航都会跳过 */
+  disabled: Ref<boolean>
+  /** 根元素，键盘导航后用来聚焦 */
+  el: Ref<HTMLElement | null>
+}
 
 export interface TabsContext {
   activeIndex: Ref<number>
