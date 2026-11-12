@@ -59,24 +59,38 @@ const active = ref(0)
 <tabs-demos-size />
 
 ```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { DwTabs, DwTabButton } from '@star-dream051118/drawings-ui'
+
+// 每条栏各自维护自己的选中项
+const defaultActive = ref(0)
+const mediumActive = ref(0)
+const largeActive = ref(0)
+</script>
+
 <template>
-  <DwTabs v-model="active">
+  <DwTabs v-model="defaultActive">
     <DwTabButton>默认</DwTabButton>
     <DwTabButton>自适应宽度</DwTabButton>
     <DwTabButton>按钮</DwTabButton>
   </DwTabs>
 
-  <DwTabs v-model="active" size="medium">
+  <DwTabs v-model="mediumActive" size="medium">
     <DwTabButton>中号</DwTabButton>
     <DwTabButton>150px</DwTabButton>
   </DwTabs>
 
-  <DwTabs v-model="active" size="large">
+  <DwTabs v-model="largeActive" size="large">
     <DwTabButton>大号</DwTabButton>
     <DwTabButton>300px</DwTabButton>
   </DwTabs>
 </template>
 ```
+
+::: tip
+`v-model` 绑的是「这一条栏的选中索引」，不同栏要各用一个 `ref`。如果几条栏共用同一个 `ref`，点在任意一条上另外几条也会跟着变——那是数据源相同，不是组件之间联动；另外当共用索引大于某条栏的标签数时，那条栏会一个都选不中。
+:::
 
 | `size` | 每个标签宽度 |
 |--------|------|
