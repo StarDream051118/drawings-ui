@@ -3,6 +3,8 @@ import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+// 组件源码在 packages/docs 之外，Vite 默认只监听 root，这里手动加进来才能热更新
+const componentsSrc = resolve(__dirname, '../../components/src')
 
 export default defineConfig({
   title: 'DrawingsUI',
@@ -10,6 +12,14 @@ export default defineConfig({
   base: '/drawings-ui/',
 
   vite: {
+    plugins: [
+      {
+        name: 'dw:watch-components',
+        configureServer(server) {
+          server.watcher.add(componentsSrc)
+        },
+      },
+    ],
     resolve: {
       alias: {
         '@star-dream051118/drawings-ui': resolve(__dirname, '../../components/src'),
