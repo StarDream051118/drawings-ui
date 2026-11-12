@@ -63,7 +63,6 @@ const active = ref(0)
 import { ref } from 'vue'
 import { DwTabs, DwTabButton } from '@star-dream051118/drawings-ui'
 
-// 每条栏各自维护自己的选中项
 const defaultActive = ref(0)
 const mediumActive = ref(0)
 const largeActive = ref(0)
@@ -87,10 +86,6 @@ const largeActive = ref(0)
   </DwTabs>
 </template>
 ```
-
-::: tip
-`v-model` 绑的是「这一条栏的选中索引」，不同栏要各用一个 `ref`。如果几条栏共用同一个 `ref`，点在任意一条上另外几条也会跟着变——那是数据源相同，不是组件之间联动；另外当共用索引大于某条栏的标签数时，那条栏会一个都选不中。
-:::
 
 | `size` | 每个标签宽度 |
 |--------|------|
@@ -134,7 +129,17 @@ const largeActive = ref(0)
 
 ## 禁用
 
-禁用态只改变背景色：文字颜色、描边和立体阴影都保持不变，**hover 时描边依然会高亮**，方便用户确认自己指到了哪一项。禁用项不会触发选中，也不会播放音效。
+禁用态与选中态的 `pressed` 观感一致：深色底、去掉立体投影、白色文字与描边，只有光标变成 `not-allowed`，并且不会触发选中和音效。
+
+默认 token 下禁用底色和 `pressed` 选中底色是同一个值（`#2C2C2C`，primary / danger 同理），所以两者看起来几乎一样。想让禁用更"灰"更好区分，覆盖这几组变量即可：
+
+```css
+:root {
+  --dw-color-bg-disabled: #1A1A1A;
+  --dw-color-bg-primary-disabled: #001A00;
+  --dw-color-bg-danger-disabled: #1A0000;
+}
+```
 
 `DwTabs` 的 `disabled` 会作用于全部标签；单个 `DwTabButton` 的 `disabled` 只作用于自己，两者取「或」。
 

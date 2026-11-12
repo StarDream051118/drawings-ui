@@ -88,8 +88,8 @@
 }
 
 // 选中观感 · 按压式：借用 Button 禁用态的深底 + 去投影，但保留白字与文字压印
-@mixin dw-skin-selected-pressed {
-  background: var(--dw-color-bg-active);
+@mixin dw-skin-selected-pressed($bg: var(--dw-color-bg-active)) {
+  background: $bg;
   border-color: var(--dw-color-border-active);
   box-shadow: none;
   color: var(--dw-color-text);

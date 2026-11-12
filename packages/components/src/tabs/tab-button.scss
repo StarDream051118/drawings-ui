@@ -23,10 +23,11 @@
     border-color: var(--dw-color-border-active);
   }
 
-  // 禁用态只换背景色；描边仍可 hover 高亮
+  // 禁用态沿用选中态（pressed）的观感：深色底、去投影、白字白边，
+  // 只有底色走 -disabled token、光标变成 not-allowed
   &:disabled,
   &[aria-disabled='true'] {
-    background: var(--dw-color-bg-disabled);
+    @include dw-skin-selected-pressed(var(--dw-color-bg-disabled));
     cursor: not-allowed;
   }
 
