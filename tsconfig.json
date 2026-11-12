@@ -14,10 +14,10 @@
     // 与各 vite.config.ts 里的 alias 保持一致：TS 也直接读源码，
     // 否则 TS 会顺着 node_modules 找到 dist/index.d.ts（可能是旧的），
     // 再被 docs/types.d.ts 里的手写声明盖住，编辑器就会报“没有导出成员 DwTabs”
-    "baseUrl": ".",
+    // 注意：不写 baseUrl（TS 5.9 起已弃用），paths 相对本文件解析
     "paths": {
-      "@star-dream051118/drawings-ui": ["packages/components/src/index.ts"],
-      "@star-dream051118/drawings-ui/*": ["packages/components/src/*"]
+      "@star-dream051118/drawings-ui": ["./packages/components/src/index.ts"],
+      "@star-dream051118/drawings-ui/*": ["./packages/components/src/*"]
     }
   }
 }
