@@ -129,11 +129,10 @@ const largeActive = ref(0)
 
 ## 禁用
 
-禁用态与选中态的 `pressed` 观感一致：深色底、去掉立体投影、白色文字与描边，只有光标变成 `not-allowed`，并且不会触发选中和音效。
-
-默认 token 下禁用底色和 `pressed` 选中底色是同一个值（`#2C2C2C`，primary / danger 同理），所以两者看起来几乎一样。想让禁用更"灰"更好区分，覆盖这几组变量即可：
+禁用态只做两件事：**换背景色**（走 `--dw-color-bg-disabled` 及类型对应的 `-disabled` token）和**去掉立体投影**。文字颜色、文字压印、描边都保持不变，所以 **hover 时描边依然会高亮成白边**；光标变成 `not-allowed`，点击不会触发选中，也不会播放音效。
 
 ```css
+/* 想让禁用更暗一点，覆盖这几组变量即可 */
 :root {
   --dw-color-bg-disabled: #1A1A1A;
   --dw-color-bg-primary-disabled: #001A00;
