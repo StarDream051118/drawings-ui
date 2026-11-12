@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, inject, onUnmounted } from 'vue'
 import { useSound } from '../composables/useSound'
-import { useIcon, type BuiltInIcon } from '../composables/useIcon'
+import { useIcon } from '../composables/useIcon'
 import { SOUNDS } from '../utils/sounds'
+import { TABS_CONTEXT } from './context'
 
 defineOptions({ name: 'DwTabButton' })
 
-type IconProp = BuiltInIcon | (string & {})
 type SizeProp = 'default' | 'medium' | 'large' | number
 
 interface Props {
@@ -14,57 +14,70 @@ interface Props {
   size?: SizeProp
   disabled?: boolean
   sound?: boolean
-  icon?: IconProp
+  icon?: string
   iconColor?: string
   bgColor?: string
   color?: string
-  /** 是否选中。注意与 DwButton 的 active（按下态）不是一个概念 */
-  active?: boolean
-  /** 选中时的视觉：border 只高亮描边，pressed 借用禁用态的深底 + 去投影 */
+  /** 选中时的视觉；不传时跟随 DwTabs 的 active-effect */
   activeEffect?: 'border' | 'pressed'
-  /** 在 DwTabs 中的序号，由容器传入 */
-  index?: number
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  type: 'default',
-  size: 'default',
-  disabled: false,
-  sound: true,
-  active: false,
-  activeEffect: 'border',
-  index: 0,
-})
+const props = defineProps<Props>()
 
-const emit = defineEmits<{ (e: 'select', index: number): void }>()
+const tabs = inject(TABS_CONTEXT, null)
+const self: object = {}
+
+if (tabs) {
+  tabs.register(self)
+  onUnmounted(() => tabs.unregister(self))
+}
+
+// 选中状态完全由 DwTabs 决定，TabButton 自己不持有
+const index = computed(() => tabs ? tabs.order.value.indexOf(self) : -1)
+const isActive = computed(() => tabs ? tabs.activeIndex.value === index.value : false)
+
+const resolvedType = computed(() => props.type ?? tabs?.defaults.type ?? 'default')
+const resolvedSize = computed(() => props.size ?? tabs?.defaults.size ?? 'default')
+const resolvedDisabled = computed(() => props.disabled ?? tabs?.defaults.disabled ?? false)
+const resolvedSound = computed(() => props.sound ?? tabs?.defaults.sound ?? true)
+const resolvedEffect = computed(() => props.activeEffect ?? tabs?.defaults.activeEffect ?? 'border')
+const resolvedIcon = computed(() => props.icon ?? tabs?.defaults.icon)
+const resolvedIconColor = computed(() => props.iconColor ?? tabs?.defaults.iconColor)
+const resolvedBgColor = computed(() => props.bgColor ?? tabs?.defaults.bgColor)
+const resolvedColor = computed(() => props.color ?? tabs?.defaults.color)
 
 const { play } = useSound()
 const { getIconSvg } = useIcon()
 
 const isUrl = computed(() => {
-  if (!props.icon) return false
-  return props.icon.startsWith('http') || props.icon.startsWith('/') || props.icon.includes('.')
+  const icon = resolvedIcon.value
+  if (!icon) return false
+  return icon.startsWith('http') || icon.startsWith('/') || icon.includes('.')
 })
-const iconSvg = computed(() => props.icon ? getIconSvg(props.icon) : null)
+const iconSvg = computed(() => resolvedIcon.value ? getIconSvg(resolvedIcon.value) : null)
 
-const sizeClass = computed(() => typeof props.size === 'string' ? `dw-tab-button--${props.size}` : '')
+const sizeClass = computed(() => {
+  const size = resolvedSize.value
+  if (typeof size !== 'string' || size === 'default') return ''
+  return `dw-tab-button--${size}`
+})
 
 const tabStyle = computed(() => {
   const style: Record<string, string> = {}
-  if (props.bgColor) style.background = props.bgColor
-  if (props.color) style.color = props.color
-  if (typeof props.size === 'number') style.width = `${props.size}px`
-  return style
+  if (resolvedBgColor.value) style.background = resolvedBgColor.value
+  if (resolvedColor.value) style.color = resolvedColor.value
+  if (typeof resolvedSize.value === 'number') style.width = `${resolvedSize.value}px`
+  return Object.keys(style).length > 0 ? style : undefined
 })
 
 function onPointerDown() {
-  if (props.disabled || !props.sound) return
+  if (resolvedDisabled.value || !resolvedSound.value) return
   play(SOUNDS.click)
 }
 
 function onClick() {
-  if (props.disabled) return
-  emit('select', props.index)
+  if (resolvedDisabled.value) return
+  tabs?.select(index.value)
 }
 </script>
 
@@ -74,19 +87,19 @@ function onClick() {
     role="tab"
     class="dw-tab-button"
     :class="[
-      `dw-tab-button--${type}`,
+      `dw-tab-button--${resolvedType}`,
       sizeClass,
-      activeEffect === 'pressed' && 'dw-tab-button--active-pressed',
+      resolvedEffect === 'pressed' && 'dw-tab-button--active-pressed',
     ]"
     :style="tabStyle"
-    :aria-selected="active ? 'true' : 'false'"
-    :aria-disabled="disabled ? 'true' : undefined"
-    :tabindex="active ? 0 : -1"
+    :aria-selected="isActive ? 'true' : 'false'"
+    :aria-disabled="resolvedDisabled ? 'true' : undefined"
+    :tabindex="tabs ? (isActive ? 0 : -1) : 0"
     @pointerdown="onPointerDown"
     @click="onClick"
   >
-    <img v-if="isUrl" :src="icon" class="dw-tab-button__icon" :style="iconColor ? { color: iconColor } : undefined" />
-    <span v-else-if="iconSvg" class="dw-tab-button__icon" :style="iconColor ? { color: iconColor } : undefined" v-html="iconSvg" />
+    <img v-if="isUrl" :src="resolvedIcon" class="dw-tab-button__icon" :style="resolvedIconColor ? { color: resolvedIconColor } : undefined" />
+    <span v-else-if="iconSvg" class="dw-tab-button__icon" :style="resolvedIconColor ? { color: resolvedIconColor } : undefined" v-html="iconSvg" />
     <slot />
   </button>
 </template>

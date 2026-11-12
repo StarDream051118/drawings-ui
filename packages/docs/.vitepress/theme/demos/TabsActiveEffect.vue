@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { DwTabs } from '@star-dream051118/drawings-ui'
+import { DwTabs, DwTabButton } from '@star-dream051118/drawings-ui'
 
 const borderActive = ref(1)
 const pressedActive = ref(1)
@@ -8,7 +8,13 @@ const pressedActive = ref(1)
 
 <template>
   <div class="row2">
-    <DwTabs v-model="borderActive" :labels="['描边式', '默认效果']" active-effect="border" />
-    <DwTabs v-model="pressedActive" :labels="['按压式', '深底效果']" active-effect="pressed" />
+    <DwTabs v-model="borderActive" active-effect="border">
+      <DwTabButton>描边式</DwTabButton>
+      <DwTabButton>默认效果</DwTabButton>
+    </DwTabs>
+    <DwTabs v-model="pressedActive" active-effect="pressed">
+      <DwTabButton>按压式</DwTabButton>
+      <DwTabButton>深底效果</DwTabButton>
+    </DwTabs>
   </div>
 </template>

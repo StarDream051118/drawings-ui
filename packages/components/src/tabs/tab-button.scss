@@ -11,9 +11,9 @@
     outline-offset: 2px;
   }
 
-  // 按下瞬间
+  // 点击只换描边，不改背景色
   &:active:not(:disabled):not([aria-disabled='true']) {
-    @include dw-skin-pressed;
+    border-color: var(--dw-color-border-active);
   }
 
   // 禁用：用 aria-disabled 而不是 disabled，保证仍可被键盘聚焦
@@ -30,10 +30,6 @@
   @each $type in $types {
     &--#{$type} {
       @include dw-skin-type($type);
-
-      &:active:not(:disabled):not([aria-disabled='true']) {
-        @include dw-skin-type-pressed($type);
-      }
 
       &:disabled,
       &[aria-disabled='true'] {

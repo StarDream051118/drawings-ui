@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { DwButton, DwTabs } from '@star-dream051118/drawings-ui'
+import { DwButton, DwTabs, DwTabButton } from '@star-dream051118/drawings-ui'
 import '@star-dream051118/drawings-ui/styles/index.scss'
 import '@star-dream051118/drawings-ui/styles/font.scss'
 
@@ -73,9 +73,21 @@ const pressedTab = ref(0)
     <section>
       <h2>Tabs</h2>
       <div class="row2">
-        <DwTabs v-model="tab" :labels="['标签一', '标签二', '标签三']" />
-        <DwTabs v-model="pressedTab" :labels="['按压式', '选中', '效果']" active-effect="pressed" />
-        <DwTabs v-model="tab" :labels="['120px', '数值宽度', '测试']" :size="120" />
+        <DwTabs v-model="tab">
+          <DwTabButton>标签一</DwTabButton>
+          <DwTabButton>标签二</DwTabButton>
+          <DwTabButton>标签三</DwTabButton>
+        </DwTabs>
+        <DwTabs v-model="pressedTab" active-effect="pressed">
+          <DwTabButton>按压式</DwTabButton>
+          <DwTabButton>选中</DwTabButton>
+          <DwTabButton>效果</DwTabButton>
+        </DwTabs>
+        <DwTabs v-model="tab" :size="120">
+          <DwTabButton>120px</DwTabButton>
+          <DwTabButton>数值宽度</DwTabButton>
+          <DwTabButton>测试</DwTabButton>
+        </DwTabs>
       </div>
     </section>
   </div>

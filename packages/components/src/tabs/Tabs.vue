@@ -1,134 +1,164 @@
-<script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+<script lang="ts">
+import {
+  Comment,
+  Fragment,
+  Text,
+  defineComponent,
+  h,
+  provide,
+  ref,
+  shallowRef,
+  watch,
+  type PropType,
+  type VNode,
+} from 'vue'
 import DwTabButton from './TabButton.vue'
-import type { BuiltInIcon } from '../composables/useIcon'
+import { TABS_CONTEXT, type TabActiveEffect, type TabInstance, type TabSize, type TabType, type TabsDefaults } from './context'
 
-defineOptions({ name: 'DwTabs' })
+export default defineComponent({
+  name: 'DwTabs',
 
-type IconProp = BuiltInIcon | (string & {})
-type SizeProp = 'default' | 'medium' | 'large' | number
+  props: {
+    /** 当前选中项索引，配合 v-model 使用 */
+    modelValue: { type: Number, default: 0 },
+    /** 以下视觉属性作为整条标签栏的默认值，可被单个 DwTabButton 覆盖 */
+    type: { type: String as PropType<TabType>, default: 'default' },
+    size: { type: [String, Number] as PropType<TabSize>, default: 'default' },
+    disabled: { type: Boolean, default: false },
+    sound: { type: Boolean, default: true },
+    icon: { type: String, default: undefined },
+    iconColor: { type: String, default: undefined },
+    bgColor: { type: String, default: undefined },
+    color: { type: String, default: undefined },
+    /** 选中视觉：border 只高亮描边（默认），pressed 借用禁用态的深底 + 去投影 */
+    activeEffect: { type: String as PropType<TabActiveEffect>, default: 'border' },
+  },
 
-interface Props {
-  /** 当前选中项索引，配合 v-model 使用 */
-  modelValue?: number
-  /** Tab 数量；传了 labels 时以 labels 长度为准 */
-  count?: number
-  /** 每个 Tab 的文字，优先级低于 tab 插槽 */
-  labels?: string[]
-  type?: 'default' | 'primary' | 'danger'
-  size?: SizeProp
-  disabled?: boolean
-  sound?: boolean
-  icon?: IconProp
-  iconColor?: string
-  bgColor?: string
-  color?: string
-  /** 选中时的视觉：border 只高亮描边（默认），pressed 借用禁用态的深底 + 去投影 */
-  activeEffect?: 'border' | 'pressed'
-}
+  emits: {
+    'update:modelValue': (value: number) => typeof value === 'number',
+    change: (value: number) => typeof value === 'number',
+  },
 
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: 0,
-  count: 1,
-  type: 'default',
-  size: 'default',
-  disabled: false,
-  sound: true,
-  activeEffect: 'border',
+  setup(props, { slots, emit }) {
+    const listRef = ref<HTMLElement | null>(null)
+    const activeIndex = ref(props.modelValue)
+    const order = shallowRef<TabInstance[]>([])
+    let warned = false
+
+    function register(tab: TabInstance) {
+      order.value = [...order.value, tab]
+    }
+
+    function unregister(tab: TabInstance) {
+      order.value = order.value.filter(item => item !== tab)
+    }
+
+    function select(index: number) {
+      if (props.disabled) return
+      if (index < 0 || index === activeIndex.value) return
+      activeIndex.value = index
+      emit('update:modelValue', index)
+      emit('change', index)
+    }
+
+    provide(TABS_CONTEXT, {
+      activeIndex,
+      order,
+      defaults: props as unknown as TabsDefaults,
+      register,
+      unregister,
+      select,
+    })
+
+    watch(() => props.modelValue, (value) => {
+      activeIndex.value = value
+    })
+
+    // 子元素增删后把越界的选中项收回
+    watch(() => order.value.length, (length) => {
+      if (length > 0 && activeIndex.value > length - 1) {
+        activeIndex.value = length - 1
+        emit('update:modelValue', length - 1)
+        emit('change', length - 1)
+      }
+    })
+
+    function focusTab(index: number) {
+      const tabs = listRef.value?.querySelectorAll<HTMLElement>('[role="tab"]')
+      tabs?.[index]?.focus()
+    }
+
+    function onKeydown(event: KeyboardEvent) {
+      if (props.disabled) return
+
+      const length = order.value.length
+      if (length === 0) return
+
+      const last = length - 1
+      let next = activeIndex.value
+
+      switch (event.key) {
+        case 'ArrowRight':
+          next = activeIndex.value >= last ? 0 : activeIndex.value + 1
+          break
+        case 'ArrowLeft':
+          next = activeIndex.value <= 0 ? last : activeIndex.value - 1
+          break
+        case 'Home':
+          next = 0
+          break
+        case 'End':
+          next = last
+          break
+        default:
+          return
+      }
+
+      event.preventDefault()
+      if (next !== activeIndex.value) select(next)
+      focusTab(next)
+    }
+
+    // 收集插槽节点：展开 Fragment，丢掉注释和空白文本
+    function collect(nodes: VNode[], out: VNode[]) {
+      for (const node of nodes) {
+        if (node.type === Fragment) {
+          collect(node.children as VNode[], out)
+        } else if (node.type === Comment) {
+          continue
+        } else if (node.type === Text && !String(node.children ?? '').trim()) {
+          continue
+        } else {
+          out.push(node)
+        }
+      }
+    }
+
+    // 只渲染 DwTabButton；混入其它标签时给出警告并整体不渲染
+    return () => {
+      const children: VNode[] = []
+      collect(slots.default?.() ?? [], children)
+
+      if (children.some(node => node.type !== DwTabButton)) {
+        if (!warned) {
+          warned = true
+          console.warn('[DrawingsUI] DwTabs 的子元素只能是 DwTabButton，检测到其它标签，DwTabs 已停止渲染。')
+        }
+        return null
+      }
+
+      warned = false
+
+      return h('div', {
+        ref: listRef,
+        class: 'dw-tabs',
+        role: 'tablist',
+        'aria-orientation': 'horizontal',
+        onKeydown,
+      }, children)
+    }
+  },
 })
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: number): void
-  (e: 'change', value: number): void
-}>()
-
-const listRef = ref<HTMLElement | null>(null)
-const innerActive = ref(props.modelValue)
-
-const total = computed(() => {
-  const length = props.labels?.length ?? 0
-  const raw = length > 0 ? length : props.count
-  return Math.max(Math.floor(Number(raw)) || 1, 1)
-})
-
-watch(() => props.modelValue, (value) => {
-  innerActive.value = value
-})
-
-watch(total, (value) => {
-  if (innerActive.value > value - 1) {
-    innerActive.value = Math.max(value - 1, 0)
-  }
-})
-
-function select(index: number) {
-  if (props.disabled || index === innerActive.value) return
-  innerActive.value = index
-  emit('update:modelValue', index)
-  emit('change', index)
-}
-
-function focusTab(index: number) {
-  const tabs = listRef.value?.querySelectorAll<HTMLElement>('[role="tab"]')
-  tabs?.[index]?.focus()
-}
-
-function onKeydown(event: KeyboardEvent) {
-  if (props.disabled) return
-
-  const last = total.value - 1
-  let next = innerActive.value
-
-  switch (event.key) {
-    case 'ArrowRight':
-      next = innerActive.value >= last ? 0 : innerActive.value + 1
-      break
-    case 'ArrowLeft':
-      next = innerActive.value <= 0 ? last : innerActive.value - 1
-      break
-    case 'Home':
-      next = 0
-      break
-    case 'End':
-      next = last
-      break
-    default:
-      return
-  }
-
-  event.preventDefault()
-  select(next)
-  focusTab(next)
-}
 </script>
-
-<template>
-  <div
-    ref="listRef"
-    class="dw-tabs"
-    role="tablist"
-    aria-orientation="horizontal"
-    @keydown="onKeydown"
-  >
-    <DwTabButton
-      v-for="i in total"
-      :key="i - 1"
-      :index="i - 1"
-      :active="i - 1 === innerActive"
-      :type="type"
-      :size="size"
-      :disabled="disabled"
-      :sound="sound"
-      :icon="icon"
-      :icon-color="iconColor"
-      :bg-color="bgColor"
-      :color="color"
-      :active-effect="activeEffect"
-      @select="select"
-    >
-      <slot name="tab" :index="i - 1" :active="i - 1 === innerActive">{{ labels?.[i - 1] }}</slot>
-    </DwTabButton>
-  </div>
-</template>
 
 <style src="./tabs.scss" />
