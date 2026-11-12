@@ -16,15 +16,11 @@
     border-color: var(--dw-color-border-active);
   }
 
-  // 禁用：用 aria-disabled 而不是 disabled，保证仍可被键盘聚焦
+  // 禁用态只换背景色；描边仍可 hover 高亮
   &:disabled,
   &[aria-disabled='true'] {
-    @include dw-skin-disabled;
-
-    // 盖掉 base 里的 hover 描边
-    &:hover {
-      border-color: var(--dw-color-border);
-    }
+    background: var(--dw-color-bg-disabled);
+    cursor: not-allowed;
   }
 
   @each $type in $types {

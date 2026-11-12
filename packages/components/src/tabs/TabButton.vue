@@ -22,7 +22,12 @@ interface Props {
   activeEffect?: 'border' | 'pressed'
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  // boolean 必须显式给默认值，否则「未传」会被 Vue 解析成 false，
+  // 导致 DwTabs 上的 sound / disabled 永远无法下发到子组件
+  disabled: false,
+  sound: true,
+})
 
 const tabs = inject(TABS_CONTEXT, null)
 const self: object = {}
@@ -38,8 +43,8 @@ const isActive = computed(() => tabs ? tabs.activeIndex.value === index.value : 
 
 const resolvedType = computed(() => props.type ?? tabs?.defaults.type ?? 'default')
 const resolvedSize = computed(() => props.size ?? tabs?.defaults.size ?? 'default')
-const resolvedDisabled = computed(() => props.disabled ?? tabs?.defaults.disabled ?? false)
-const resolvedSound = computed(() => props.sound ?? tabs?.defaults.sound ?? true)
+const resolvedDisabled = computed(() => props.disabled || (tabs?.defaults.disabled ?? false))
+const resolvedSound = computed(() => props.sound && (tabs?.defaults.sound ?? true))
 const resolvedEffect = computed(() => props.activeEffect ?? tabs?.defaults.activeEffect ?? 'border')
 const resolvedIcon = computed(() => props.icon ?? tabs?.defaults.icon)
 const resolvedIconColor = computed(() => props.iconColor ?? tabs?.defaults.iconColor)

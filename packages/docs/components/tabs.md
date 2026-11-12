@@ -85,6 +85,12 @@ const active = ref(0)
 | `'large'` | `300px` |
 | `number` | 该数值 px，例如 `:size="120"` |
 
+## 禁用
+
+禁用态只改变背景色：文字颜色、描边和立体阴影都保持不变，**hover 时描边依然会高亮**，方便用户确认自己指到了哪一项。禁用项不会触发选中，也不会播放音效。
+
+`DwTabs` 的 `disabled` 会作用于全部标签；单个 `DwTabButton` 的 `disabled` 只作用于自己，两者取「或」。
+
 ## 键盘操作
 
 标签栏遵循 WAI-ARIA 的 tablist 模式：
@@ -156,8 +162,8 @@ useSound().setEnabled(false)
 |------|------|------|--------|
 | `type` | 标签类型 | `'default' \| 'primary' \| 'danger'` | 跟随 `DwTabs` |
 | `size` | 标签尺寸 | `'default' \| 'medium' \| 'large' \| number` | 跟随 `DwTabs` |
-| `disabled` | 是否禁用 | `boolean` | 跟随 `DwTabs` |
-| `sound` | 是否播放音效 | `boolean` | 跟随 `DwTabs` |
+| `disabled` | 是否禁用（与 `DwTabs` 的 `disabled` 取或） | `boolean` | `false` |
+| `sound` | 是否播放音效（与 `DwTabs` 的 `sound` 取与，只能单方面关闭） | `boolean` | `true` |
 | `icon` | 图标名称或 URL | `string` | 跟随 `DwTabs` |
 | `icon-color` | 图标颜色 | `string` | 跟随 `DwTabs` |
 | `bg-color` | 背景颜色 | `string` | 跟随 `DwTabs` |
