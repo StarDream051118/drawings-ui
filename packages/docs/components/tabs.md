@@ -127,6 +127,32 @@ const largeActive = ref(0)
 `equal` 依赖测量：挂载、标签增删、窗口缩放、像素字体加载完成后都会重新量一次。如果标签一开始渲染在 `display: none` 的容器里，量到的宽度是 0，会先按 `auto` 显示，等容器可见并触发上述任一事件后才变成等宽。`size` 为 `medium` / `large` / 数字时不生效（已经是固定宽度）。
 :::
 
+## 铺满父容器
+
+默认 `.dw-tabs` 是块级 flex 容器，**本身就会占满父容器宽度**，只是标签按内容宽度从左侧排列、右侧留白。加 `fill` 之后每个标签变成 `flex: 1`，均分整条栏的宽度：
+
+<tabs-demos-fill />
+
+```vue
+<template>
+  <DwTabs v-model="autoActive">
+    <DwTabButton>默认</DwTabButton>
+    <DwTabButton>按内容宽</DwTabButton>
+    <DwTabButton>右侧留白</DwTabButton>
+  </DwTabs>
+
+  <DwTabs v-model="fillActive" fill>
+    <DwTabButton>铺满</DwTabButton>
+    <DwTabButton>均分</DwTabButton>
+    <DwTabButton>宽度</DwTabButton>
+  </DwTabs>
+</template>
+```
+
+::: tip
+`fill` 与 `size` 同时使用时以 `fill` 为准（标签均分，不再走 150/300px 或数值宽度）；与 `width-mode="equal"` 同时使用时 `equal` 不生效，因为 `fill` 本身就是均分。
+:::
+
 ## 禁用
 
 禁用态只做两件事：**换背景色**（走 `--dw-color-bg-disabled` 及类型对应的 `-disabled` token）和**去掉立体投影**。文字颜色、文字压印、描边都保持不变，所以 **hover 时描边依然会高亮成白边**；光标变成 `not-allowed`，点击不会触发选中，也不会播放音效。
@@ -185,6 +211,7 @@ useSound().setEnabled(false)
 | `modelValue` | 当前选中项索引，支持 `v-model` | `number` | `0` |
 | `active-effect` | 选中视觉 | `'border' \| 'pressed'` | `'border'` |
 | `width-mode` | 自适应宽度下的定宽方式 | `'auto' \| 'equal'` | `'auto'` |
+| `fill` | 标签均分整条栏宽度，铺满父容器 | `boolean` | `false` |
 | `type` | 整条标签栏的类型默认值 | `'default' \| 'primary' \| 'danger'` | `'default'` |
 | `size` | 整条标签栏的尺寸默认值 | `'default' \| 'medium' \| 'large' \| number` | `'default'` |
 | `disabled` | 是否整体禁用 | `boolean` | `false` |

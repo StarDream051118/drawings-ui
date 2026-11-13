@@ -4,11 +4,17 @@
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  gap: var(--dw-spacing-xs);
+  gap: var(--dw-spacing-base);
   max-width: 100%;
 }
 
 // 等宽：宽度由 DwTabs 量出最宽标签后写进 --dw-tab-width
 .dw-tabs--equal .dw-tab-button {
   width: var(--dw-tab-width, auto);
+}
+
+// 铺满：每个标签均分整条栏宽度
+.dw-tabs--fill .dw-tab-button {
+  flex: 1 1 0;
+  min-width: 0;
 }

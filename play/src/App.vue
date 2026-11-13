@@ -10,6 +10,7 @@ const sizeTab = ref(0)
 const mediumTab = ref(0)
 const largeTab = ref(0)
 const equalTab = ref(0)
+const fillTab = ref(0)
 </script>
 
 <template>
@@ -104,6 +105,11 @@ const equalTab = ref(0)
           <DwTabButton>首页</DwTabButton>
           <DwTabButton>个人设置</DwTabButton>
           <DwTabButton>关于我们团队</DwTabButton>
+        </DwTabs>
+        <DwTabs v-model="fillTab" fill>
+          <DwTabButton>铺满</DwTabButton>
+          <DwTabButton>均分宽度</DwTabButton>
+          <DwTabButton>父容器</DwTabButton>
         </DwTabs>
       </div>
     </section>

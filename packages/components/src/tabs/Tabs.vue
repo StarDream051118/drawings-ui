@@ -38,6 +38,8 @@ export default defineComponent({
     activeEffect: { type: String as PropType<TabActiveEffect>, default: 'border' },
     /** 自适应宽度下：auto 各自按内容撑开，equal 以最宽标签为准 */
     widthMode: { type: String as PropType<TabWidthMode>, default: 'auto' },
+    /** 标签均分整条栏宽度（flex: 1），用于铺满父容器 */
+    fill: { type: Boolean, default: false },
   },
 
   emits: {
@@ -102,7 +104,7 @@ export default defineComponent({
       const el = listRef.value
       if (!el) return
 
-      const needed = props.widthMode === 'equal' && props.size === 'default'
+      const needed = props.widthMode === 'equal' && props.size === 'default' && !props.fill
 
       // auto 模式不测量；只有之前设过变量时才清理一次
       if (!needed) {
@@ -228,7 +230,11 @@ export default defineComponent({
 
       return h('div', {
         ref: listRef,
-        class: ['dw-tabs', props.widthMode === 'equal' && props.size === 'default' && 'dw-tabs--equal'],
+        class: [
+          'dw-tabs',
+          props.fill && 'dw-tabs--fill',
+          !props.fill && props.widthMode === 'equal' && props.size === 'default' && 'dw-tabs--equal',
+        ],
         role: 'tablist',
         'aria-orientation': 'horizontal',
         onKeydown,

@@ -16,6 +16,7 @@ import TabsBasic from './demos/TabsBasic.vue'
 import TabsActiveEffect from './demos/TabsActiveEffect.vue'
 import TabsSize from './demos/TabsSize.vue'
 import TabsWidthMode from './demos/TabsWidthMode.vue'
+import TabsFill from './demos/TabsFill.vue'
 
 export default {
   extends: DefaultTheme,
@@ -34,5 +35,6 @@ export default {
     app.component('tabs-demos-active-effect', TabsActiveEffect)
     app.component('tabs-demos-size', TabsSize)
     app.component('tabs-demos-width-mode', TabsWidthMode)
+    app.component('tabs-demos-fill', TabsFill)
   },
 }
