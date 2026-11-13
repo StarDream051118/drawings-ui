@@ -13,21 +13,23 @@
 import { ref } from 'vue'
 import { DwTabs, DwTabButton } from '@star-dream051118/drawings-ui'
 
-const active = ref(0)
+const active = ref('home')
 </script>
 
 <template>
   <DwTabs v-model="active">
-    <DwTabButton>首页</DwTabButton>
-    <DwTabButton>设置</DwTabButton>
-    <DwTabButton>状态</DwTabButton>
-    <DwTabButton>关于</DwTabButton>
+    <DwTabButton value="home">首页</DwTabButton>
+    <DwTabButton value="settings">设置</DwTabButton>
+    <DwTabButton value="status">状态</DwTabButton>
+    <DwTabButton value="about">关于</DwTabButton>
   </DwTabs>
 </template>
 ```
 
 ::: tip
-`v-model` 绑定的是标签在 `DwTabs` 中的**顺序索引**。`DwTabButton` 自己不持有选中状态，也没有 `active` prop —— 这与 `DwButton` 的 `active`（按下态）不是同一个概念。
+`v-model` 绑定的是标签的 **`value`**，`value` 在一条栏内必须唯一；它还可以是数字。没写 `value` 的标签会自动用**自己的顺序索引**作为 key，所以 `v-model="0"` 这种老写法依然可用。
+
+`DwTabButton` 自己不持有选中状态，也没有 `active` prop —— 这与 `DwButton` 的 `active`（按下态）不是同一个概念。
 :::
 
 ## 交互状态
@@ -203,7 +205,7 @@ const active = ref(0)
 - `←` / `→` 在可选标签间循环移动，`Home` / `End` 跳到首尾，**禁用项会被跳过**
 - 只有选中项 `tabindex="0"`，其余为 `-1`（roving tabindex）
 - 禁用项使用 `aria-disabled="true"` 而不是原生 `disabled`，保证键盘用户仍能聚焦到它
-- `v-model` 传入越界索引时会自动夹到有效范围，不会出现「一个都没选中」
+- `v-model` 指向一个已不存在的 key 时不会报错、也不会自动改值，此时没有标签被选中，但第一个可选标签保持 `tabindex="0"`，键盘仍能进入
 
 ## 子元素校验
 
@@ -254,7 +256,7 @@ useSound().setEnabled(false)
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `modelValue` | 当前选中项索引，支持 `v-model` | `number` | `0` |
+| `modelValue` | 当前选中标签的 `value`（未写 value 时是索引），支持 `v-model` | `string \| number` | — |
 | `active-effect` | 选中视觉 | `'border' \| 'pressed'` | `'border'` |
 | `type` | 整条标签栏的类型默认值 | `'default' \| 'primary' \| 'danger'` | `'default'` |
 | `size` | 整条标签栏的尺寸默认值 | `'default' \| 'medium' \| 'large' \| number` | `'default'` |
@@ -271,8 +273,8 @@ useSound().setEnabled(false)
 
 | 事件名 | 说明 | 参数 |
 |--------|------|------|
-| `update:modelValue` | 选中项变化 | `index: number` |
-| `change` | 选中项变化（语义化别名） | `index: number` |
+| `update:modelValue` | 选中项变化 | `key: string \| number`（该标签的 value，未写 value 时为索引） |
+| `change` | 选中项变化（语义化别名） | `key: string \| number` |
 
 ### DwTabs Slots
 
@@ -286,6 +288,7 @@ useSound().setEnabled(false)
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
+| `value` | 唯一标识，和 `v-model` 比对；不传时回退成顺序索引 | `string \| number` | — |
 | `type` | 标签类型 | `'default' \| 'primary' \| 'danger'` | 跟随 `DwTabs` |
 | `disabled` | 是否禁用（与 `DwTabs` 的 `disabled` 取或） | `boolean` | `false` |
 | `sound` | 是否播放音效（与 `DwTabs` 的 `sound` 取与，只能单方面关闭） | `boolean` | `true` |
@@ -297,6 +300,8 @@ useSound().setEnabled(false)
 
 ::: tip
 `DwTabButton` 没有 `active` prop：它是否选中完全由 `DwTabs` 的 `v-model` 决定，单独放在 `DwTabs` 外面只会渲染成一个不可选中的标签。尺寸也只由 `DwTabs` 统一控制。
+
+同一条栏里 `value` 必须唯一，重复时只有第一个能被选中，控制台会给出警告。`v-model` 指向一个已经不存在的值时不会报错、也不会自动改值，只是没有标签处于选中态（第一个可选标签仍保持可聚焦）。
 :::
 
 ## 设计 Token

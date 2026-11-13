@@ -3,6 +3,7 @@ import {
   Comment,
   Fragment,
   Text,
+  computed,
   defineComponent,
   h,
   nextTick,
@@ -17,14 +18,23 @@ import {
   type VNode,
 } from 'vue'
 import DwTabButton from './TabButton.vue'
-import { TABS_CONTEXT, type TabActiveEffect, type TabInstance, type TabSize, type TabType, type TabWidthMode, type TabsDefaults } from './context'
+import {
+  TABS_CONTEXT,
+  type TabActiveEffect,
+  type TabInstance,
+  type TabKey,
+  type TabSize,
+  type TabType,
+  type TabWidthMode,
+  type TabsDefaults,
+} from './context'
 
 export default defineComponent({
   name: 'DwTabs',
 
   props: {
-    /** 当前选中项索引，配合 v-model 使用 */
-    modelValue: { type: Number, default: 0 },
+    /** 当前选中标签的 value；标签没写 value 时回退成它的顺序索引 */
+    modelValue: { type: [String, Number] as PropType<TabKey>, default: undefined },
     /** 以下视觉属性作为整条标签栏的默认值，可被单个 DwTabButton 覆盖 */
     type: { type: String as PropType<TabType>, default: 'default' },
     size: { type: [String, Number] as PropType<TabSize>, default: 'default' },
@@ -43,16 +53,25 @@ export default defineComponent({
   },
 
   emits: {
-    'update:modelValue': (value: number) => typeof value === 'number',
-    change: (value: number) => typeof value === 'number',
+    'update:modelValue': (value: TabKey) => typeof value === 'string' || typeof value === 'number',
+    change: (value: TabKey) => typeof value === 'string' || typeof value === 'number',
   },
 
   setup(props, { slots, emit }) {
     const listRef = ref<HTMLElement | null>(null)
-    const activeIndex = ref(Math.max(props.modelValue, 0))
     const order = shallowRef<TabInstance[]>([])
+    const innerKey = ref<TabKey | undefined>(props.modelValue)
     let warned = false
+    let duplicateWarned = false
     let observer: IntersectionObserver | null = null
+
+    // 没传 v-model 时默认选中第一个可选标签
+    const firstEnabledKey = computed<TabKey | undefined>(
+      () => order.value.find(tab => !tab.disabled.value)?.key.value,
+    )
+    const activeKey = computed<TabKey | undefined>(() => innerKey.value ?? firstEnabledKey.value)
+    const hasSelection = computed(() => order.value.some(tab => tab.key.value === activeKey.value))
+    const keys = computed(() => order.value.map(tab => tab.key.value))
 
     function register(tab: TabInstance) {
       order.value = [...order.value, tab]
@@ -62,23 +81,18 @@ export default defineComponent({
       order.value = order.value.filter(item => item !== tab)
     }
 
-    function clampIndex(value: number) {
-      const next = Math.max(0, value)
-      const max = order.value.length - 1
-      return max >= 0 ? Math.min(next, max) : next
-    }
-
-    function select(index: number) {
+    function select(key: TabKey) {
       if (props.disabled) return
-      const tab = order.value[index]
-      if (!tab || tab.disabled.value || index === activeIndex.value) return
-      activeIndex.value = index
-      emit('update:modelValue', index)
-      emit('change', index)
+      const tab = order.value.find(item => item.key.value === key)
+      if (!tab || tab.disabled.value || key === activeKey.value) return
+      innerKey.value = key
+      emit('update:modelValue', key)
+      emit('change', key)
     }
 
     provide(TABS_CONTEXT, {
-      activeIndex,
+      activeKey,
+      hasSelection,
       order,
       defaults: props as unknown as TabsDefaults,
       register,
@@ -87,17 +101,31 @@ export default defineComponent({
     })
 
     watch(() => props.modelValue, (value) => {
-      activeIndex.value = clampIndex(value)
+      innerKey.value = value
     })
 
-    // 子元素增删后把越界的选中项收回
-    watch(() => order.value.length, (length) => {
-      if (length > 0 && activeIndex.value > length - 1) {
-        activeIndex.value = length - 1
-        emit('update:modelValue', length - 1)
-        emit('change', length - 1)
+    // 重复 key 提醒：同名标签只有第一个能被选中
+    watch(keys, (list) => {
+      const seen = new Set<TabKey>()
+      const duplicates: TabKey[] = []
+
+      for (const key of list) {
+        if (seen.has(key)) {
+          if (!duplicates.includes(key)) duplicates.push(key)
+        } else {
+          seen.add(key)
+        }
       }
-    })
+
+      if (duplicates.length === 0) {
+        duplicateWarned = false
+        return
+      }
+      if (duplicateWarned) return
+
+      duplicateWarned = true
+      console.warn(`[DrawingsUI] DwTabs 检测到重复的 value：${duplicates.map(String).join('、')}，同名标签只有第一个能被选中。`)
+    }, { immediate: true })
 
     // 等宽模式：量出最宽的那个标签，让所有标签统一宽度
     function syncEqualWidth() {
@@ -148,35 +176,23 @@ export default defineComponent({
       observer?.disconnect()
     })
 
-    watch(() => [props.widthMode, props.size], () => {
+    watch(() => [props.widthMode, props.size, props.fill], () => {
       nextTick(syncEqualWidth)
     })
-
-    function focusTab(index: number) {
-      order.value[index]?.el.value?.focus()
-    }
-
-    function enabledIndexes() {
-      const list: number[] = []
-      order.value.forEach((tab, index) => {
-        if (!tab.disabled.value) list.push(index)
-      })
-      return list
-    }
 
     function onKeydown(event: KeyboardEvent) {
       if (props.disabled) return
 
       // 方向键和 Home/End 只在可选标签之间移动，跳过禁用项
-      const enabled = enabledIndexes()
+      const enabled = order.value.filter(tab => !tab.disabled.value)
       if (enabled.length === 0) return
 
-      const current = enabled.indexOf(activeIndex.value)
-      let target: number
+      const current = enabled.findIndex(tab => tab.key.value === activeKey.value)
+      let target: TabInstance
 
       switch (event.key) {
         case 'ArrowRight':
-          target = current === -1 ? enabled[0] : enabled[(current + 1) % enabled.length]
+          target = enabled[current === -1 ? 0 : (current + 1) % enabled.length]
           break
         case 'ArrowLeft':
           target = current === -1
@@ -194,8 +210,8 @@ export default defineComponent({
       }
 
       event.preventDefault()
-      if (target !== activeIndex.value) select(target)
-      focusTab(target)
+      select(target.key.value)
+      target.el.value?.focus()
     }
 
     // 收集插槽节点：展开 Fragment，丢掉注释和空白文本

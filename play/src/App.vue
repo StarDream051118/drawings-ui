@@ -11,6 +11,7 @@ const mediumTab = ref(0)
 const largeTab = ref(0)
 const equalTab = ref(0)
 const fillTab = ref(0)
+const valueTab = ref('a')
 </script>
 
 <template>
@@ -110,6 +111,10 @@ const fillTab = ref(0)
           <DwTabButton>铺满</DwTabButton>
           <DwTabButton>均分宽度</DwTabButton>
           <DwTabButton>父容器</DwTabButton>
+        </DwTabs>
+        <DwTabs v-model="valueTab">
+          <DwTabButton value="a">value 模式</DwTabButton>
+          <DwTabButton value="b">字符串绑定</DwTabButton>
         </DwTabs>
       </div>
     </section>

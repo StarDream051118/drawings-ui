@@ -3,11 +3,13 @@ import { computed, inject, onUnmounted, ref } from 'vue'
 import { useSound } from '../composables/useSound'
 import { useIcon } from '../composables/useIcon'
 import { SOUNDS } from '../utils/sounds'
-import { TABS_CONTEXT, type TabInstance } from './context'
+import { TABS_CONTEXT, type TabInstance, type TabKey } from './context'
 
 defineOptions({ name: 'DwTabButton' })
 
 interface Props {
+  /** 唯一标识，和 DwTabs 的 v-model 比对；不传时回退成顺序索引 */
+  value?: TabKey
   type?: 'default' | 'primary' | 'danger'
   disabled?: boolean
   sound?: boolean
@@ -39,18 +41,38 @@ const resolvedIconColor = computed(() => props.iconColor ?? tabs?.defaults.iconC
 const resolvedBgColor = computed(() => props.bgColor ?? tabs?.defaults.bgColor)
 const resolvedColor = computed(() => props.color ?? tabs?.defaults.color)
 
-// 注册给 DwTabs：顺序索引、禁用状态和元素都由容器统一管理
+// 注册给 DwTabs：唯一标识、禁用状态和元素都由容器统一管理
 const elRef = ref<HTMLElement | null>(null)
-const instance: TabInstance = { disabled: resolvedDisabled, el: elRef }
+const instance: TabInstance = {
+  // key = value ?? 顺序索引（index 在下面声明，computed 是惰性的，首次读取时已初始化）
+  key: computed<TabKey>(() => props.value ?? index.value),
+  disabled: resolvedDisabled,
+  el: elRef,
+}
 
 if (tabs) {
   tabs.register(instance)
   onUnmounted(() => tabs.unregister(instance))
 }
 
-// 选中状态完全由 DwTabs 决定，TabButton 自己不持有
 const index = computed(() => tabs ? tabs.order.value.indexOf(instance) : -1)
-const isActive = computed(() => tabs ? tabs.activeIndex.value === index.value : false)
+const isActive = computed(() => {
+  if (!tabs) return false
+  const key = instance.key.value
+  if (tabs.activeKey.value !== key) return false
+  // 重复 key 时只让第一个匹配项生效
+  return tabs.order.value.find(tab => tab.key.value === key) === instance
+})
+
+// 没有任何选中项时，让第一个可选标签保持可聚焦
+const isFirstEnabled = computed(() => {
+  if (!tabs) return true
+  return tabs.order.value.findIndex(tab => !tab.disabled.value) === index.value
+})
+const isTabbable = computed(() => {
+  if (!tabs) return true
+  return isActive.value || (!tabs.hasSelection.value && isFirstEnabled.value)
+})
 
 const { play } = useSound()
 const { getIconSvg } = useIcon()
@@ -83,7 +105,7 @@ function onPointerDown() {
 
 function onClick() {
   if (resolvedDisabled.value) return
-  tabs?.select(index.value)
+  tabs?.select(instance.key.value)
 }
 </script>
 
@@ -101,7 +123,7 @@ function onClick() {
     :style="tabStyle"
     :aria-selected="isActive ? 'true' : 'false'"
     :aria-disabled="resolvedDisabled ? 'true' : undefined"
-    :tabindex="tabs ? (isActive ? 0 : -1) : 0"
+    :tabindex="isTabbable ? 0 : -1"
     @pointerdown="onPointerDown"
     @click="onClick"
   >

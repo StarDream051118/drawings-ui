@@ -2,16 +2,16 @@
 import { ref } from 'vue'
 import { DwTabs, DwTabButton } from '@star-dream051118/drawings-ui'
 
-const active = ref(0)
+const active = ref('home')
 </script>
 
 <template>
   <div class="row1">
     <DwTabs v-model="active">
-      <DwTabButton>首页</DwTabButton>
-      <DwTabButton>设置</DwTabButton>
-      <DwTabButton>状态</DwTabButton>
-      <DwTabButton>关于</DwTabButton>
+      <DwTabButton value="home">首页</DwTabButton>
+      <DwTabButton value="settings">设置</DwTabButton>
+      <DwTabButton value="status">状态</DwTabButton>
+      <DwTabButton value="about">关于</DwTabButton>
     </DwTabs>
   </div>
 </template>
