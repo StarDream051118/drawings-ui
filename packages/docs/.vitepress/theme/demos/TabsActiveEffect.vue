@@ -8,13 +8,17 @@ const pressedActive = ref(1)
 
 <template>
   <div class="row2">
-    <DwTabs v-model="borderActive" active-effect="border">
-      <DwTabButton>描边式</DwTabButton>
-      <DwTabButton>默认效果</DwTabButton>
-    </DwTabs>
-    <DwTabs v-model="pressedActive" active-effect="pressed">
-      <DwTabButton>按压式</DwTabButton>
-      <DwTabButton>深底效果</DwTabButton>
-    </DwTabs>
+    <div class="flex-center-h">
+      <DwTabs v-model="borderActive" active-effect="border">
+        <DwTabButton>描边式</DwTabButton>
+        <DwTabButton>默认效果</DwTabButton>
+      </DwTabs>
+    </div>
+    <div class="flex-center-h">
+      <DwTabs v-model="pressedActive" active-effect="pressed">
+        <DwTabButton>按压式</DwTabButton>
+        <DwTabButton>深底效果</DwTabButton>
+      </DwTabs>
+    </div>
   </div>
 </template>

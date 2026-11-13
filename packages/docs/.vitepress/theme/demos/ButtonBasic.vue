@@ -11,6 +11,11 @@ import { DwButton } from '@star-dream051118/drawings-ui'
 </template>
 
 <style>
+  .flex-center-h {
+    display: flex;
+    justify-content: center;
+  }
+
   .row1 {
     display: flex;
     justify-content: center;

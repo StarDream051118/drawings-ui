@@ -8,13 +8,17 @@ const silent = ref(0)
 
 <template>
   <div class="row2">
-    <DwTabs v-model="active">
-      <DwTabButton>有音效</DwTabButton>
-      <DwTabButton>切换试试</DwTabButton>
-    </DwTabs>
-    <DwTabs v-model="silent" :sound="false">
-      <DwTabButton>无音效</DwTabButton>
-      <DwTabButton>切换试试</DwTabButton>
-    </DwTabs>
+    <div class="flex-center-h">
+      <DwTabs v-model="active">
+        <DwTabButton>有音效</DwTabButton>
+        <DwTabButton>切换试试</DwTabButton>
+      </DwTabs>
+    </div>
+    <div class="flex-center-h">
+      <DwTabs v-model="silent" :sound="false">
+        <DwTabButton>无音效</DwTabButton>
+        <DwTabButton>切换试试</DwTabButton>
+      </DwTabs>
+    </div>
   </div>
 </template>
