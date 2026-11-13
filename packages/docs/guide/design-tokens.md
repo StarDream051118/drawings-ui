@@ -39,6 +39,7 @@ DrawingsUI 通过 CSS 自定义属性实现主题系统，你可以在运行时�
 
 | 变量名 | 默认值 | 说明 |
 |--------|--------|------|
+| `--dw-spacing-base` | `3px` | 基础间距（Tab 之间的缝隙） |
 | `--dw-spacing-xs` | `4px` | 超小间距 |
 | `--dw-spacing-sm` | `8px` | 小间距 |
 | `--dw-spacing-md` | `12px` | 中间距 |
@@ -49,7 +50,7 @@ DrawingsUI 通过 CSS 自定义属性实现主题系统，你可以在运行时�
 | 变量名 | 默认值 | 说明 |
 |--------|--------|------|
 | `--dw-width-md` | `150px` | medium 按钮宽度 |
-| `--dw-width--xl` | `300px` | large 按钮宽度 |
+| `--dw-width-xl` | `300px` | large 按钮宽度 |
 
 ## 字号
 

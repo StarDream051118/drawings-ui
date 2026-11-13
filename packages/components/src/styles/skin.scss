@@ -77,7 +77,7 @@
     @if $size == medium {
       width: var(--dw-width-md);
     } @else if $size == large {
-      width: var(--dw-width--xl);
+      width: var(--dw-width-xl);
     }
   }
 }
