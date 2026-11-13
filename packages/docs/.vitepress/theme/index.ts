@@ -17,6 +17,8 @@ import TabsActiveEffect from './demos/TabsActiveEffect.vue'
 import TabsSize from './demos/TabsSize.vue'
 import TabsWidthMode from './demos/TabsWidthMode.vue'
 import TabsFill from './demos/TabsFill.vue'
+import TabsDisabled from './demos/TabsDisabled.vue'
+import TabsSound from './demos/TabsSound.vue'
 
 export default {
   extends: DefaultTheme,
@@ -36,5 +38,7 @@ export default {
     app.component('tabs-demos-size', TabsSize)
     app.component('tabs-demos-width-mode', TabsWidthMode)
     app.component('tabs-demos-fill', TabsFill)
+    app.component('tabs-demos-disabled', TabsDisabled)
+    app.component('tabs-demos-sound', TabsSound)
   },
 }

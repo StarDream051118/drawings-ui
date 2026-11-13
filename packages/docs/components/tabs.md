@@ -1,10 +1,12 @@
 # Tabs 标签栏
 
-横向排列的标签栏，用于在同一区域的不同视图之间切换。标签本体复用 Button 的 Minecraft 皮肤（`skin.scss`），因此配色、描边、立体阴影与按钮完全一致。
+标签栏用于在同一区域的不同视图之间切换，采用 Minecraft Java 风格的标签设计。标签本体复用 Button 的皮肤，描边、立体阴影、配色与按钮完全一致。
+
+## 基础用法
 
 `DwTabs` 只负责「选中哪一项」和布局，标签由你在模板里自己写 `DwTabButton`，数量不受任何 prop 限制。
 
-## 基础用法
+<tabs-demos-basic />
 
 ```vue
 <script setup lang="ts">
@@ -24,18 +26,22 @@ const active = ref(0)
 </template>
 ```
 
-<tabs-demos-basic />
+::: tip
+`v-model` 绑定的是标签在 `DwTabs` 中的**顺序索引**。`DwTabButton` 自己不持有选中状态，也没有 `active` prop —— 这与 `DwButton` 的 `active`（按下态）不是同一个概念。
+:::
 
-`v-model` 绑定的是标签在 `DwTabs` 中的顺序索引，`DwTabButton` 自己不持有选中状态，也不提供 `active` prop。
+## 交互状态
 
-## 选中效果
+### `active-effect`
 
-`active-effect` 决定选中标签长什么样，两个取值：
+`active-effect` 决定选中标签长什么样，共两个取值。
+
+在 Minecraft Java 中标签本身没有「选中态」，这里借用按钮的两种视觉来表达：
 
 | 值 | 表现 |
 |----|------|
-| `border`（默认） | 只把描边高亮成 `--dw-color-border-active`，与 hover 同色；点击时同样只变描边、**不改变背景色** |
-| `pressed` | 借用 Button 禁用态的深色底 + 去掉立体投影，像被按住不放，文字仍为白色 |
+| `border`（默认） | 只把描边高亮成 `--dw-color-border-active`，与 hover 同色；点击时同样只变描边、不改变背景色 |
+| `pressed` | 借用禁用态的深色底并去掉立体投影，像被按住不放；文字仍为白色 |
 
 <tabs-demos-active-effect />
 
@@ -45,6 +51,7 @@ const active = ref(0)
     <DwTabButton>描边式</DwTabButton>
     <DwTabButton>默认效果</DwTabButton>
   </DwTabs>
+
   <DwTabs v-model="pressedActive" active-effect="pressed">
     <DwTabButton>按压式</DwTabButton>
     <DwTabButton>深底效果</DwTabButton>
@@ -52,22 +59,59 @@ const active = ref(0)
 </template>
 ```
 
-## 尺寸
+::: tip
+`pressed` 取的是各类型对应的深色底（`--dw-color-bg-active`、`--dw-color-bg-primary-active`、`--dw-color-bg-danger-active`）。相比 `border` 式多了一层「凹陷」的语义，适合标签和页面背景色接近、只靠描边看不出区别的场景。
+:::
 
-`size` 只在 `DwTabs` 上设置，作用于整条标签栏里的每个标签；`DwTabButton` 不提供 `size`。取值与 Button 一致：字符串走 token，数字表示**每个标签的宽度多少 px**。
+### `disabled`
+
+禁用态只做两件事：**换背景色**（走 `--dw-color-bg-disabled` 及类型对应的 `-disabled` token）和**去掉立体投影**。文字颜色、文字压印、描边都保持不变，所以 hover 时描边依然会高亮成白边；光标变成 `not-allowed`，点击不会触发选中，也不会播放音效。
+
+<tabs-demos-disabled />
+
+```vue
+<template>
+  <DwTabs v-model="mixed">
+    <DwTabButton>正常</DwTabButton>
+    <DwTabButton disabled>禁用</DwTabButton>
+    <DwTabButton>正常</DwTabButton>
+  </DwTabs>
+
+  <DwTabs v-model="allDisabled" disabled>
+    <DwTabButton>整条禁用</DwTabButton>
+    <DwTabButton>无法点击</DwTabButton>
+  </DwTabs>
+</template>
+```
+
+`DwTabs` 的 `disabled` 作用于全部标签，单个 `DwTabButton` 的 `disabled` 只作用于自己，两者取「或」。禁用项仍可用键盘聚焦，但方向键与 `Home` / `End` 会跳过它们。
+
+::: tip
+默认主题下禁用底色和 `pressed` 选中底色是同一个值（`#2C2C2C`，primary / danger 同理）。想让禁用更暗、和选中态区分得更明显，覆盖这几组变量即可：
+
+```css
+:root {
+  --dw-color-bg-disabled: #1A1A1A;
+  --dw-color-bg-primary-disabled: #001A00;
+  --dw-color-bg-danger-disabled: #1A0000;
+}
+```
+:::
+
+## 标签尺寸
+
+`size` 只在 `DwTabs` 上设置，作用于整条标签栏里的每个标签，`DwTabButton` 不提供 `size`。取值与 Button 一致：字符串走已有的尺寸 token，数字表示**每个标签的宽度多少 px**。
 
 <tabs-demos-size />
 
+| 属性 | 值 | 尺寸（仅 `width`） |
+|--------|--------|------|
+| `size` | `default` | `auto` |
+| `size` | `medium` | `150px` |
+| `size` | `large` | `300px` |
+| `size` | `number` | 该数值 `px`，例如 `:size="120"` |
+
 ```vue
-<script setup lang="ts">
-import { ref } from 'vue'
-import { DwTabs, DwTabButton } from '@star-dream051118/drawings-ui'
-
-const defaultActive = ref(0)
-const mediumActive = ref(0)
-const largeActive = ref(0)
-</script>
-
 <template>
   <DwTabs v-model="defaultActive">
     <DwTabButton>默认</DwTabButton>
@@ -87,16 +131,15 @@ const largeActive = ref(0)
 </template>
 ```
 
-| `size` | 每个标签宽度 |
-|--------|------|
-| `'default'`（默认） | 由内容撑开 |
-| `'medium'` | `150px` |
-| `'large'` | `300px` |
-| `number` | 该数值 px，例如 `:size="120"` |
+整条栏的宽度 = 标签数 × 单标签宽度 + 标签之间的间距（`--dw-spacing-base`）。
 
-整条栏的宽度 = 标签数 × 单标签宽度 + 标签之间的间距（`--dw-spacing-xs`）。
+::: tip
+不同栏要各自用一个 `ref`。几条栏共用同一个 `ref` 时，点在任意一条上另外几条也会跟着变 —— 那是数据源相同，不是组件联动。
+:::
 
-## 等宽
+## 宽度模式
+
+### `width-mode`
 
 `width-mode` 控制自适应宽度（`size="default"`）下每个标签怎么定宽：
 
@@ -124,12 +167,12 @@ const largeActive = ref(0)
 ```
 
 ::: tip
-`equal` 依赖测量：挂载、标签增删、窗口缩放、像素字体加载完成后都会重新量一次。如果标签一开始渲染在 `display: none` 的容器里，量到的宽度是 0，会先按 `auto` 显示，等容器可见并触发上述任一事件后才变成等宽。`size` 为 `medium` / `large` / 数字时不生效（已经是固定宽度）。
+`equal` 依赖测量：挂载、标签增删、窗口缩放、字体加载完成后都会重新量一次，容器从不可见变为可见时也会补测。如果标签一开始渲染在 `display: none` 的容器里，量到的宽度是 0，会先按 `auto` 显示。`size` 为 `medium` / `large` / 数字时不生效（已经是固定宽度）。
 :::
 
-## 铺满父容器
+### `fill`
 
-默认 `.dw-tabs` 是块级 flex 容器，**本身就会占满父容器宽度**，只是标签按内容宽度从左侧排列、右侧留白。加 `fill` 之后每个标签变成 `flex: 1`，均分整条栏的宽度：
+默认 `.dw-tabs` 是块级 flex 容器，本身就会占满父容器宽度，只是标签按内容宽度从左侧排列、右侧留白。加 `fill` 之后每个标签变成 `flex: 1`，均分整条栏的宽度：
 
 <tabs-demos-fill />
 
@@ -150,23 +193,8 @@ const largeActive = ref(0)
 ```
 
 ::: tip
-`fill` 与 `size` 同时使用时以 `fill` 为准（标签均分，不再走 150/300px 或数值宽度）；与 `width-mode="equal"` 同时使用时 `equal` 不生效，因为 `fill` 本身就是均分。
+`fill` 与 `size` 同时使用时以 `fill` 为准（标签均分，不再走 150 / 300px 或数值宽度）；与 `width-mode="equal"` 同时使用时 `equal` 不生效，因为 `fill` 本身就是均分。
 :::
-
-## 禁用
-
-禁用态只做两件事：**换背景色**（走 `--dw-color-bg-disabled` 及类型对应的 `-disabled` token）和**去掉立体投影**。文字颜色、文字压印、描边都保持不变，所以 **hover 时描边依然会高亮成白边**；光标变成 `not-allowed`，点击不会触发选中，也不会播放音效。
-
-```css
-/* 想让禁用更暗一点，覆盖这几组变量即可 */
-:root {
-  --dw-color-bg-disabled: #1A1A1A;
-  --dw-color-bg-primary-disabled: #001A00;
-  --dw-color-bg-danger-disabled: #1A0000;
-}
-```
-
-`DwTabs` 的 `disabled` 会作用于全部标签；单个 `DwTabButton` 的 `disabled` 只作用于自己，两者取「或」。
 
 ## 键盘操作
 
@@ -175,7 +203,7 @@ const largeActive = ref(0)
 - `←` / `→` 在可选标签间循环移动，`Home` / `End` 跳到首尾，**禁用项会被跳过**
 - 只有选中项 `tabindex="0"`，其余为 `-1`（roving tabindex）
 - 禁用项使用 `aria-disabled="true"` 而不是原生 `disabled`，保证键盘用户仍能聚焦到它
-- `v-model` 传入越界索引时会自动夹到有效范围，不会出现"一个都没选中"
+- `v-model` 传入越界索引时会自动夹到有效范围，不会出现「一个都没选中」
 
 ## 子元素校验
 
@@ -194,7 +222,25 @@ const largeActive = ref(0)
 
 ## 音效
 
-与 Button 相同，`sound` 默认开启，禁用时不发声。全局关闭：
+与 Button 相同，按下标签时默认播放音效，可通过 `sound` prop 关闭：
+
+<tabs-demos-sound />
+
+```vue
+<template>
+  <DwTabs v-model="active">
+    <DwTabButton>有音效</DwTabButton>
+    <DwTabButton>切换试试</DwTabButton>
+  </DwTabs>
+
+  <DwTabs v-model="silent" :sound="false">
+    <DwTabButton>无音效</DwTabButton>
+    <DwTabButton>切换试试</DwTabButton>
+  </DwTabs>
+</template>
+```
+
+需要全局关闭时：
 
 ```ts
 import { useSound } from '@star-dream051118/drawings-ui'
@@ -210,8 +256,6 @@ useSound().setEnabled(false)
 |------|------|------|--------|
 | `modelValue` | 当前选中项索引，支持 `v-model` | `number` | `0` |
 | `active-effect` | 选中视觉 | `'border' \| 'pressed'` | `'border'` |
-| `width-mode` | 自适应宽度下的定宽方式 | `'auto' \| 'equal'` | `'auto'` |
-| `fill` | 标签均分整条栏宽度，铺满父容器 | `boolean` | `false` |
 | `type` | 整条标签栏的类型默认值 | `'default' \| 'primary' \| 'danger'` | `'default'` |
 | `size` | 整条标签栏的尺寸默认值 | `'default' \| 'medium' \| 'large' \| number` | `'default'` |
 | `disabled` | 是否整体禁用 | `boolean` | `false` |
@@ -220,6 +264,8 @@ useSound().setEnabled(false)
 | `icon-color` | 图标颜色 | `string` | — |
 | `bg-color` | 背景颜色 | `string` | — |
 | `color` | 文字颜色 | `string` | — |
+| `width-mode` | 自适应宽度下的定宽方式 | `'auto' \| 'equal'` | `'auto'` |
+| `fill` | 标签均分整条栏宽度，铺满父容器 | `boolean` | `false` |
 
 ### DwTabs Events
 
@@ -250,15 +296,30 @@ useSound().setEnabled(false)
 | `active-effect` | 选中视觉 | `'border' \| 'pressed'` | 跟随 `DwTabs` |
 
 ::: tip
-`DwTabButton` 没有 `active` prop：它是否选中完全由 `DwTabs` 的 `v-model` 决定，单独放在 `DwTabs` 外面只会渲染成一个不可选中的标签。
+`DwTabButton` 没有 `active` prop：它是否选中完全由 `DwTabs` 的 `v-model` 决定，单独放在 `DwTabs` 外面只会渲染成一个不可选中的标签。尺寸也只由 `DwTabs` 统一控制。
 :::
 
 ## 设计 Token
 
+标签使用以下 CSS 自定义属性，可通过覆盖变量自定义样式：
+
 | Token | 说明 |
 |-------|------|
+| `--dw-color-border` | 描边色 |
 | `--dw-color-border-active` | hover / 选中描边色（原 `--dw-color-hover-border`，旧名保留为别名） |
+| `--dw-color-bg` | 默认背景色 |
 | `--dw-color-bg-active` | 按压式选中的深色底 |
+| `--dw-color-bg-primary` | primary 背景色 |
 | `--dw-color-bg-primary-active` | primary 按压式选中的深色底 |
+| `--dw-color-bg-primary-disabled` | primary 禁用背景色 |
+| `--dw-color-bg-danger` | danger 背景色 |
 | `--dw-color-bg-danger-active` | danger 按压式选中的深色底 |
-| `--dw-spacing-xs` | 标签之间的间距、图标与文字的间距 |
+| `--dw-color-bg-danger-disabled` | danger 禁用背景色 |
+| `--dw-color-bg-disabled` | 禁用背景色 |
+| `--dw-color-text` | 文字颜色 |
+| `--dw-color-text-diabled` | 禁用文字颜色 |
+| `--dw-shadow-base` | 立体阴影 |
+| `--dw-width-md` | `medium` 标签宽度 |
+| `--dw-width-xl` | `large` 标签宽度 |
+| `--dw-spacing-base` | 标签之间的间距 |
+| `--dw-spacing-xs` | 图标与文字的间距 |
