@@ -27,7 +27,7 @@ const active = ref('home')
 ```
 
 ::: tip
-`v-model` 绑定的是标签的 **`value`**，`value` 在一条栏内必须唯一；它还可以是数字。没写 `value` 的标签会自动用**自己的顺序索引**作为 key，所以 `v-model="0"` 这种老写法依然可用。
+`v-model` 绑定的是标签的 **`value`**，`value` 在一条栏内必须唯一；它还可以是数字。没写 `value` 的标签会自动用**自己的顺序索引**作为 key。
 
 `DwTabButton` 自己不持有选中状态，也没有 `active` prop —— 这与 `DwButton` 的 `active`（按下态）不是同一个概念。
 :::
@@ -67,7 +67,7 @@ const active = ref('home')
 
 ### `disabled`
 
-禁用态只做两件事：**换背景色**（走 `--dw-color-bg-disabled` 及类型对应的 `-disabled` token）和**去掉立体投影**。文字颜色、文字压印、描边都保持不变，所以 hover 时描边依然会高亮成白边；光标变成 `not-allowed`，点击不会触发选中，也不会播放音效。
+禁用态的视觉与 Button 的禁用态一致：**背景换成 `--dw-color-bg-disabled`**（类型对应 `-disabled` token）、**去掉立体投影**、**文字变成 `--dw-color-text-diabled`（`#A0A0A0`）**，文字压印也切到禁用色。描边不受影响，所以 hover 时依然会高亮成白边；光标变成 `not-allowed`，点击不会触发选中，也不会播放音效。
 
 <tabs-demos-disabled />
 

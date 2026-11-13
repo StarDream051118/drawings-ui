@@ -23,13 +23,11 @@
     border-color: var(--dw-color-border-active);
   }
 
-  // 禁用态：只换背景色 + 去掉立体投影，文字与描边保持，
-  // hover 时描边仍会高亮（base 里的 hover 规则对 aria-disabled 同样生效）
+  // 禁用态与 Button 的禁用视觉一致：灰字、深底、去投影；
+  // 描边不在这里改，hover 时仍会高亮（base 的 hover 规则对 aria-disabled 同样生效）
   &:disabled,
   &[aria-disabled='true'] {
-    background: var(--dw-color-bg-disabled);
-    box-shadow: none;
-    cursor: not-allowed;
+    @include dw-skin-disabled;
   }
 
   @each $type in $types {
