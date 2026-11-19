@@ -84,6 +84,11 @@ const valueTab = ref('a')
           <DwTabButton>标签二</DwTabButton>
           <DwTabButton>标签三</DwTabButton>
         </DwTabs>
+        <DwTabs v-model="tab" :activeLine="false ">
+          <DwTabButton>文字不带</DwTabButton>
+          <DwTabButton>下划线</DwTabButton>
+          <DwTabButton>按钮</DwTabButton>
+        </DwTabs>
         <DwTabs v-model="pressedTab" active-effect="pressed">
           <DwTabButton>按压式</DwTabButton>
           <DwTabButton>选中</DwTabButton>
