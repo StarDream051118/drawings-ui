@@ -46,6 +46,7 @@ export default defineComponent({
     color: { type: String, default: undefined },
     /** 选中视觉：border 只高亮描边（默认），pressed 借用禁用态的深底 + 去投影 */
     activeEffect: { type: String as PropType<TabActiveEffect>, default: 'border' },
+    activeLine: { type: Boolean, default: true },
     /** 自适应宽度下：auto 各自按内容撑开，equal 以最宽标签为准 */
     widthMode: { type: String as PropType<TabWidthMode>, default: 'auto' },
     /** 标签均分整条栏宽度（flex: 1），用于铺满父容器 */

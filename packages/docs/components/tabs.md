@@ -65,6 +65,30 @@ const active = ref('home')
 `pressed` 取的是各类型对应的深色底（`--dw-color-bg-active`、`--dw-color-bg-primary-active`、`--dw-color-bg-danger-active`）。相比 `border` 式多了一层「凹陷」的语义，适合标签和页面背景色接近、只靠描边看不出区别的场景。
 :::
 
+### `active-line`
+
+`active-line` 给选中的标签文字加一条下划线，颜色取 `--dw-color-border-active`。默认开启；`DwTabs` 与 `DwTabButton` 上的值取「与」——整条栏关掉就全部没有，单个标签也能单独关掉。
+
+<tabs-demos-active-line />
+
+```vue
+<template>
+  <DwTabs v-model="onActive">
+    <DwTabButton value="a">默认（有下划线）</DwTabButton>
+    <DwTabButton value="b">选中项</DwTabButton>
+  </DwTabs>
+
+  <DwTabs v-model="offActive" :active-line="false">
+    <DwTabButton value="a">关闭下划线</DwTabButton>
+    <DwTabButton value="b">选中项</DwTabButton>
+  </DwTabs>
+</template>
+```
+
+::: tip
+下划线画在文字外层的 `dw-tab-button__label` 上，不会连带图标；`text-underline-offset` 为 `3px`，需要时可以覆盖。
+:::
+
 ### `disabled`
 
 禁用态的视觉与 Button 的禁用态一致：**背景换成 `--dw-color-bg-disabled`**（类型对应 `-disabled` token）、**去掉立体投影**、**文字变成 `--dw-color-text-diabled`（`#A0A0A0`）**，文字压印也切到禁用色。描边不受影响，所以 hover 时依然会高亮成白边；光标变成 `not-allowed`，点击不会触发选中，也不会播放音效。
@@ -258,6 +282,7 @@ useSound().setEnabled(false)
 |------|------|------|--------|
 | `modelValue` | 当前选中标签的 `value`（未写 value 时是索引），支持 `v-model` | `string \| number` | — |
 | `active-effect` | 选中视觉 | `'border' \| 'pressed'` | `'border'` |
+| `active-line` | 选中标签文字是否加下划线 | `boolean` | `true` |
 | `type` | 整条标签栏的类型默认值 | `'default' \| 'primary' \| 'danger'` | `'default'` |
 | `size` | 整条标签栏的尺寸默认值 | `'default' \| 'medium' \| 'large' \| number` | `'default'` |
 | `disabled` | 是否整体禁用 | `boolean` | `false` |
@@ -297,6 +322,7 @@ useSound().setEnabled(false)
 | `bg-color` | 背景颜色 | `string` | 跟随 `DwTabs` |
 | `color` | 文字颜色 | `string` | 跟随 `DwTabs` |
 | `active-effect` | 选中视觉 | `'border' \| 'pressed'` | 跟随 `DwTabs` |
+| `active-line` | 选中时文字下划线（与 `DwTabs` 取与） | `boolean` | `true` |
 
 ::: tip
 `DwTabButton` 没有 `active` prop：它是否选中完全由 `DwTabs` 的 `v-model` 决定，单独放在 `DwTabs` 外面只会渲染成一个不可选中的标签。尺寸也只由 `DwTabs` 统一控制。

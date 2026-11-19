@@ -14,7 +14,7 @@
 
   // 键盘可见焦点（鼠标点击不显示）
   &:focus-visible {
-    outline: 2px solid var(--dw-color-border-active);
+    outline: 1px solid var(--dw-color-border-active);
     outline-offset: 2px;
   }
 
@@ -51,6 +51,12 @@
   // 选中态必须放在类型循环之后：同权重，靠书写顺序覆盖类型底色
   &[aria-selected='true'] {
     @include dw-skin-selected-border;
+  }
+
+  // 下划线挂在 label 上：按钮是 inline-flex，装饰不会传播进匿名 flex 项目
+  &--active-line[aria-selected='true'] &__label {
+    text-decoration: underline var(--dw-color-border-active) solid 1.5px;
+    text-underline-offset: 3px;
   }
 
   // 按压式选中优先级更高（0,3,0），不受上面顺序影响

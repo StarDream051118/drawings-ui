@@ -19,13 +19,16 @@ interface Props {
   color?: string
   /** 选中时的视觉；不传时跟随 DwTabs 的 active-effect */
   activeEffect?: 'border' | 'pressed'
+  /** 选中时文字是否加下划线，与 DwTabs 的同名 prop 取「与」 */
+  activeLine?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   // boolean 必须显式给默认值，否则「未传」会被 Vue 解析成 false，
-  // 导致 DwTabs 上的 sound / disabled 永远无法下发到子组件
+  // 导致 DwTabs 上的 sound / disabled / activeLine 永远无法下发到子组件
   disabled: false,
   sound: true,
+  activeLine: true,
 })
 
 const tabs = inject(TABS_CONTEXT, null)
@@ -36,6 +39,7 @@ const resolvedSize = computed(() => tabs?.defaults.size ?? 'default')
 const resolvedDisabled = computed(() => props.disabled || (tabs?.defaults.disabled ?? false))
 const resolvedSound = computed(() => props.sound && (tabs?.defaults.sound ?? true))
 const resolvedEffect = computed(() => props.activeEffect ?? tabs?.defaults.activeEffect ?? 'border')
+const resolvedActiveLine = computed(() => props.activeLine && (tabs?.defaults.activeLine ?? true))
 const resolvedIcon = computed(() => props.icon ?? tabs?.defaults.icon)
 const resolvedIconColor = computed(() => props.iconColor ?? tabs?.defaults.iconColor)
 const resolvedBgColor = computed(() => props.bgColor ?? tabs?.defaults.bgColor)
@@ -119,6 +123,7 @@ function onClick() {
       `dw-tab-button--${resolvedType}`,
       sizeClass,
       resolvedEffect === 'pressed' && 'dw-tab-button--active-pressed',
+      isActive && resolvedActiveLine && 'dw-tab-button--active-line',
     ]"
     :style="tabStyle"
     :aria-selected="isActive ? 'true' : 'false'"
@@ -129,7 +134,7 @@ function onClick() {
   >
     <img v-if="isUrl" :src="resolvedIcon" class="dw-tab-button__icon" :style="resolvedIconColor ? { color: resolvedIconColor } : undefined" />
     <span v-else-if="iconSvg" class="dw-tab-button__icon" :style="resolvedIconColor ? { color: resolvedIconColor } : undefined" v-html="iconSvg" />
-    <slot />
+    <span class="dw-tab-button__label"><slot /></span>
   </button>
 </template>
 

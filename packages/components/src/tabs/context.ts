@@ -19,6 +19,7 @@ export interface TabsDefaults {
   bgColor?: string
   color?: string
   activeEffect: TabActiveEffect
+  activeLine: boolean
   widthMode: TabWidthMode
 }
 
