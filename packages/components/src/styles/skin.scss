@@ -21,6 +21,8 @@
   color: var(--dw-color-text);
   user-select: none;
   white-space: nowrap;
+  // 浏览器对 <button> 的默认光标是箭头，这里显式给出手型；禁用态由 dw-skin-disabled 覆盖成 not-allowed
+  cursor: pointer;
 
   &:hover:not(:disabled) {
     border-color: var(--dw-color-border-active);
