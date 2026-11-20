@@ -18,7 +18,12 @@ const valueTab = ref('a')
   <div class="demo">
     <h1>DrawingsUI 组件预览</h1>
     <div style="width: 100%;height: 500px;background-image: url('/images/star.png');background-size: cover;">
-      <button class="tb">首页</button>
+      <div style="display: flex;gap:6px;height: fit-content">
+        <button class="dw-tab"><span>游戏</span></button>
+        <button class="dw-tab-selected"><span>世界</span></button>
+        <button class="dw-tab"><span>更多</span></button>
+      </div>
+      <hr class="header-separator">
     </div>
 
     <section>
@@ -131,35 +136,91 @@ const valueTab = ref('a')
 
 <style lang="scss">
 
-.tb{
+.dw-tab{
   position: relative;
-  width: 200px;
+  width: 300px;
   height: 40px;
+  transform: translateY(12px);
   background-color: rgba(0, 0, 0, 0.9);
   background-clip: padding-box;
+  font-size: 16px;
   color: #ffffff;
-  border: 3px solid transparent;
-  box-shadow: inset 3px 3px 0px transparent, inset -3px -3px 0px transparent,
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
             3px -3px 0px rgba(0, 0, 0, 0.9), -3px -3px 0px rgba(0, 0, 0, 0.9),
             3px 0 0px rgba(0, 0, 0, 0.9), -3px 0 0px rgba(0, 0, 0, 0.9);
+  span {
+    display: inline-block;
+    transform: translateY(3px);
+  }
 }
-.tb::before {
+/* 占位元素让button的outline可被点击或者hover */
+.dw-tab::before {
   content: '';
   position: absolute;
   inset: -6px -6px -3px;
 }
-.tb::after{
+/* 底部黑色bg */
+.dw-tab::after{
   content: '';
   position: absolute;
   inset: 0;
   box-shadow: 0 3px 0px rgba(0, 0, 0, 0.9);
 }
-.tb:hover{
-  border: 3px solid #ffffff;
+/* shadow模拟border变色 */
+.dw-tab:hover::after{
+  box-shadow: 3px -3px 0px #ffffff, -3px 3px 0px #ffffff,
+              3px 3px 0px #ffffff, -3px -3px 0px #ffffff;
 }
-.tb:hover::after{
-  box-shadow: 0 3px 0px #ffffff;
+
+
+
+.dw-tab-selected{
+  position: relative;
+  width: 300px;
+  height: calc(40px + 15px);
+  background-color: rgba(255, 255, 255, 0.1);
+  background-clip: padding-box;
+  color: #ffffff;
+  font-size: 16px;
+  text-shadow: 1px 1px #3F3F3F;
+  border: 3px solid transparent;
+  box-shadow: 
+            3px -3px 0px rgba(0, 0, 0, 0.9), -3px -3px 0px rgba(0, 0, 0, 0.9);
+  span {
+    display: inline-block;
+    transform: translateY(0px);
+    text-decoration: underline #ffffff solid 3px;
+    text-underline-offset: 18.5px;
+  }
 }
+/* 占位元素让button的outline可被点击或者hover */
+.dw-tab-selected::before {
+  content: '';
+  position: absolute;
+  inset: -6px -6px -3px;
+}
+/* 底部黑色bg */
+.dw-tab-selected::after{
+  content: '';
+  position: absolute;
+  height: calc(100% + 3px);
+  inset: 0;
+  box-shadow: 3px -3px 0px #ffffff, -3px -3px 0px #ffffff,
+              3px 0px 0px #ffffff, -3px 0px 0px #ffffff;
+}
+
+
+.header-separator {
+  height: 6px;
+  transform: translateY(-3px);
+  background-color: rgba(0, 0, 0, 0.9);;
+  background-clip: padding-box;
+  border: none;
+  border-top: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+
 html {
   color: #ffffff;
   background-color: #202020;
