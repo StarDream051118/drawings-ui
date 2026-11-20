@@ -17,6 +17,9 @@ const valueTab = ref('a')
 <template>
   <div class="demo">
     <h1>DrawingsUI 组件预览</h1>
+    <div style="width: 100%;height: 500px;background-image: url('/images/star.png');background-size: cover;">
+      <button class="tb">首页</button>
+    </div>
 
     <section>
       <h2>类型：一种原生 + 两种定制</h2>
@@ -127,6 +130,36 @@ const valueTab = ref('a')
 </template>
 
 <style lang="scss">
+
+.tb{
+  position: relative;
+  width: 200px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.9);
+  background-clip: padding-box;
+  color: #ffffff;
+  border: 3px solid transparent;
+  box-shadow: inset 3px 3px 0px transparent, inset -3px -3px 0px transparent,
+            3px -3px 0px rgba(0, 0, 0, 0.9), -3px -3px 0px rgba(0, 0, 0, 0.9),
+            3px 0 0px rgba(0, 0, 0, 0.9), -3px 0 0px rgba(0, 0, 0, 0.9);
+}
+.tb::before {
+  content: '';
+  position: absolute;
+  inset: -6px -6px -3px;
+}
+.tb::after{
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 3px 0px rgba(0, 0, 0, 0.9);
+}
+.tb:hover{
+  border: 3px solid #ffffff;
+}
+.tb:hover::after{
+  box-shadow: 0 3px 0px #ffffff;
+}
 html {
   color: #ffffff;
   background-color: #202020;
