@@ -18,12 +18,13 @@ const valueTab = ref('a')
   <div class="demo">
     <h1>DrawingsUI 组件预览</h1>
     <div style="width: 100%;height: 500px;background-image: url('/images/star.png');background-size: cover;">
-      <div style="display: flex;gap:6px;height: fit-content">
-        <button class="dw-tab"><span>游戏</span></button>
-        <button class="dw-tab-selected"><span>世界</span></button>
-        <button class="dw-tab"><span>更多</span></button>
+      <div class="dw-tabs">
+        <hr class="header-separator">
+        <button class="dw-new-tab-button"><span class="dw-new-tab-button-text">游戏</span></button>
+        <button class="dw-new-tab-button-selected"><span class="dw-new-tab-button-selected-text">世界</span></button>
+        <button class="dw-new-tab-button"><span class="dw-new-tab-button-text">更多</span></button>
+        <hr class="header-separator">
       </div>
-      <hr class="header-separator">
     </div>
 
     <section>
@@ -136,7 +137,17 @@ const valueTab = ref('a')
 
 <style lang="scss">
 
-.dw-tab{
+.dw-tabs {
+  display: flex;
+  justify-content: center;
+  height: fit-content;
+}
+
+.dw-new-tab-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 3px;
   position: relative;
   width: 300px;
   height: 40px;
@@ -145,41 +156,59 @@ const valueTab = ref('a')
   background-clip: padding-box;
   font-size: 16px;
   color: #ffffff;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid rgba(255, 255, 255, 0.2);
   box-shadow: 
             3px -3px 0px rgba(0, 0, 0, 0.9), -3px -3px 0px rgba(0, 0, 0, 0.9),
             3px 0 0px rgba(0, 0, 0, 0.9), -3px 0 0px rgba(0, 0, 0, 0.9);
-  span {
-    display: inline-block;
+  .dw-new-tab-button-text {
+    position: relative;
+    display: flex;
+    justify-content: center;
     transform: translateY(3px);
   }
+  .dw-new-tab-button-text::after {
+    content: '';
+    position: absolute;
+    width: 306px;
+    height: 6px;
+    transform: translateY(25.5px);
+    background-color: rgba(0, 0, 0, 0.9);;
+    background-clip: padding-box;
+    border-top: 3px solid rgba(255, 255, 255, 0.2);
+  }
+}
+.dw-new-tab-button:last-of-type {
+  margin-right: 0px;
 }
 /* 占位元素让button的outline可被点击或者hover */
-.dw-tab::before {
+.dw-new-tab-button::before {
   content: '';
   position: absolute;
   inset: -6px -6px -3px;
 }
 /* 底部黑色bg */
-.dw-tab::after{
+.dw-new-tab-button::after{
   content: '';
   position: absolute;
   inset: 0;
   box-shadow: 0 3px 0px rgba(0, 0, 0, 0.9);
 }
 /* shadow模拟border变色 */
-.dw-tab:hover::after{
+.dw-new-tab-button:hover::after{
   box-shadow: 3px -3px 0px #ffffff, -3px 3px 0px #ffffff,
               3px 3px 0px #ffffff, -3px -3px 0px #ffffff;
 }
 
 
 
-.dw-tab-selected{
+.dw-new-tab-button-selected{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   width: 300px;
   height: calc(40px + 15px);
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: transparent;
   background-clip: padding-box;
   color: #ffffff;
   font-size: 16px;
@@ -187,21 +216,44 @@ const valueTab = ref('a')
   border: 3px solid transparent;
   box-shadow: 
             3px -3px 0px rgba(0, 0, 0, 0.9), -3px -3px 0px rgba(0, 0, 0, 0.9);
-  span {
-    display: inline-block;
+  .dw-new-tab-button-selected-text {
+    display: flex;
+    justify-content: center;
     transform: translateY(0px);
     text-decoration: underline #ffffff solid 3px;
     text-underline-offset: 18.5px;
   }
+  .dw-new-tab-button-selected-text::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    right: -136.5px;
+    transform: translateY(33.5px);
+    background-color: rgba(0, 0, 0, 0.9);;
+    background-clip: padding-box;
+    border-top: 3px solid rgba(255, 255, 255, 0.2);
+  }
+  .dw-new-tab-button-selected-text::before {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    left: -136.5px;
+    transform: translateY(33.5px);
+    background-color: rgba(0, 0, 0, 0.9);;
+    background-clip: padding-box;
+    border-top: 3px solid rgba(255, 255, 255, 0.2);
+  }
 }
 /* 占位元素让button的outline可被点击或者hover */
-.dw-tab-selected::before {
+.dw-new-tab-button-selected::before {
   content: '';
   position: absolute;
   inset: -6px -6px -3px;
 }
 /* 底部黑色bg */
-.dw-tab-selected::after{
+.dw-new-tab-button-selected::after{
   content: '';
   position: absolute;
   height: calc(100% + 3px);
@@ -212,12 +264,14 @@ const valueTab = ref('a')
 
 
 .header-separator {
+  align-self: self-end;
+  flex: 1;
   height: 6px;
-  transform: translateY(-3px);
+  transform: translateY(3.5px);
   background-color: rgba(0, 0, 0, 0.9);;
   background-clip: padding-box;
   border: none;
-  border-top: 3px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid rgba(255, 255, 255, 0.2);
 }
 
 
