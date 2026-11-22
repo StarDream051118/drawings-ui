@@ -176,7 +176,7 @@ const activeNewTabIndex = computed(() =>
   background-image: url('/images/star.png');
   background-size: cover;
   --dw-tabstrip-tab-width: 300px;
-  --dw-tabstrip-tab-gap: 3px;
+  --dw-tabstrip-tab-gap: 6px;
   --dw-tabstrip-tab-height: 40px;
   --dw-tabstrip-tab-height-selected: calc(var(--dw-tabstrip-tab-height) + 15px);
   --dw-tabstrip-line-height: 6px;
@@ -219,8 +219,6 @@ const activeNewTabIndex = computed(() =>
   font-size: 16px;
   color: #ffffff;
   border: 3px solid var(--dw-tabstrip-highlight);
-  /* 底边交给统一的 Tab 栏线元素绘制，避免双层高光 */
-  border-bottom-color: transparent;
   box-shadow: 
             3px -3px 0px var(--dw-tabstrip-tab-background-color), -3px -3px 0px var(--dw-tabstrip-tab-background-color),
             3px 0 0px var(--dw-tabstrip-tab-background-color), -3px 0 0px var(--dw-tabstrip-tab-background-color);
@@ -292,7 +290,6 @@ const activeNewTabIndex = computed(() =>
 .dw-tabstrip-group-content-footer {
   position: relative;
   width: 100%;
-  transform: translateY(3px);
   height: var(--dw-tabstrip-content-footer-height);
   background-color: var(--dw-tabstrip-content-background);
   border-bottom: 3px solid rgba(0, 0, 0, 1);
@@ -303,8 +300,6 @@ const activeNewTabIndex = computed(() =>
   position: relative;
   width: 100%;
   height: var(--dw-tabstrip-line-height);
-  /* 上移半个线高，让高光带与未选中 tab 的底边重合 */
-  margin-top: calc(var(--dw-tabstrip-line-height) * -0.5);
   pointer-events: none;
 
   /* tab 组总宽：n * 单宽 + (n - 1) * 间距 */
@@ -317,11 +312,11 @@ const activeNewTabIndex = computed(() =>
   /* 窗口左右边界：前 i 个 tab 的累计宽度，并各外扩 3px 盖住选中 tab 的外描边 */
   --dw-tabstrip-window-left: calc(
     var(--dw-tabstrip-tabs-offset) +
-      var(--dw-tabstrip-active-index) * (var(--dw-tabstrip-tab-width) + var(--dw-tabstrip-tab-gap)) -
+      var(--dw-tabstrip-active-index) * (var(--dw-tabstrip-tab-width) + var(--dw-tabstrip-tab-gap)) +
       3px
   );
   --dw-tabstrip-window-right: calc(
-    var(--dw-tabstrip-window-left) + var(--dw-tabstrip-tab-width) + 6px
+    var(--dw-tabstrip-window-left) + var(--dw-tabstrip-tab-width) - 6px
   );
 
   /* 上 3px 高光、下 3px 实色；选中 tab 所在区间整段挖空 */
