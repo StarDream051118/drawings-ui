@@ -18,13 +18,18 @@ const model = defineModel<string>({ default: '' })
 const rootEl = ref<HTMLElement | null>(null)
 const inputEl = ref<HTMLInputElement | null>(null)
 const mirrorEl = ref<HTMLElement | null>(null)
+const caretEl = ref<HTMLElement | null>(null)
 
 const focused = ref(false)
 // 光标是否折叠（没有选中一段文字）
 const caretCollapsed = ref(true)
 // 折叠光标是否停在文字末尾：末尾画下划线，其余位置画竖线
 const caretAtEnd = ref(true)
+// 至少成功测量过一次才显示光标，避免隐藏容器/外部改值后的首帧闪位
+const measured = ref(false)
 let frame = 0
+let lastCaretIndex = -1
+let resizeObserver: ResizeObserver | null = null
 
 const rootStyle = computed(() => ({
   '--dw-input-caret-blink': `${Math.max(props.blinkDuration, 0)}s`,
@@ -37,6 +42,12 @@ function measure() {
   const mirror = mirrorEl.value
   if (!root || !input || !mirror) return
 
+  // 容器隐藏（display:none）时量到的都是 0，等 ResizeObserver 通知可见后再量
+  if (input.clientWidth === 0) {
+    measured.value = false
+    return
+  }
+
   const style = getComputedStyle(input)
 
   // 字体必须和输入框完全一致，直接复制计算样式，避免两边字体设置漂移
@@ -45,6 +56,9 @@ function measure() {
   mirror.style.fontWeight = style.fontWeight
   mirror.style.fontStyle = style.fontStyle
   mirror.style.letterSpacing = style.letterSpacing
+  mirror.style.textTransform = style.textTransform
+  mirror.style.wordSpacing = style.wordSpacing
+  mirror.style.fontStretch = style.fontStretch
 
   // 有选区时按焦点端定位：向后选中（往左拖）时焦点在左端
   const start = input.selectionStart ?? input.value.length
@@ -76,6 +90,20 @@ function measure() {
 
   caretCollapsed.value = start === end
   caretAtEnd.value = caretCollapsed.value && index === input.value.length
+  measured.value = true
+
+  // 光标移动后让闪烁从「亮」重新计时，与原生光标行为一致
+  if (focused.value && index !== lastCaretIndex) restartBlink()
+  lastCaretIndex = index
+}
+
+function restartBlink() {
+  const caret = caretEl.value
+  if (!caret) return
+  caret.style.animation = 'none'
+  // 强制回读一次布局，让浏览器丢弃当前动画进度
+  void caret.offsetWidth
+  caret.style.animation = ''
 }
 
 function schedule() {
@@ -88,6 +116,8 @@ function schedule() {
 
 function onFocus() {
   focused.value = true
+  // 重新聚焦时闪烁也要从头开始
+  lastCaretIndex = -1
   schedule()
 }
 
@@ -104,12 +134,18 @@ watch(model, () => nextTick(schedule))
 onMounted(() => {
   measure()
   window.addEventListener('resize', onResize)
+  // 父容器宽度变化、display:none → block 都不会触发 window resize，需要单独监听尺寸
+  if (typeof ResizeObserver !== 'undefined' && inputEl.value) {
+    resizeObserver = new ResizeObserver(() => schedule())
+    resizeObserver.observe(inputEl.value)
+  }
   // 像素字体加载完之前量到的是回退字体宽度，加载完再量一次
   document.fonts?.ready.then(schedule).catch(() => {})
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', onResize)
+  resizeObserver?.disconnect()
   if (frame) cancelAnimationFrame(frame)
 })
 </script>
@@ -122,6 +158,7 @@ onBeforeUnmount(() => {
       'dw-input--focused': focused,
       'dw-input--caret-end': caretAtEnd,
       'dw-input--selecting': !caretCollapsed,
+      'dw-input--measured': measured,
     }"
     :style="rootStyle"
   >
@@ -134,6 +171,7 @@ onBeforeUnmount(() => {
       @focus="onFocus"
       @blur="onBlur"
       @input="schedule"
+      @keydown="schedule"
       @keyup="schedule"
       @click="schedule"
       @select="schedule"
@@ -143,7 +181,7 @@ onBeforeUnmount(() => {
     <!-- 只用来量文字宽度，不可见也不参与交互 -->
     <span ref="mirrorEl" class="dw-input__mirror" aria-hidden="true" />
     <!-- 自绘光标：末尾为下划线，文字中间为竖线 -->
-    <span class="dw-input__caret" aria-hidden="true" />
+    <span ref="caretEl" class="dw-input__caret" aria-hidden="true" />
   </span>
 </template>
 
