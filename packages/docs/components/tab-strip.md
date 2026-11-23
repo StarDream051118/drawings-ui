@@ -277,6 +277,12 @@ const active = ref('world')
 | `update:modelValue` | 独立使用时的选中项变化 | `value: string \| number` |
 | `change` | 选中项变化（语义化别名） | `value: string \| number` |
 
+### DwTabStripGroup Slots
+
+| 插槽名 | 说明 |
+|--------|------|
+| `default` | 页签，只能放 `DwTabStripButton` |
+
 ### DwTabStripButton Props
 
 | 属性 | 说明 | 类型 | 默认值 |
@@ -289,17 +295,35 @@ const active = ref('world')
 图标颜色不由组件控制：内置图标统一用 `fill="currentColor"`，跟随页签文字颜色；传图片 URL 时按 `<img>` 渲染，保留图片自身颜色。组件目前只支持「内置图标名」和「图片 URL」两种，不支持直接传 SVG 字符串。
 :::
 
+### DwTabStripButton Slots
+
+| 插槽名 | 说明 |
+|--------|------|
+| `default` | 页签文字 |
+
 ### DwTabStripContent Props
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | `content-height` | 内容区最小高度，内容更高时以内容为准 | `number \| string` | `'auto'` |
 
+### DwTabStripContent Slots
+
+| 插槽名 | 说明 |
+|--------|------|
+| `default` | 内容区内容 |
+
 ### DwTabStripFooter Props
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | `height` | 页脚高度，数字按 px 处理 | `number \| string` | 与页签组等高 |
+
+### DwTabStripFooter Slots
+
+| 插槽名 | 说明 |
+|--------|------|
+| `default` | 页脚内容 |
 
 ## 设计 Token
 
