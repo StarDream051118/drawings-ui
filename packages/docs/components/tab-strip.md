@@ -125,7 +125,11 @@ const active = ref('world')
 
 ## 内容高度
 
-`content-height` 默认 `'auto'`，由插槽内容撑开；传数字按 px 处理，传字符串原样透传（如 `'40vh'`）。
+`content-height` 是**最小高度**，默认 `'auto'`：
+
+- 插槽内容比它高时，按内容实际高度显示，不会被截断；
+- 内容为空且设为 `0` 时，内容区就缩到 0；
+- 数字按 px 处理，字符串原样透传（如 `'40vh'`）。
 
 ```vue
 <template>
@@ -242,7 +246,7 @@ const active = ref('world')
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `content-height` | 内容区高度，数字按 px 处理 | `number \| string` | `'auto'` |
+| `content-height` | 内容区最小高度，内容更高时以内容为准 | `number \| string` | `'auto'` |
 
 ### DwTabStripFooter Props
 

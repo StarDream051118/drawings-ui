@@ -5,7 +5,7 @@ import { TAB_STRIP_CONTEXT } from './context'
 defineOptions({ name: 'DwTabStripContent' })
 
 interface Props {
-  /** 内容区高度；数字按 px 处理，默认 auto 由内容撑开 */
+  /** 内容区最小高度；内容更高时按内容高度显示，数字按 px 处理 */
   contentHeight?: number | string
 }
 
@@ -27,7 +27,8 @@ const contentStyle = computed(() => {
 
   const height = props.contentHeight
   if (height !== undefined && height !== '' && height !== 'auto') {
-    style.height = typeof height === 'number' ? `${height}px` : height
+    // 用 min-height 而不是 height：内容比它高时以内容为准，没内容时才允许缩到设定值
+    style.minHeight = typeof height === 'number' ? `${height}px` : height
   }
 
   return style
