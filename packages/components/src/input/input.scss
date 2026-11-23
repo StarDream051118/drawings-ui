@@ -9,6 +9,12 @@
 .dw-input__native {
   // 竖线与下划线都由自绘元素画，原生光标隐藏；选区高亮保持不变
   caret-color: transparent;
+
+  &::selection {
+    background-color: var(--dw-color-selection-bg);
+    color: var(--dw-color-selection-text);
+    text-shadow: var(--dw-text-selection-shadow);
+  }
 }
 
 // 与内部 input 的文字起点对齐，偏移量由组件测量后写入

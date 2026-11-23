@@ -55,4 +55,9 @@
   --dw-text-color-shadow: 1px 1px #3F3F3F;
   --dw-text-disabled-color-shadow: 1px 1px #282828;
   --dw-shadow-base: inset -3px 0 #00000038 ,inset 0 -6px #00000038, inset 3px 3px #FFFFFF66;
+
+  // 文本选区（Input 等输入组件的 ::selection）
+  --dw-color-selection-bg: #FFFFFF;
+  --dw-color-selection-text: #201FFF;
+  --dw-text-selection-shadow: 1px 1px #C7C7FF;
 }
