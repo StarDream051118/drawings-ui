@@ -26,7 +26,7 @@ interface Props {
   bgSelectedColor?: string
   /** 背景图片地址；铺满整条页签栏（含页签区），为空时不铺 */
   bgImage?: string
-  /** 背景模糊程度（px），页签区与内容区共用同一个值 */
+  /** 背景模糊程度（px） */
   bgBlur?: number
 }
 
@@ -67,16 +67,19 @@ provide(TAB_STRIP_CONTEXT, {
   })),
   select,
 })
+
+const rootStyle = computed(() => {
+  const style: Record<string, string> = {
+    '--dw-tabstrip-blur': `${props.bgBlur}px`,
+  }
+  if (props.bgImage) style['--dw-tabstrip-bg-image'] = `url(${props.bgImage})`
+  return style
+})
 </script>
 
 <template>
-  <div class="dw-tab-strip" :style="{ '--dw-tabstrip-blur': `${bgBlur}px` }">
-    <div
-      v-if="bgImage"
-      class="dw-tabstrip-background"
-      :style="{ backgroundImage: `url(${bgImage})` }"
-      aria-hidden="true"
-    />
+  <div class="dw-tab-strip" :style="rootStyle">
+    <div v-if="bgImage" class="dw-tabstrip-background" aria-hidden="true" />
     <slot />
   </div>
 </template>

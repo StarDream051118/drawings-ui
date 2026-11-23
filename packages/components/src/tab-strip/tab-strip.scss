@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  // 内容区为了上下分隔线向下错开 3px，这里留出这段高度，背景层才能盖满
+  // 页脚底部 3px 高光需要留高，背景层才能盖满
   padding-bottom: 3px;
 }
 
@@ -14,7 +14,18 @@
 .dw-tabstrip-background {
   position: absolute;
   inset: 0;
-  background-position: center;
-  background-size: cover;
+  overflow: hidden;
   pointer-events: none;
+
+  // 比容器大一圈再模糊：filter: blur 会在边缘采样到透明像素，
+  // 不外扩就会在四边出现发虚的白边
+  &::before {
+    content: '';
+    position: absolute;
+    inset: calc(var(--dw-tabstrip-blur, 3px) * -1);
+    background-image: var(--dw-tabstrip-bg-image, none);
+    background-position: center;
+    background-size: cover;
+    filter: blur(var(--dw-tabstrip-blur, 3px));
+  }
 }

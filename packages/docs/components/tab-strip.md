@@ -9,8 +9,8 @@
 | `DwTabStrip` | 持有 `v-model` 与整条栏的默认值，向下提供 context | 任意 |
 | `DwTabStripGroup` | 页签行 + 描边线，管理页签顺序 | 一般放在 `DwTabStrip` 内；也可独立使用 |
 | `DwTabStripButton` | 单个页签 | 只能放在 `DwTabStripGroup` 内 |
-| `DwTabStripContent` | 内容区，负责内容高度与模糊 | 只能放在 `DwTabStrip` 内 |
-| `DwTabStripFooter` | 页脚，默认与页签组等高，与内容区同色同模糊 | 只能放在 `DwTabStrip` 内 |
+| `DwTabStripContent` | 内容区，负责内容高度与底色 | 只能放在 `DwTabStrip` 内 |
+| `DwTabStripFooter` | 页脚，默认与页签组等高，只负责留高与内容承载 | 只能放在 `DwTabStrip` 内 |
 
 ## 基础用法
 
@@ -93,10 +93,10 @@ const active = ref('world')
 
 ## 背景图与模糊
 
-背景图与模糊都属于整条页签栏，页签区和内容区共用同一个模糊值。
+背景图与模糊都属于整条页签栏，模糊的是整张背景图。
 
 - `bg-image`：背景图片地址，作用在 `DwTabStrip` 内的 `.dw-tabstrip-background` 元素上，铺满整条栏
-- `bg-blur`：背景模糊程度（px），默认 `3`，同时作用于页签组和内容区
+- `bg-blur`：背景模糊程度（px），默认 `3`
 
 <tab-strip-demos-background />
 
@@ -116,7 +116,9 @@ const active = ref('world')
 ```
 
 ::: tip
-背景层是绝对定位铺满整条栏的，层级在页签和内容之下，所以页签之间的缝隙、内容区四周露出的都是同一张背景图。页签组和内容区都带同一套 `backdrop-filter`，两者交界处不会出现一段没模糊的图像。
+模糊用的是 `filter: blur()`，直接作用在背景图自己身上，所以整张图是同一套模糊 —— 页签区、内容区、页脚露出的部分不会有清晰/模糊的差异。
+
+背景层会先比容器外扩一个模糊半径再被裁掉，否则 `filter: blur` 会在四边采样到透明像素，出现发虚的白边。
 :::
 
 ## 内容高度
@@ -133,7 +135,7 @@ const active = ref('world')
 
 ## 页脚
 
-`DwTabStripFooter` 放在内容区之后，默认高度与页签组等高（`--dw-tabstrip-tab-height-selected` + `--dw-tabstrip-line-height`），底色和模糊都跟随 `bg-selected-color`，所以页脚与内容区、页签区是同一套材质。
+`DwTabStripFooter` 放在内容区之后，默认高度与页签组等高（`--dw-tabstrip-tab-height-selected` + `--dw-tabstrip-line-height`）。它本身不画底色、描边和阴影，只负责底部留高，露出来的就是背景图。
 
 <tab-strip-demos-footer />
 
@@ -158,7 +160,7 @@ const active = ref('world')
 `height` 不传时等于页签组高度；传数字按 px 处理，传字符串原样透传。
 
 ::: tip
-背景图铺满整条栏，所以页签区、内容区、页脚三块露出的都是同一张图；三块都带同一套 `backdrop-filter` 和 `--dw-color-tabstrip-content`，交界处不会出现色差或一段没模糊的图像。
+背景图铺满整条栏，所以页签区、内容区、页脚三块露出的都是同一张图。内容区底部的 3px 边线就是内容与页脚的分界。
 :::
 
 ## 单独使用 DwTabStripGroup

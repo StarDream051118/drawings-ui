@@ -20,16 +20,10 @@ if (!strip) {
 
 const footerStyle = computed(() => {
   const style: Record<string, string> = {}
-
-  // 与内容区同色，背景图透出来的部分才不会出现色差
-  const selected = strip?.defaults.value.bgSelectedColor
-  if (selected) style['--dw-color-tabstrip-content'] = selected
-
   const height = props.height
   if (height !== undefined && height !== '' && height !== 'auto') {
     style.height = typeof height === 'number' ? `${height}px` : height
   }
-
   return style
 })
 </script>
