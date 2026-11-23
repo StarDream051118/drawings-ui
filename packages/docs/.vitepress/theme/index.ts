@@ -1,6 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
 import type { EnhanceAppContext } from 'vitepress'
-import '@star-dream051118/drawings-ui/styles/index.scss'
+import '@star-dream051118/drawings-ui/styles/base.scss'
 import '@star-dream051118/drawings-ui/styles/font.scss'
 import ButtonBasic from './demos/ButtonBasic.vue'
 import ButtonSize from './demos/ButtonSize.vue'

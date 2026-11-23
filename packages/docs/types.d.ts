@@ -7,7 +7,7 @@ declare module '*.svg' {
   export default content
 }
 
-declare module '@star-dream051118/drawings-ui/styles/index.scss' {
+declare module '@star-dream051118/drawings-ui/styles/base.scss' {
   const content: string
   export default content
 }

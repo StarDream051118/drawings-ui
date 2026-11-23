@@ -10,7 +10,7 @@ import {
   DwTabStripContent,
   DwTabStripFooter,
 } from '@star-dream051118/drawings-ui'
-import '@star-dream051118/drawings-ui/styles/index.scss'
+import '@star-dream051118/drawings-ui/styles/base.scss'
 import '@star-dream051118/drawings-ui/styles/font.scss'
 
 const tab = ref(0)
