@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   DwButton,
   DwTabs,
@@ -38,6 +38,63 @@ const activeTabStrip = ref('game')
 const activeTabStripGroup = ref('game')
 /** TabStrip 演示用背景图 */
 const tabStripBg = '/images/star.png'
+
+// 镜像测量：用隐藏元素量出光标前的文字宽度，再定位自绘的下划线光标
+const worldName = ref('新的世界')
+const inputEl = ref<HTMLInputElement | null>(null)
+const mirrorEl = ref<HTMLElement | null>(null)
+const caretX = ref(0)
+const inputFocused = ref(false)
+let caretRaf = 0
+
+function measureCaret() {
+  const el = inputEl.value
+  const mirror = mirrorEl.value
+  if (!el || !mirror) return
+
+  // 字体必须和输入框完全一致，直接复制计算样式，避免两边字体设置漂移
+  const style = getComputedStyle(el)
+  mirror.style.fontFamily = style.fontFamily
+  mirror.style.fontSize = style.fontSize
+  mirror.style.fontWeight = style.fontWeight
+  mirror.style.fontStyle = style.fontStyle
+  mirror.style.letterSpacing = style.letterSpacing
+
+  // 有选区时按焦点端定位：向后选中（往左拖）时焦点在左端
+  const start = el.selectionStart ?? el.value.length
+  const end = el.selectionEnd ?? start
+  const caretIndex = el.selectionDirection === 'backward' ? start : end
+
+  mirror.textContent = el.value.slice(0, caretIndex)
+  // 内容超宽时 input 会横向滚动，光标的屏幕位置要减去 scrollLeft
+  caretX.value = mirror.getBoundingClientRect().width - el.scrollLeft
+}
+
+function scheduleCaret() {
+  if (caretRaf) return
+  caretRaf = requestAnimationFrame(() => {
+    caretRaf = 0
+    measureCaret()
+  })
+}
+
+function onInputFocus() {
+  inputFocused.value = true
+  scheduleCaret()
+}
+
+function onInputBlur() {
+  inputFocused.value = false
+}
+
+onMounted(() => {
+  // 像素字体加载完之前量到的是回退字体宽度，加载完再量一次
+  document.fonts?.ready.then(scheduleCaret).catch(() => {})
+})
+
+onBeforeUnmount(() => {
+  if (caretRaf) cancelAnimationFrame(caretRaf)
+})
 </script>
 
 <template>
@@ -60,7 +117,30 @@ const tabStripBg = '/images/star.png'
           <div class="tabstrip-demo-frame">
             <div class="tabstrip-demo-content">
               <div class="world-title">世界名称</div>
-              <input value="新的世界" type="text" class="demo-input dw-input">
+              <span class="demo-input-wrap" :class="{ 'demo-input-wrap--focused': inputFocused }">
+                <input
+                  ref="inputEl"
+                  v-model="worldName"
+                  type="text"
+                  class="demo-input dw-input"
+                  @focus="onInputFocus"
+                  @blur="onInputBlur"
+                  @input="scheduleCaret"
+                  @keyup="scheduleCaret"
+                  @click="scheduleCaret"
+                  @select="scheduleCaret"
+                  @scroll="scheduleCaret"
+                  @compositionupdate="scheduleCaret"
+                >
+                <!-- 只用来量文字宽度，不可见也不参与交互 -->
+                <span ref="mirrorEl" class="demo-input-mirror" aria-hidden="true" />
+                <!-- 自绘下划线光标 -->
+                <span
+                  class="demo-input-caret"
+                  :style="{ transform: `translateX(${caretX}px)` }"
+                  aria-hidden="true"
+                />
+              </span>
               <DwButton class="demo-button">游戏模式：生存</DwButton>
               <DwButton class="demo-button">难度：普通</DwButton>
               <DwButton class="demo-button">允许指令：关</DwButton>
@@ -211,11 +291,62 @@ const tabStripBg = '/images/star.png'
   margin-top: 30px;
   margin-bottom: 10px;
 }
+.demo-input-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
 .demo-input {
+  display: block;
   width: 100%;
   height: 46px;
   margin-bottom: 20px;
   font-size: 18px;
+}
+
+// 隐藏原生竖线光标，选区高亮保持不变
+.demo-input.dw-input {
+  caret-color: transparent;
+}
+
+// 与 input 的文字起点（border-left 3px + padding-left 5px）对齐
+.demo-input-mirror {
+  position: absolute;
+  top: 0;
+  left: 8px;
+  visibility: hidden;
+  white-space: pre;
+  pointer-events: none;
+  user-select: none;
+}
+
+.demo-input-caret {
+  position: absolute;
+  left: 8px;
+  top: 30px;
+  width: 0.55em;
+  height: 3px;
+  background: var(--dw-color-text);
+  pointer-events: none;
+  opacity: 0;
+
+  .demo-input-wrap--focused & {
+    opacity: 1;
+    animation: demo-caret-blink 1s steps(1) infinite;
+  }
+}
+
+@keyframes demo-caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 .demo-button {
   width: 100%;
