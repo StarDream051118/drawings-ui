@@ -34,8 +34,8 @@ const newTabs: NewTabItem[] = [
 ]
 /** 新 Tab 栏所有标签共用同一个宽度（等长），对应已有 Tab 组件的自定义宽度 */
 const newTabWidth = ref(300)
-const activeNewTab = ref('world')
-const activeTabStripGroup = ref('world')
+const activeTabStrip = ref('game')
+const activeTabStripGroup = ref('game')
 /** TabStrip 演示用背景图 */
 const tabStripBg = '/images/star.png'
 </script>
@@ -45,9 +45,10 @@ const tabStripBg = '/images/star.png'
     <h1>DrawingsUI 组件预览</h1>
     <section>
       <h2>TabStrip组件预览</h2>
-      <DwTabStrip v-model="activeNewTab" :size="newTabWidth" :bg-image="tabStripBg" :bg-blur="3">
+      <DwTabStrip v-model="activeTabStrip" :size="newTabWidth" :bg-image="tabStripBg" :bg-blur="3">
         <DwTabStripGroup>
           <DwTabStripButton
+          style="font-size: 18px;"
             v-for="item in newTabs"
             :key="item.value"
             :value="item.value"
@@ -55,11 +56,24 @@ const tabStripBg = '/images/star.png'
             {{ item.label }}
           </DwTabStripButton>
         </DwTabStripGroup>
-        <DwTabStripContent :content-height="387">
-          <div class="tabstrip-demo-content">内容区域</div>
+        <DwTabStripContent :content-height="500">
+          <div class="tabstrip-demo-frame">
+            <div class="tabstrip-demo-content">
+              <div class="world-title">世界名称</div>
+              <input value="新的世界" type="text" class="demo-input dw-input">
+              <DwButton class="demo-button">游戏模式：生存</DwButton>
+              <DwButton class="demo-button">难度：普通</DwButton>
+              <DwButton class="demo-button">允许指令：关</DwButton>
+            </div>
+          </div>
         </DwTabStripContent>
         <DwTabStripFooter>
-          <div class="tabstrip-demo-content">页脚区域</div>
+          <div class="tabstrip-demo-footer-frame">
+            <div class="demo-button-group">
+              <DwButton class="demo-button-footer">创建新的世界</DwButton>
+              <DwButton class="demo-button-footer">取消</DwButton>
+            </div>
+          </div>
         </DwTabStripFooter>
       </DwTabStrip>
     </section>
@@ -184,8 +198,69 @@ const tabStripBg = '/images/star.png'
 </template>
 
 <style lang="scss">
+.tabstrip-demo-frame {
+  width: 550px;
+  margin: 20px auto;
+}
 .tabstrip-demo-content {
-  padding: 16px;
+  width: 100%;
+  height: 100%;
+}
+.world-title {
+  font-size: 18px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+.demo-input {
+  width: 100%;
+  height: 46px;
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+.demo-button {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.tabstrip-demo-footer-frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.demo-button-group {
+  display: flex;
+  gap: 20px;
+  width: 60%;
+}
+.demo-button-footer {
+  width: 100%;
+}
+
+
+.dw-input {
+  border-radius: 0;
+  color: var(--dw-color-text);
+  text-shadow: var(--dw-text-color-shadow);
+  background-color: #000000;
+  border: 3px solid #A0A0A0;
+  font-size: 16px;
+  padding: 5px 5px;
+
+  &:hover:not(:focus) {
+    border-color: #ffffff;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #ffffff;
+  }
+
+  &::selection {
+    background-color: #ffffff;
+    color: #201FFF;
+    text-shadow: 1px 1px #C7C7FF;
+  }
 }
 
 html {
