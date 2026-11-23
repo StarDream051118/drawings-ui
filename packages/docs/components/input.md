@@ -28,6 +28,11 @@ const value = ref('新的世界')
 - 光标在文字中间：`2px` 竖线，高度跟随一行文字
 - 选中一段文字：隐藏自绘光标，使用系统选区高亮
 - 位置通过对隐藏 mirror 元素量文字宽度得到，字体、字号、字距均取输入框的计算样式；输入框横向滚动时会扣除 `scrollLeft`
+- 容器尺寸变化（含 `display: none` → 显示）和字体加载完成后会自动重新测量
+
+::: warning
+光标位置按「从左到右（LTR）+ 左对齐」计算。输入框使用 `text-align: center` / `text-align: right` 或 `direction: rtl` 时，位置会偏。
+:::
 
 ## 闪烁速度
 
