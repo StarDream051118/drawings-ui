@@ -19,7 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build && sass src/fonts.scss dist/fonts.css --no-source-map && node -e \"require('fs').copyFileSync('src/fonts/mc_font.ttf','dist/mc_font.ttf')\""
+    "build": "vite build && sass src/fonts.scss dist/fonts.css --no-source-map && node -e \"require('fs').copyFileSync('src/fonts/mc_font.woff2','dist/mc_font.woff2')\""
   },
   "peerDependencies": {
     "vue": "^3.4.0"
