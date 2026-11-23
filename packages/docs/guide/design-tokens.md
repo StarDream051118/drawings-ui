@@ -2,6 +2,15 @@
 
 DrawingsUI 通过 CSS 自定义属性实现主题系统，你可以在运行时动态切换。
 
+## 引入
+
+- 引入组件样式 `@star-dream051118/drawings-ui/style.css` 时，Token 已一并包含，无需额外引入。
+- 只想要变量、不引入组件样式时（例如在业务组件里复用配色），单独引入 `tokens.css`：
+
+```ts
+import '@star-dream051118/drawings-ui/tokens.css'
+```
+
 ## 按钮颜色
 
 ### 默认按钮
