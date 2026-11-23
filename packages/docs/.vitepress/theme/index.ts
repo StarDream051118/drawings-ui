@@ -12,6 +12,7 @@ import ButtonIconColor from './demos/ButtonIconColor.vue'
 import ButtonBgColor from './demos/ButtonBgColor.vue'
 import ButtonBgColorChange from './demos/ButtonBgColorChange.vue'
 import ButtonSound from './demos/ButtonSound.vue'
+import InputBasic from './demos/InputBasic.vue'
 import TabsBasic from './demos/TabsBasic.vue'
 import TabsActiveEffect from './demos/TabsActiveEffect.vue'
 import TabsSize from './demos/TabsSize.vue'
@@ -39,6 +40,7 @@ export default {
     app.component('button-demos-bg-color', ButtonBgColor)
     app.component('button-demos-bg-color-change', ButtonBgColorChange)
     app.component('button-demos-sound', ButtonSound)
+    app.component('input-demos-basic', InputBasic)
     app.component('tabs-demos-basic', TabsBasic)
     app.component('tabs-demos-active-effect', TabsActiveEffect)
     app.component('tabs-demos-size', TabsSize)

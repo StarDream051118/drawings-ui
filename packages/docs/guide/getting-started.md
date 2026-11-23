@@ -55,6 +55,7 @@ import '@star-dream051118/drawings-ui/fonts.css'
 | 组件 | 标签名 |
 |------|--------|
 | Button | `<DwButton>` |
+| Input | `<DwInput>` |
 | Tabs | `<DwTabs>` + `<DwTabButton>` |
 | TabStrip | `<DwTabStrip>` + `<DwTabStripGroup>` + `<DwTabStripButton>` + `<DwTabStripContent>` + `<DwTabStripFooter>` |
 

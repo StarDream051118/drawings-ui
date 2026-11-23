@@ -1,0 +1,48 @@
+# Input 输入框
+
+单行输入框，内置 Minecraft 风格的自绘光标。组件没有可调整 props：除 `v-model` 外的属性全部透传到内部 `<input>`。
+
+## 基础用法
+
+<input-demos-basic />
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const value = ref('新的世界')
+</script>
+
+<template>
+  <DwInput v-model="value" class="my-input" />
+</template>
+```
+
+::: tip
+组件不绘制边框、底色和字体，这些由使用方的 class / CSS 决定；`class`、`placeholder`、`disabled`、原生事件都通过 attrs 透传到内部 `<input>`。
+:::
+
+## 光标
+
+- 光标在文字末尾：下划线，粗细 `2px`，`0.6s` 硬切闪烁
+- 光标在文字中间：`2px` 竖线，高度跟随一行文字
+- 选中一段文字：隐藏自绘光标，使用系统选区高亮
+- 位置通过对隐藏 mirror 元素量文字宽度得到，字体、字号、字距均取输入框的计算样式；输入框横向滚动时会扣除 `scrollLeft`
+
+## API
+
+### DwInput Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| `modelValue` | 输入值，支持 `v-model` | `string` | `''` |
+
+组件没有其它 props。
+
+### DwInput Events
+
+`input` / `focus` / `blur` / `keyup` 等原生事件通过 attrs 透传到内部 `<input>`。
+
+### DwInput Slots
+
+无。
