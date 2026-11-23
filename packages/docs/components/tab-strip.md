@@ -2,105 +2,147 @@
 
 `TabStrip` 是 Minecraft 风格的页签栏：未选中的页签像贴在内容区上的标签，选中页签向下延伸，与内容区**无缝衔接**。整条描边由一个线元素统一绘制，选中页签所在区间用渐变硬停点挖空。
 
-这一族有两个组件：
+组件分四层，和 `DwTabs` / `DwTabButton` 的组织方式一致：
 
-- `DwTabStrip`：完整页签栏，内部直接使用 `DwTabStripGroup`，额外提供背景图、蒙版、模糊和内容区。
-- `DwTabStripGroup`：只有页签和描边线，适合自己接管内容区，或嵌在别的容器里。
+| 组件 | 职责 | 可放位置 |
+|------|------|----------|
+| `DwTabStrip` | 持有 `v-model` 与整条栏的默认值，向下提供 context | 任意 |
+| `DwTabStripGroup` | 页签行 + 描边线，管理页签顺序 | 一般放在 `DwTabStrip` 内；也可独立使用 |
+| `DwTabStripButton` | 单个页签 | 只能放在 `DwTabStripGroup` 内 |
+| `DwTabStripContent` | 内容区，负责背景图与模糊 | 只能放在 `DwTabStrip` 内 |
 
 ## 基础用法
-
-`items` 决定页签的数量和顺序，`v-model` 绑定选中的 `value`。
 
 <tab-strip-demos-basic />
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { DwTabStrip } from '@star-dream051118/drawings-ui'
+import {
+  DwTabStrip,
+  DwTabStripGroup,
+  DwTabStripButton,
+  DwTabStripContent,
+} from '@star-dream051118/drawings-ui'
 
-const tabs = [
-  { value: 'game', label: '游戏' },
-  { value: 'world', label: '世界' },
-  { value: 'more', label: '更多' },
-]
 const active = ref('world')
 </script>
 
 <template>
-  <DwTabStrip v-model="active" :items="tabs" :content-height="200">
-    内容区域
+  <DwTabStrip v-model="active">
+    <DwTabStripGroup>
+      <DwTabStripButton value="game">游戏</DwTabStripButton>
+      <DwTabStripButton value="world">世界</DwTabStripButton>
+      <DwTabStripButton value="more">更多</DwTabStripButton>
+    </DwTabStripGroup>
+    <DwTabStripContent :content-height="200">
+      内容区域
+    </DwTabStripContent>
   </DwTabStrip>
 </template>
 ```
 
 ::: tip
-`v-model` 绑定的是 `item.value`，同一条栏内必须唯一。不传 `v-model` 时默认选中第一项。
+`v-model` 绑定的是页签的 `value`，同一条栏内必须唯一；不写 `value` 时自动用**自己的顺序索引**作为 key（与 `DwTabButton` 一致）。不传 `v-model` 时默认选中第一项。
 :::
 
 ## 页签宽度
 
-`size` 是**单个页签的宽度**（px），整条栏等长排列。默认 `300`，与 `--dw-width-xl` 一致。
+`size` 与 `DwTabs` 一致：
+
+| 值 | 宽度 |
+|----|------|
+| `'default'`（默认） | 按内容撑开，再量出最宽的那个页签，全部统一成这个宽度 |
+| `'medium'` | `--dw-width-md`（150px） |
+| `'large'` | `--dw-width-xl`（300px） |
+| `number` | 该数值 px，例如 `:size="180"` |
 
 <tab-strip-demos-group />
 
 ```vue
 <template>
-  <DwTabStripGroup v-model="active" :items="tabs" :size="180" />
+  <DwTabStripGroup v-model="active" :size="180">
+    <DwTabStripButton value="game">游戏</DwTabStripButton>
+    <DwTabStripButton value="world">世界</DwTabStripButton>
+    <DwTabStripButton value="more">更多</DwTabStripButton>
+  </DwTabStripGroup>
 </template>
 ```
 
-页签始终保持固定宽度（`flex: none`），窗口变窄时不会收缩 —— 线元素的挖洞位置依赖这个固定宽度，收缩会导致断口错位。
+::: warning
+`'default'` 不能是「每个页签各按自己的文字宽度」。描边线的挖洞位置是由「等宽 + 索引」推出来的，宽度不一致断口会对不上，所以这里量出最宽值后统一等长。页签始终保持固定宽度（`flex: none`），窗口变窄时不会收缩。
+:::
 
-## 背景与蒙版
+## 底色
 
-`bgImage` 铺背景图，`bgColor` 是压在图上的蒙版色，`bgBlur` 是背景模糊程度（px，默认 `3`）。
+- `bg-color`：未选中页签的底色，默认 `rgba(0, 0, 0, 0.9)`
+- `bg-selected-color`：选中页签的底色，默认 `rgba(0, 0, 0, 0.3)`
+
+```vue
+<template>
+  <DwTabStrip v-model="active" bg-color="rgba(0, 0, 0, 0.9)" bg-selected-color="rgba(0, 0, 0, 0.3)">
+    ...
+  </DwTabStrip>
+</template>
+```
+
+::: warning
+`bg-selected-color` 会同时应用到**选中页签**和 `DwTabStripContent` 的**内容区**。两者必须完全一致（包括透明度），否则衔接处会露出色差 —— 这也是 `DwTabStripContent` 不提供独立底色 prop 的原因。
+:::
+
+## 背景图与模糊
+
+背景图与模糊属于内容区，所以放在 `DwTabStripContent` 上：
+
+- `bg-image`：背景图片地址，作用在 `.dw-tabstrip-background` 元素上
+- `bg-blur`：内容层的模糊程度（px），默认 `3`
 
 <tab-strip-demos-background />
 
 ```vue
 <template>
-  <DwTabStrip
-    v-model="active"
-    :items="tabs"
-    :bg-image="bgImage"
-    bg-color="rgba(0, 0, 0, 0.25)"
-    :bg-blur="3"
-    :content-height="200"
-  >
-    内容区域
+  <DwTabStrip v-model="active">
+    <DwTabStripGroup>
+      <DwTabStripButton value="game">游戏</DwTabStripButton>
+      <DwTabStripButton value="world">世界</DwTabStripButton>
+      <DwTabStripButton value="more">更多</DwTabStripButton>
+    </DwTabStripGroup>
+    <DwTabStripContent :bg-image="bgImage" :bg-blur="3" :content-height="200">
+      内容区域
+    </DwTabStripContent>
   </DwTabStrip>
 </template>
 ```
 
-::: tip
-只有传了 `bgImage` 或 `bgColor` 才会铺蒙版层。都不传时组件不创建这一层，避免默认状态下把页面背景也模糊掉。
-
-`bgColor` 接受任意 CSS 颜色：`red`、`rgb(0 0 0 / 25%)`、`rgba(0, 0, 0, .25)`、`hsl(220 40% 20%)`、`#000000`。
-:::
-
 ## 内容高度
 
-`contentHeight` 控制内容区高度：数字按 px 处理，字符串原样透传（如 `'50vh'`）。不传时高度由插槽内容撑开。
+`content-height` 默认 `'auto'`，由插槽内容撑开；传数字按 px 处理，传字符串原样透传（如 `'40vh'`）。
 
 ```vue
 <template>
-  <DwTabStrip v-model="active" :items="tabs" :content-height="240">...</DwTabStrip>
-  <DwTabStrip v-model="active" :items="tabs" content-height="40vh">...</DwTabStrip>
+  <DwTabStripContent :content-height="240">...</DwTabStripContent>
+  <DwTabStripContent content-height="40vh">...</DwTabStripContent>
+  <DwTabStripContent>...</DwTabStripContent>
 </template>
 ```
 
 ## 单独使用 DwTabStripGroup
 
-如果内容区已经有自己的容器和背景，直接用 `DwTabStripGroup` 即可。
+只需要页签条、内容区自己接管时，直接用 `DwTabStripGroup` 并给它自己的 `v-model`：
 
 ```vue
 <template>
-  <DwTabStripGroup v-model="active" :items="tabs" :size="180" />
+  <DwTabStripGroup v-model="active" :size="180">
+    <DwTabStripButton value="game">游戏</DwTabStripButton>
+    <DwTabStripButton value="world">世界</DwTabStripButton>
+  </DwTabStripGroup>
 </template>
 ```
 
+放在 `DwTabStrip` 内时，`size` / `sound` / `color` / `icon` / `bg-color` / `bg-selected-color` 都从父组件继承，Group 上再传一次会覆盖父组件的值。
+
 ::: warning
-选中页签的底色由 `content-color` 决定，必须和它下方内容区的底色**完全一致**（包括透明度），否则衔接处会露出色差。`DwTabStrip` 会自动把 `content-color` 同时应用到内容区和选中页签；单独用 `DwTabStripGroup` 时需要自己保证两者一致。
+`DwTabStripContent` 只能用在 `DwTabStrip` 内，`DwTabStripButton` 只能用在 `DwTabStripGroup` 内。放错位置时组件会输出一条控制台警告并停止渲染，避免底色和选中值对不上。
 :::
 
 ## 键盘操作
@@ -116,18 +158,13 @@ const active = ref('world')
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `items` | 页签数据，顺序即显示顺序 | `TabStripItem[]` | — |
 | `modelValue` | 当前选中页签的 `value`，支持 `v-model` | `string \| number` | — |
-| `size` | 单个页签宽度（px） | `number` | `300` |
-| `color` | 页签文字颜色 | `string` | `--dw-color-text` |
-| `icon` | 整条栏的默认图标，可被 `item.icon` 覆盖 | `string` | — |
-| `tab-bg-color` | 未选中页签的底色 | `string` | `--dw-color-tabstrip-bg` |
-| `content-color` | 内容区底色，同时作为选中页签底色 | `string` | `--dw-color-tabstrip-content` |
+| `size` | 单个页签宽度 | `'default' \| 'medium' \| 'large' \| number` | `'default'` |
 | `sound` | 是否播放点击音效 | `boolean` | `true` |
-| `bg-image` | 背景图片地址 | `string` | `''` |
-| `bg-color` | 背景蒙版色，支持任意 CSS 颜色 | `string` | `''` |
-| `bg-blur` | 背景模糊程度（px） | `number` | `3` |
-| `content-height` | 内容区高度，数字按 px 处理 | `number \| string` | — |
+| `icon` | 整条栏的默认图标，可被单个 `DwTabStripButton` 覆盖 | `string` | — |
+| `color` | 页签文字颜色 | `string` | `--dw-color-text` |
+| `bg-color` | 未选中页签的底色 | `string` | `--dw-color-tabstrip-bg` |
+| `bg-selected-color` | 选中页签底色，同时作为内容区底色 | `string` | `--dw-color-tabstrip-content` |
 
 ### DwTabStrip Events
 
@@ -140,23 +177,33 @@ const active = ref('world')
 
 | 插槽名 | 说明 |
 |--------|------|
-| `default` | 内容区 |
+| `default` | `DwTabStripGroup` 与 `DwTabStripContent` |
 
 ### DwTabStripGroup Props
 
-`DwTabStrip` 的 `items` / `modelValue` / `size` / `color` / `icon` / `sound` / `content-color` 在这里含义相同，另外：
+放在 `DwTabStrip` 内时，以下不传就继承父组件：
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `bg-color` | 未选中页签的底色 | `string` | `--dw-color-tabstrip-bg` |
+| `modelValue` | 独立使用时的选中值；在 `DwTabStrip` 内以父组件为准 | `string \| number` | — |
+| `size` | 单个页签宽度 | `'default' \| 'medium' \| 'large' \| number` | 继承 |
+| `sound` | 是否播放点击音效 | `boolean` | 继承 |
+| `icon` / `color` / `bg-color` / `bg-selected-color` | 同上 | `string` | 继承 |
 
-### TabStripItem
+### DwTabStripButton Props
 
-| 字段 | 说明 | 类型 | 必填 |
-|------|------|------|------|
-| `value` | 唯一标识，与 `v-model` 比对 | `string \| number` | 是 |
-| `label` | 页签文字 | `string` | 是 |
-| `icon` | 单个页签的图标（内置图标名或图片 URL） | `string` | 否 |
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| `value` | 唯一标识，和 `v-model` 比对；不传时回退成顺序索引 | `string \| number` | — |
+| `icon` | 单个页签的图标（内置图标名或图片 URL） | `string` | 跟随 `DwTabStrip` |
+
+### DwTabStripContent Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| `bg-image` | 背景图片地址 | `string` | `''` |
+| `bg-blur` | 背景模糊程度（px） | `number` | `3` |
+| `content-height` | 内容区高度，数字按 px 处理 | `number \| string` | `'auto'` |
 
 ## 设计 Token
 

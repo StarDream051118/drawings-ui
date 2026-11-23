@@ -1,0 +1,22 @@
+@use '../styles/css-vars.scss';
+@use '../styles/reset.scss';
+
+// 背景层：只负责背景图，模糊交给内容层
+.dw-tabstrip-background {
+  position: relative;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  transform: translateY(3px);
+}
+
+// 内容层：底色跟随选中页签，毛玻璃靠 backdrop-filter 模糊下层的背景图
+.dw-tabstrip-content {
+  position: relative;
+  background: var(--dw-color-tabstrip-content);
+  border-bottom: 3px solid var(--dw-color-border);
+  box-shadow:
+    0 -3px 0 var(--dw-color-tabstrip-content),
+    0 3px 0 var(--dw-color-tabstrip-highlight);
+  backdrop-filter: blur(var(--dw-tabstrip-blur, 3px));
+}

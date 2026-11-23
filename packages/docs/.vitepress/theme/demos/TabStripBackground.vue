@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { DwTabStrip } from '@star-dream051118/drawings-ui'
+import {
+  DwTabStrip,
+  DwTabStripGroup,
+  DwTabStripButton,
+  DwTabStripContent,
+} from '@star-dream051118/drawings-ui'
 
-const tabs = [
-  { value: 'game', label: '游戏' },
-  { value: 'world', label: '世界' },
-  { value: 'more', label: '更多' },
-]
+const active = ref('world')
 
 // 用内联 SVG 当背景图，避免示例依赖外部资源
 const bgImage = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
@@ -19,20 +20,19 @@ const bgImage = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
     <circle cx="284" cy="92" r="4" fill="#9fd6ff" opacity=".6"/>
   </svg>`,
 )}`
-
-const active = ref('world')
 </script>
 
 <template>
   <div class="row1">
-    <DwTabStrip
-      v-model="active"
-      :items="tabs"
-      :bg-image="bgImage"
-      bg-color="rgba(0, 0, 0, 0.25)"
-      :content-height="180"
-    >
-      <p class="tab-strip-demo-text">背景图 + 蒙版 + 模糊</p>
+    <DwTabStrip v-model="active">
+      <DwTabStripGroup>
+        <DwTabStripButton value="game">游戏</DwTabStripButton>
+        <DwTabStripButton value="world">世界</DwTabStripButton>
+        <DwTabStripButton value="more">更多</DwTabStripButton>
+      </DwTabStripGroup>
+      <DwTabStripContent :bg-image="bgImage" :bg-blur="3" :content-height="180">
+        <p class="tab-strip-demo-text">背景图 + 模糊</p>
+      </DwTabStripContent>
     </DwTabStrip>
   </div>
 </template>

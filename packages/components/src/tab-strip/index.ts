@@ -1,3 +1,5 @@
-export { default as DwTabStripGroup } from './TabStripGroup.vue'
 export { default as DwTabStrip } from './TabStrip.vue'
-export type { TabStripItem, TabStripKey } from './types'
+export { default as DwTabStripGroup } from './TabStripGroup.vue'
+export { default as DwTabStripButton } from './TabStripButton.vue'
+export { default as DwTabStripContent } from './TabStripContent.vue'
+export type { TabStripKey, TabStripSize } from './context'

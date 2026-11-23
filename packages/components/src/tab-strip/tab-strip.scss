@@ -2,26 +2,7 @@
 @use '../styles/reset.scss';
 
 .dw-tab-strip {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  background-position: center;
-  background-size: cover;
-}
-
-// 背景蒙版：负责给背景图着色并模糊它；不参与交互
-.dw-tab-strip__backdrop {
-  position: absolute;
-  inset: 0;
-  background: var(--dw-tabstrip-mask-color, transparent);
-  backdrop-filter: blur(var(--dw-tabstrip-blur, 3px));
-}
-
-.dw-tab-strip__content {
-  position: relative;
-  background: var(--dw-color-tabstrip-content);
-  border-bottom: 3px solid var(--dw-color-border);
-  box-shadow:
-    0 -3px 0 var(--dw-color-tabstrip-content),
-    0 3px 0 var(--dw-color-tabstrip-highlight);
-  transform: translateY(3px);
 }

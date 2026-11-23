@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { DwButton, DwTabs, DwTabButton, DwTabStrip, DwTabStripGroup } from '@star-dream051118/drawings-ui'
+import {
+  DwButton,
+  DwTabs,
+  DwTabButton,
+  DwTabStrip,
+  DwTabStripGroup,
+  DwTabStripButton,
+  DwTabStripContent,
+} from '@star-dream051118/drawings-ui'
 import '@star-dream051118/drawings-ui/styles/index.scss'
 import '@star-dream051118/drawings-ui/styles/font.scss'
 
@@ -33,18 +41,30 @@ const tabStripBg = '/images/star.png'
 <template>
   <div class="demo">
     <h1>DrawingsUI 组件预览</h1>
-    <DwTabStrip
-      v-model="activeNewTab"
-      :items="newTabs"
-      :size="newTabWidth"
-      :bg-image="tabStripBg"
-      bg-color="rgba(0, 0, 0, 0.25)"
-      :content-height="387"
-    >
-      <div class="tabstrip-demo-content">内容区域</div>
+    <DwTabStrip v-model="activeNewTab" :size="newTabWidth">
+      <DwTabStripGroup>
+        <DwTabStripButton
+          v-for="item in newTabs"
+          :key="item.value"
+          :value="item.value"
+        >
+          {{ item.label }}
+        </DwTabStripButton>
+      </DwTabStripGroup>
+      <DwTabStripContent :bg-image="tabStripBg" :bg-blur="3" :content-height="387">
+        <div class="tabstrip-demo-content">内容区域</div>
+      </DwTabStripContent>
     </DwTabStrip>
 
-    <DwTabStripGroup v-model="activeNewTab" :items="newTabs" :size="newTabWidth" />
+    <DwTabStripGroup v-model="activeNewTab">
+      <DwTabStripButton
+        v-for="item in newTabs"
+        :key="item.value"
+        :value="item.value"
+      >
+        {{ item.label }}
+      </DwTabStripButton>
+    </DwTabStripGroup>
     <section>
       <h2>类型：一种原生 + 两种定制</h2>
       <div class="row2">
