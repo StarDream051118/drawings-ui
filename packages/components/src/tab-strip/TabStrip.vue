@@ -24,11 +24,14 @@ interface Props {
   bgColor?: string
   /** 选中页签的底色；DwTabStripContent 的内容区底色会跟随它，保证无缝衔接 */
   bgSelectedColor?: string
+  /** 背景图片地址；铺满整条页签栏（含页签区），为空时不铺 */
+  bgImage?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'default',
   sound: true,
+  bgImage: '',
 })
 
 const emit = defineEmits<{
@@ -65,6 +68,12 @@ provide(TAB_STRIP_CONTEXT, {
 
 <template>
   <div class="dw-tab-strip">
+    <div
+      v-if="bgImage"
+      class="dw-tabstrip-background"
+      :style="{ backgroundImage: `url(${bgImage})` }"
+      aria-hidden="true"
+    />
     <slot />
   </div>
 </template>

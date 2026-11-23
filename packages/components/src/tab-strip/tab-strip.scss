@@ -2,7 +2,19 @@
 @use '../styles/reset.scss';
 
 .dw-tab-strip {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
+  // 内容区为了上下分隔线向下错开 3px，这里留出这段高度，背景层才能盖满
+  padding-bottom: 3px;
+}
+
+// 背景层：铺满整条页签栏（含页签区），只负责背景图，不参与交互与布局
+.dw-tabstrip-background {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  pointer-events: none;
 }
