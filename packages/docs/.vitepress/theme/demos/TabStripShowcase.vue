@@ -9,6 +9,8 @@ import {
   DwTabStripContent,
   DwTabStripFooter,
 } from '@star-dream051118/drawings-ui'
+// 走模块导入，构建时自动带上部署 base 与 hash，GitHub Pages 子路径下也不会失效
+import starBg from './assets/star.png'
 
 interface ShowcaseTab {
   value: string
@@ -20,13 +22,14 @@ const tabs: ShowcaseTab[] = [
   { value: 'world', label: '世界' },
   { value: 'more', label: '更多' },
 ]
-const tabWidth = 300
+const tabWidth = 200
 const active = ref('game')
 const worldName = ref('新的世界')
-const tabStripBg = `${import.meta.env.BASE_URL}images/star.png`
+const tabStripBg = starBg
 
-// 舞台原始宽度：3 个 300px 页签 + 2 个 6px 间距
-const STAGE_WIDTH = 912
+// 舞台原始宽度：页签数 × 单宽 + 页签间距（--dw-tabstrip-gap: 6px）
+const TAB_GAP = 6
+const STAGE_WIDTH = tabs.length * tabWidth + (tabs.length - 1) * TAB_GAP
 const scale = ref(1)
 const viewportEl = ref<HTMLElement | null>(null)
 const stageEl = ref<HTMLElement | null>(null)
@@ -78,7 +81,7 @@ onBeforeUnmount(() => {
             {{ item.label }}
           </DwTabStripButton>
         </DwTabStripGroup>
-        <DwTabStripContent :content-height="500">
+        <DwTabStripContent :content-height="300">
           <div class="tabstrip-showcase-frame">
             <div class="tabstrip-showcase-content">
               <div class="showcase-world-title">世界名称</div>
