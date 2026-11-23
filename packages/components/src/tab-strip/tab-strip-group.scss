@@ -43,7 +43,9 @@
     var(--dw-tabstrip-window-left) + var(--dw-tabstrip-tab-width) - 6px
   );
 
-  // 上 3px 高光、下 3px 实色；选中页签所在区间整段挖空
+  // 上 3px 高光带：选中区间整段挖空，露出选中页签自身的底色
+  // 下 3px 实色带：选中区间换成内容区底色，把页签和内容区之间那 3px 补齐。
+  // 这一段必须画在线元素自己身上 —— 交给内容区的 box-shadow 会盖住线的颜色
   background:
     linear-gradient(
         to right,
@@ -55,7 +57,7 @@
     linear-gradient(
         to right,
         var(--dw-color-tabstrip-bg) 0 var(--dw-tabstrip-window-left),
-        transparent var(--dw-tabstrip-window-left) var(--dw-tabstrip-window-right),
+        var(--dw-color-tabstrip-content) var(--dw-tabstrip-window-left) var(--dw-tabstrip-window-right),
         var(--dw-color-tabstrip-bg) var(--dw-tabstrip-window-right) 100%
       )
       left bottom / 100% 3px no-repeat;

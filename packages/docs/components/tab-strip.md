@@ -90,7 +90,9 @@ const active = ref('world')
 ```
 
 ::: warning
-`bg-selected-color` 会同时应用到**选中页签**和 `DwTabStripContent` 的**内容区**。两者必须完全一致（包括透明度），否则衔接处会露出色差 —— 这也是 `DwTabStripContent` 不提供独立底色 prop 的原因。
+`bg-selected-color` 会同时应用到**选中页签**、**选中页签与内容区之间那 3px**、以及 `DwTabStripContent` 的**内容区**。三者必须完全一致（包括透明度），否则衔接处会露出色差 —— 这也是 `DwTabStripContent` 不提供独立底色 prop 的原因。
+
+那 3px 缝隙由描边线（`.dw-tab-strip-group__line`）自己在挖洞区间内画上这个颜色，不是由内容区的 `box-shadow` 覆盖上去的，所以改色不会污染描边线本身的深浅。
 :::
 
 ## 背景图与模糊
