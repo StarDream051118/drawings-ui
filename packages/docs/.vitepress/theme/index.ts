@@ -23,6 +23,7 @@ import TabsActiveLine from './demos/TabsActiveLine.vue'
 import TabStripBasic from './demos/TabStripBasic.vue'
 import TabStripBackground from './demos/TabStripBackground.vue'
 import TabStripGroupBasic from './demos/TabStripGroupBasic.vue'
+import TabStripFooter from './demos/TabStripFooter.vue'
 
 export default {
   extends: DefaultTheme,
@@ -48,5 +49,6 @@ export default {
     app.component('tab-strip-demos-basic', TabStripBasic)
     app.component('tab-strip-demos-background', TabStripBackground)
     app.component('tab-strip-demos-group', TabStripGroupBasic)
+    app.component('tab-strip-demos-footer', TabStripFooter)
   },
 }

@@ -9,7 +9,8 @@
 | `DwTabStrip` | 持有 `v-model` 与整条栏的默认值，向下提供 context | 任意 |
 | `DwTabStripGroup` | 页签行 + 描边线，管理页签顺序 | 一般放在 `DwTabStrip` 内；也可独立使用 |
 | `DwTabStripButton` | 单个页签 | 只能放在 `DwTabStripGroup` 内 |
-| `DwTabStripContent` | 内容区，负责背景图与模糊 | 只能放在 `DwTabStrip` 内 |
+| `DwTabStripContent` | 内容区，负责内容高度与模糊 | 只能放在 `DwTabStrip` 内 |
+| `DwTabStripFooter` | 页脚，默认与页签组等高，与内容区同色同模糊 | 只能放在 `DwTabStrip` 内 |
 
 ## 基础用法
 
@@ -130,6 +131,36 @@ const active = ref('world')
 </template>
 ```
 
+## 页脚
+
+`DwTabStripFooter` 放在内容区之后，默认高度与页签组等高（`--dw-tabstrip-tab-height-selected` + `--dw-tabstrip-line-height`），底色和模糊都跟随 `bg-selected-color`，所以页脚与内容区、页签区是同一套材质。
+
+<tab-strip-demos-footer />
+
+```vue
+<template>
+  <DwTabStrip v-model="active">
+    <DwTabStripGroup>
+      <DwTabStripButton value="game">游戏</DwTabStripButton>
+      <DwTabStripButton value="world">世界</DwTabStripButton>
+      <DwTabStripButton value="more">更多</DwTabStripButton>
+    </DwTabStripGroup>
+    <DwTabStripContent :content-height="200">
+      内容区域
+    </DwTabStripContent>
+    <DwTabStripFooter>
+      页脚区域
+    </DwTabStripFooter>
+  </DwTabStrip>
+</template>
+```
+
+`height` 不传时等于页签组高度；传数字按 px 处理，传字符串原样透传。
+
+::: tip
+背景图铺满整条栏，所以页签区、内容区、页脚三块露出的都是同一张图；三块都带同一套 `backdrop-filter` 和 `--dw-color-tabstrip-content`，交界处不会出现色差或一段没模糊的图像。
+:::
+
 ## 单独使用 DwTabStripGroup
 
 只需要页签条、内容区自己接管时，直接用 `DwTabStripGroup` 并给它自己的 `v-model`：
@@ -183,7 +214,7 @@ const active = ref('world')
 
 | 插槽名 | 说明 |
 |--------|------|
-| `default` | `DwTabStripGroup` 与 `DwTabStripContent` |
+| `default` | `DwTabStripGroup`、`DwTabStripContent`、`DwTabStripFooter` |
 
 ### DwTabStripGroup Props
 
@@ -208,6 +239,12 @@ const active = ref('world')
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | `content-height` | 内容区高度，数字按 px 处理 | `number \| string` | `'auto'` |
+
+### DwTabStripFooter Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| `height` | 页脚高度，数字按 px 处理 | `number \| string` | 与页签组等高 |
 
 ## 设计 Token
 

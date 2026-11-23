@@ -1,7 +1,13 @@
 import type { App } from 'vue'
 import { DwButton } from './button'
 import { DwTabs, DwTabButton } from './tabs'
-import { DwTabStrip, DwTabStripGroup, DwTabStripButton, DwTabStripContent } from './tab-strip'
+import {
+  DwTabStrip,
+  DwTabStripGroup,
+  DwTabStripButton,
+  DwTabStripContent,
+  DwTabStripFooter,
+} from './tab-strip'
 
 const components = [
   DwButton,
@@ -11,6 +17,7 @@ const components = [
   DwTabStripGroup,
   DwTabStripButton,
   DwTabStripContent,
+  DwTabStripFooter,
 ]
 
 function install(app: App) {

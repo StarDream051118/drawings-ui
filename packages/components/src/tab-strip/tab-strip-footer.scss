@@ -1,0 +1,12 @@
+@use '../styles/css-vars.scss';
+@use '../styles/reset.scss';
+
+// 页脚：与内容区同色、同模糊，默认与页签组等高
+.dw-tabstrip-footer {
+  position: relative;
+  height: calc(var(--dw-tabstrip-tab-height-selected) + var(--dw-tabstrip-line-height));
+  background: var(--dw-color-tabstrip-content);
+  border-bottom: 3px solid var(--dw-color-border);
+  box-shadow: 0 3px 0 var(--dw-color-tabstrip-highlight);
+  backdrop-filter: blur(var(--dw-tabstrip-blur, 3px));
+}

@@ -8,6 +8,7 @@ import {
   DwTabStripGroup,
   DwTabStripButton,
   DwTabStripContent,
+  DwTabStripFooter,
 } from '@star-dream051118/drawings-ui'
 import '@star-dream051118/drawings-ui/styles/index.scss'
 import '@star-dream051118/drawings-ui/styles/font.scss'
@@ -54,6 +55,9 @@ const tabStripBg = '/images/star.png'
       <DwTabStripContent :content-height="387">
         <div class="tabstrip-demo-content">内容区域</div>
       </DwTabStripContent>
+      <DwTabStripFooter>
+        <div class="tabstrip-demo-content">页脚区域</div>
+      </DwTabStripFooter>
     </DwTabStrip>
 
     <DwTabStripGroup v-model="activeNewTab">
