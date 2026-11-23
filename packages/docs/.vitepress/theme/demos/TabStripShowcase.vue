@@ -85,7 +85,7 @@ onBeforeUnmount(() => {
           <div class="tabstrip-showcase-frame">
             <div class="tabstrip-showcase-content">
               <div class="showcase-world-title">世界名称</div>
-              <DwInput v-model="worldName" class="showcase-input" />
+              <DwInput v-model="worldName" :blink-duration="0.6" class="showcase-input" />
               <DwButton class="showcase-button">游戏模式：生存</DwButton>
               <DwButton class="showcase-button">难度：普通</DwButton>
               <DwButton class="showcase-button">允许指令：关</DwButton>
