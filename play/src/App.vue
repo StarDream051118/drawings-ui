@@ -35,6 +35,7 @@ const newTabs: NewTabItem[] = [
 /** 新 Tab 栏所有标签共用同一个宽度（等长），对应已有 Tab 组件的自定义宽度 */
 const newTabWidth = ref(300)
 const activeNewTab = ref('world')
+const activeTabStripGroup = ref('world')
 /** TabStrip 演示用背景图 */
 const tabStripBg = '/images/star.png'
 </script>
@@ -42,8 +43,29 @@ const tabStripBg = '/images/star.png'
 <template>
   <div class="demo">
     <h1>DrawingsUI 组件预览</h1>
-    <DwTabStrip v-model="activeNewTab" :size="newTabWidth" :bg-image="tabStripBg" :bg-blur="3">
-      <DwTabStripGroup>
+    <section>
+      <h2>TabStrip组件预览</h2>
+      <DwTabStrip v-model="activeNewTab" :size="newTabWidth" :bg-image="tabStripBg" bg-selected-color="rgba(255,255,0,0.5)" :bg-blur="3">
+        <DwTabStripGroup>
+          <DwTabStripButton
+            v-for="item in newTabs"
+            :key="item.value"
+            :value="item.value"
+          >
+            {{ item.label }}
+          </DwTabStripButton>
+        </DwTabStripGroup>
+        <DwTabStripContent :content-height="387">
+          <div class="tabstrip-demo-content">内容区域</div>
+        </DwTabStripContent>
+        <DwTabStripFooter>
+          <div class="tabstrip-demo-content">页脚区域</div>
+        </DwTabStripFooter>
+      </DwTabStrip>
+    </section>
+    <section>
+      <h2>DwTabStripGroup组件预览</h2>
+      <DwTabStripGroup :size="300" v-model="activeTabStripGroup">
         <DwTabStripButton
           v-for="item in newTabs"
           :key="item.value"
@@ -52,23 +74,7 @@ const tabStripBg = '/images/star.png'
           {{ item.label }}
         </DwTabStripButton>
       </DwTabStripGroup>
-      <DwTabStripContent :content-height="387">
-        <div class="tabstrip-demo-content">内容区域</div>
-      </DwTabStripContent>
-      <DwTabStripFooter>
-        <div class="tabstrip-demo-content">页脚区域</div>
-      </DwTabStripFooter>
-    </DwTabStrip>
-
-    <DwTabStripGroup v-model="activeNewTab">
-      <DwTabStripButton
-        v-for="item in newTabs"
-        :key="item.value"
-        :value="item.value"
-      >
-        {{ item.label }}
-      </DwTabStripButton>
-    </DwTabStripGroup>
+    </section>
     <section>
       <h2>类型：一种原生 + 两种定制</h2>
       <div class="row2">
