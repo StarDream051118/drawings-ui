@@ -56,12 +56,6 @@ const slowValue = ref('慢速闪烁')
   border-color: #ffffff;
 }
 
-.input-demo-field::selection {
-  background: #ffffff;
-  color: #201fff;
-  text-shadow: 1px 1px #c7c7ff;
-}
-
 /* 文档站全局会按 prefers-reduced-motion 压缩动画，演示里恢复光标闪烁 */
 @media (prefers-reduced-motion: reduce) {
   .input-demo .dw-input__caret {

@@ -90,6 +90,14 @@ import '@star-dream051118/drawings-ui/tokens.css'
 |--------|--------|------|
 | `--dw-font-family` | `'mc-font', -apple-system, ...` | 全局字体 |
 
+## 文本选区
+
+| 变量名 | 默认值 | 说明 |
+|--------|--------|------|
+| `--dw-color-selection-bg` | `#FFFFFF` | 选中文字的背景色 |
+| `--dw-color-selection-text` | `#201FFF` | 选中文字的颜色 |
+| `--dw-text-selection-shadow` | `1px 1px #C7C7FF` | 选中文字的压印阴影 |
+
 ## 使用示例
 
 ### 全局覆盖
