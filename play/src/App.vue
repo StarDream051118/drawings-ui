@@ -44,8 +44,10 @@ const worldName = ref('新的世界')
 const inputEl = ref<HTMLInputElement | null>(null)
 const mirrorEl = ref<HTMLElement | null>(null)
 const caretX = ref(0)
-// 只有光标停在文字末尾时才用自绘下划线，其余位置交给原生竖线
+// 只有光标停在文字末尾时才用自绘下划线，其余位置画竖线
 const caretAtEnd = ref(true)
+// 选中一段文字时隐藏自绘光标，交给系统选区高亮
+const caretCollapsed = ref(true)
 const inputFocused = ref(false)
 let caretRaf = 0
 
@@ -71,7 +73,8 @@ function measureCaret() {
   // 内容超宽时 input 会横向滚动，光标的屏幕位置要减去 scrollLeft
   caretX.value = mirror.getBoundingClientRect().width - el.scrollLeft
   // 选中一段文字时不显示自绘光标；只有折叠光标且停在末尾才算「末尾」
-  caretAtEnd.value = start === end && caretIndex === el.value.length
+  caretCollapsed.value = start === end
+  caretAtEnd.value = caretCollapsed.value && caretIndex === el.value.length
 }
 
 function scheduleCaret() {
@@ -126,6 +129,7 @@ onBeforeUnmount(() => {
                 :class="{
                   'demo-input-wrap--focused': inputFocused,
                   'demo-input-wrap--caret-end': caretAtEnd,
+                  'demo-input-wrap--selecting': !caretCollapsed,
                 }"
               >
                 <input
@@ -315,8 +319,8 @@ onBeforeUnmount(() => {
   font-size: 18px;
 }
 
-// 光标停在末尾时隐藏原生竖线，改用自绘下划线；文字中间仍用原生竖线
-.demo-input-wrap--caret-end .demo-input.dw-input {
+// 竖线与下划线都由自绘元素画，原生光标隐藏；选区高亮保持不变
+.demo-input.dw-input {
   caret-color: transparent;
 }
 
@@ -334,18 +338,26 @@ onBeforeUnmount(() => {
 .demo-input-caret {
   position: absolute;
   left: 8px;
-  top: 30px;
-  width: 0.625em;
-  height: 2px;
+  // 竖线：内容区垂直居中（内容顶部 8px + (30px - 1em) / 2），粗细 2px
+  top: 15px;
+  width: 2px;
+  height: 1em;
   background: var(--dw-color-text);
   box-shadow: var(--dw-text-color-shadow);
   pointer-events: none;
   opacity: 0;
 
-  .demo-input-wrap--focused.demo-input-wrap--caret-end & {
+  .demo-input-wrap--focused:not(.demo-input-wrap--selecting) & {
     opacity: 1;
     animation: demo-caret-blink 1s steps(1) infinite;
   }
+}
+
+// 光标在末尾时换成下划线
+.demo-input-wrap--caret-end .demo-input-caret {
+  top: 30px;
+  width: 0.625em;
+  height: 2px;
 }
 
 @keyframes demo-caret-blink {
