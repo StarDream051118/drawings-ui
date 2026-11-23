@@ -1,22 +1,13 @@
-// 只重置 dw- 组件自身及其内部元素：
-// 全局 `*` 重置会随样式一起发布，覆盖消费者站点的 margin / padding / 字体
+// 只重置组件自己的 dw- 元素：
+// 全局 `*` 会污染消费者站点；后代 `*` 会清掉插槽内容（标题、段落等）的 margin / 字体，二者都不要
 :where([class^='dw-'], [class*=' dw-']) {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: var(--dw-font-family);
 
-  &,
   &::before,
   &::after {
     box-sizing: border-box;
-  }
-
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: inherit;
   }
 }
