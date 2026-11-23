@@ -236,12 +236,6 @@ const worldName = ref('新的世界')
     outline: none;
     border-color: #ffffff;
   }
-
-  &::selection {
-    background-color: #ffffff;
-    color: #201FFF;
-    text-shadow: 1px 1px #C7C7FF;
-  }
 }
 .demo-button {
   width: 100%;
