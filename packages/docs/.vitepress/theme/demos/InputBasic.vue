@@ -3,12 +3,16 @@ import { ref } from 'vue'
 import { DwInput } from '@star-dream051118/drawings-ui'
 
 const value = ref('新的世界')
+const slowValue = ref('慢速闪烁')
 </script>
 
 <template>
   <div class="input-demo">
     <div class="input-demo-title">世界名称</div>
     <DwInput v-model="value" class="input-demo-field" />
+
+    <div class="input-demo-title input-demo-title--gap">慢速闪烁（1.5 秒）</div>
+    <DwInput v-model="slowValue" :blink-duration="1.5" class="input-demo-field" />
   </div>
 </template>
 
@@ -24,6 +28,10 @@ const value = ref('新的世界')
   margin-bottom: 10px;
   font-size: 18px;
   color: #ffffff;
+}
+
+.input-demo-title--gap {
+  margin-top: 16px;
 }
 
 .input-demo-field {
@@ -52,5 +60,13 @@ const value = ref('新的世界')
   background: #ffffff;
   color: #201fff;
   text-shadow: 1px 1px #c7c7ff;
+}
+
+/* 文档站全局会按 prefers-reduced-motion 压缩动画，演示里恢复光标闪烁 */
+@media (prefers-reduced-motion: reduce) {
+  .input-demo .dw-input__caret {
+    animation-duration: var(--dw-input-caret-blink, 0.6s) !important;
+    animation-iteration-count: infinite !important;
+  }
 }
 </style>
