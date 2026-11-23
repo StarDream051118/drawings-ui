@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
-import { TAB_STRIP_CONTEXT } from './context'
+import { computed } from 'vue'
+import { useTabStripContext } from './context'
 
 defineOptions({ name: 'DwTabStripContent' })
 
@@ -13,10 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
   contentHeight: 'auto',
 })
 
-const strip = inject(TAB_STRIP_CONTEXT, null)
-if (!strip) {
-  console.warn('[DrawingsUI] DwTabStripContent 只能用在 DwTabStrip 内，已停止渲染。')
-}
+const strip = useTabStripContext('DwTabStripContent')
 
 const contentStyle = computed(() => {
   const style: Record<string, string> = {}

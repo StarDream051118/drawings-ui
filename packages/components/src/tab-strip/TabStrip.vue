@@ -16,6 +16,8 @@ interface Props {
   size?: TabStripSize
   /** 是否播放点击音效 */
   sound?: boolean
+  /** 是否整体禁用：禁用后不可点击，所有页签按未选中样式显示 */
+  disabled?: boolean
   /** 整条栏的默认图标，可被单个 DwTabStripButton 覆盖 */
   icon?: string
   /** 页签文字颜色 */
@@ -33,6 +35,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   size: 'default',
   sound: true,
+  disabled: false,
   bgImage: '',
   bgBlur: 3,
 })
@@ -60,6 +63,7 @@ provide(TAB_STRIP_CONTEXT, {
   defaults: computed<TabStripDefaults>(() => ({
     size: props.size,
     sound: props.sound,
+    disabled: props.disabled,
     icon: props.icon,
     color: props.color,
     bgColor: props.bgColor,

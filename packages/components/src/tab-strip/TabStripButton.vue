@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { computed, inject, onUnmounted, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 import { useSound } from '../composables/useSound'
 import { useIcon } from '../composables/useIcon'
 import { SOUNDS } from '../utils/sounds'
-import { TAB_STRIP_GROUP_CONTEXT, type TabStripKey, type TabStripTabInstance } from './context'
+import {
+  useTabStripGroupContext,
+  type TabStripKey,
+  type TabStripTabInstance,
+} from './context'
 
 defineOptions({ name: 'DwTabStripButton' })
 
@@ -16,10 +20,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const group = inject(TAB_STRIP_GROUP_CONTEXT, null)
-if (!group) {
-  console.warn('[DrawingsUI] DwTabStripButton 只能用在 DwTabStripGroup 内，已停止渲染。')
-}
+const group = useTabStripGroupContext('DwTabStripButton')
 
 const { play } = useSound()
 const { getIconSvg } = useIcon()
@@ -37,12 +38,20 @@ if (group) {
 }
 
 const index = computed(() => (group ? group.order.value.indexOf(instance) : -1))
+const isDisabled = computed(() => group?.defaults.value.disabled ?? false)
 const isActive = computed(() => {
-  if (!group) return false
+  if (!group || isDisabled.value) return false
   const key = instance.key.value
   if (group.activeKey.value !== key) return false
   // 重复 key 时只让第一个匹配项生效
   return group.order.value.find(tab => tab.key.value === key) === instance
+})
+
+// 只有选中项可聚焦；完全没有选中项时让第一个页签兜底，键盘才能进入 tablist
+const isTabbable = computed(() => {
+  if (!group || isDisabled.value) return false
+  if (isActive.value) return true
+  return !group.hasSelection.value && group.order.value[0] === instance
 })
 
 const resolvedIcon = computed(() => props.icon ?? group?.defaults.value.icon)
@@ -54,12 +63,13 @@ const isUrl = computed(() => {
 const iconSvg = computed(() => (resolvedIcon.value ? getIconSvg(resolvedIcon.value) : null))
 
 function onPointerDown() {
-  if (!group?.defaults.value.sound) return
+  if (!group || isDisabled.value) return
+  if (!group.defaults.value.sound) return
   play(SOUNDS.click)
 }
 
 function onClick() {
-  if (!group) return
+  if (!group || isDisabled.value) return
   group.select(instance.key.value)
 }
 </script>
@@ -73,7 +83,8 @@ function onClick() {
     class="dw-tab-strip-button"
     :class="{ 'dw-tab-strip-button--selected': isActive }"
     :aria-selected="isActive ? 'true' : 'false'"
-    :tabindex="isActive ? 0 : -1"
+    :tabindex="isTabbable ? 0 : -1"
+    :disabled="isDisabled || undefined"
     @pointerdown="onPointerDown"
     @click="onClick"
   >

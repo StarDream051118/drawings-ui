@@ -6,8 +6,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  // 页脚底部 3px 高光需要留高，背景层才能盖满
-  padding-bottom: 3px;
+  // 页脚底部高光需要留高，背景层才能盖满
+  padding-bottom: var(--dw-tabstrip-border-width, 3px);
 }
 
 // 背景层：铺满整条页签栏（含页签区），只负责背景图，不参与交互与布局

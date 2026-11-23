@@ -5,7 +5,7 @@
 .dw-tabstrip-content {
   position: relative;
   background: var(--dw-color-tabstrip-content);
-  border-bottom: 3px solid var(--dw-color-border);
-  // 页签与内容之间的 3px 由描边线自己补齐，这里只画底部高光
-  box-shadow: 0 3px 0 var(--dw-color-tabstrip-highlight);
+  border-bottom: var(--dw-tabstrip-border-width, 3px) solid var(--dw-color-border);
+  // 页签与内容之间的间隙由描边线自己补齐，这里只画底部高光
+  box-shadow: 0 var(--dw-tabstrip-border-width, 3px) 0 var(--dw-color-tabstrip-highlight);
 }

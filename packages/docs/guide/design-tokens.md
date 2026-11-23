@@ -69,6 +69,7 @@ DrawingsUI 通过 CSS 自定义属性实现主题系统，你可以在运行时�
 | `--dw-tabstrip-tab-height` | `40px` | 未选中页签高度 |
 | `--dw-tabstrip-tab-height-selected` | `55px` | 选中页签高度 |
 | `--dw-tabstrip-line-height` | `6px` | 描边线高度（3px 高光 + 3px 实色） |
+| `--dw-tabstrip-border-width` | `3px` | 像素描边宽度（页签边框、断口内缩、内容区底边共用） |
 | `--dw-tabstrip-blur` | `3px` | 背景模糊程度（会被 `bg-blur` 覆盖） |
 | `--dw-color-tabstrip-bg` | `rgba(0, 0, 0, 0.9)` | 未选中页签底色 / 描边线实色 |
 | `--dw-color-tabstrip-content` | `rgba(0, 0, 0, 0.3)` | 内容区与选中页签底色 |

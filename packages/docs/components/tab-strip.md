@@ -74,6 +74,8 @@ const active = ref('world')
 `'default'` 不能是「每个页签各按自己的文字宽度」。描边线的挖洞位置是由「等宽 + 索引」推出来的，宽度不一致断口会对不上，所以这里量出最宽值后统一等长。页签始终保持固定宽度（`flex: none`），窗口变窄时不会收缩。
 
 页签带 `min-width: max-content` 且文字 `white-space: nowrap`：`size` 小于文字实际宽度时按文字宽度显示，不会被压缩或换行。此时各页签宽度可能不一致，描边线的断口按**实际渲染位置**测量（不是按「索引 × 等宽」推算），所以依然对齐。
+
+`'default'` 的测量时机：挂载、页签增删、页签文字变化、选中项变化、`size` 变化、窗口缩放、字体加载完成。测量结果没变化时会直接跳过，不会反复触发重排。
 :::
 
 ## 底色
@@ -184,10 +186,12 @@ const active = ref('world')
 </template>
 ```
 
-放在 `DwTabStrip` 内时，`size` / `sound` / `color` / `icon` / `bg-color` / `bg-selected-color` 都从父组件继承，Group 上再传一次会覆盖父组件的值。
+放在 `DwTabStrip` 内时，`size` / `sound` / `disabled` / `color` / `icon` / `bg-color` / `bg-selected-color` 都从父组件继承，Group 上再传一次会覆盖父组件的值。
 
 ::: warning
 `DwTabStripContent` 只能用在 `DwTabStrip` 内，`DwTabStripButton` 只能用在 `DwTabStripGroup` 内。放错位置时组件会输出一条控制台警告并停止渲染，避免底色和选中值对不上。
+
+独立使用时没有背景图，选中页签的默认底色 `rgba(0, 0, 0, 0.3)` 会直接叠在页面背景上；纯色页面通常需要自己传 `bg-selected-color`。
 :::
 
 ## 键盘操作
@@ -206,6 +210,7 @@ const active = ref('world')
 | `modelValue` | 当前选中页签的 `value`，支持 `v-model` | `string \| number` | — |
 | `size` | 单个页签宽度 | `'default' \| 'medium' \| 'large' \| number` | `'default'` |
 | `sound` | 是否播放点击音效 | `boolean` | `true` |
+| `disabled` | 是否整体禁用；禁用后不可点击，所有页签按未选中样式显示 | `boolean` | `false` |
 | `icon` | 整条栏的默认图标，可被单个 `DwTabStripButton` 覆盖 | `string` | — |
 | `color` | 页签文字颜色 | `string` | `--dw-color-text` |
 | `bg-color` | 未选中页签的底色 | `string` | `--dw-color-tabstrip-bg` |
@@ -235,14 +240,26 @@ const active = ref('world')
 | `modelValue` | 独立使用时的选中值；在 `DwTabStrip` 内以父组件为准 | `string \| number` | — |
 | `size` | 单个页签宽度 | `'default' \| 'medium' \| 'large' \| number` | 继承 |
 | `sound` | 是否播放点击音效 | `boolean` | 继承 |
+| `disabled` | 是否整体禁用 | `boolean` | 继承 |
 | `icon` / `color` / `bg-color` / `bg-selected-color` | 同上 | `string` | 继承 |
+
+### DwTabStripGroup Events
+
+| 事件名 | 说明 | 参数 |
+|--------|------|------|
+| `update:modelValue` | 独立使用时的选中项变化 | `value: string \| number` |
+| `change` | 选中项变化（语义化别名） | `value: string \| number` |
 
 ### DwTabStripButton Props
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | `value` | 唯一标识，和 `v-model` 比对；不传时回退成顺序索引 | `string \| number` | — |
-| `icon` | 单个页签的图标（内置图标名或图片 URL） | `string` | 跟随 `DwTabStrip` |
+| `icon` | 单个页签的图标：内置图标名（如 `heart`）或图片 URL | `string` | 跟随 `DwTabStrip` |
+
+::: tip
+图标颜色不由组件控制：内置图标统一用 `fill="currentColor"`，跟随页签文字颜色；传图片 URL 时按 `<img>` 渲染，保留图片自身颜色。组件目前只支持「内置图标名」和「图片 URL」两种，不支持直接传 SVG 字符串。
+:::
 
 ### DwTabStripContent Props
 
@@ -267,6 +284,7 @@ const active = ref('world')
 | `--dw-tabstrip-tab-height` | `40px` | 未选中页签高度 |
 | `--dw-tabstrip-tab-height-selected` | `55px` | 选中页签高度 |
 | `--dw-tabstrip-line-height` | `6px` | 描边线高度（3px 高光 + 3px 实色） |
+| `--dw-tabstrip-border-width` | `3px` | 像素描边宽度（页签边框、断口内缩、内容区底边共用） |
 | `--dw-tabstrip-blur` | `3px` | 背景模糊程度（会被 `bg-blur` 覆盖） |
 | `--dw-color-tabstrip-bg` | `rgba(0, 0, 0, 0.9)` | 未选中页签底色 / 描边线实色 |
 | `--dw-color-tabstrip-content` | `rgba(0, 0, 0, 0.3)` | 内容区与选中页签底色 |

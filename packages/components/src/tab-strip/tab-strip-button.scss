@@ -18,8 +18,8 @@
   transform: translateY(-3px);
   background: var(--dw-color-tabstrip-bg);
   background-clip: padding-box;
-  // 边框只做 3px 占位，描边由 ::after 的 box-shadow 绘制
-  border: 3px solid var(--dw-color-tabstrip-highlight);
+  // 边框只做描边宽度的占位，描边由 ::after 的 box-shadow 绘制
+  border: var(--dw-tabstrip-border-width, 3px) solid var(--dw-color-tabstrip-highlight);
   color: var(--dw-tabstrip-tab-color, var(--dw-color-text));
   font-family: inherit;
   font-size: var(--dw-font-size-base);
@@ -37,11 +37,16 @@
     content: '';
     position: absolute;
     inset: 0;
-    box-shadow: 0 3px 0 var(--dw-color-tabstrip-bg);
+    box-shadow: 0 var(--dw-tabstrip-border-width, 3px) 0 var(--dw-color-tabstrip-bg);
   }
 
   &:hover::after {
     @include dw-skin-tabstrip-edge-active;
+  }
+
+  // 整栏禁用时按未选中样式显示，只保留不可点击的光标
+  &:disabled {
+    cursor: not-allowed;
   }
 }
 
@@ -55,7 +60,7 @@
   text-shadow: var(--dw-text-color-shadow);
 
   &::after {
-    height: calc(100% + 3px);
+    height: calc(100% + var(--dw-tabstrip-border-width, 3px));
     @include dw-skin-tabstrip-edge-open;
   }
 
