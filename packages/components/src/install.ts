@@ -1,8 +1,9 @@
 import type { App } from 'vue'
 import { DwButton } from './button'
 import { DwTabs, DwTabButton } from './tabs'
+import { DwTabStrip, DwTabStripGroup } from './tab-strip'
 
-const components = [DwButton, DwTabs, DwTabButton]
+const components = [DwButton, DwTabs, DwTabButton, DwTabStrip, DwTabStripGroup]
 
 function install(app: App) {
   components.forEach((comp) => {

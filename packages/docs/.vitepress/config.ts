@@ -56,6 +56,7 @@ export default defineConfig({
         items: [
           { text: 'Button 按钮', link: '/components/button' },
           { text: 'Tabs 标签栏', link: '/components/tabs' },
+          { text: 'TabStrip 页签栏', link: '/components/tab-strip' },
         ],
       },
     ],

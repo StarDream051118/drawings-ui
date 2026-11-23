@@ -96,3 +96,52 @@
   color: var(--dw-color-text);
   text-shadow: var(--dw-text-color-shadow);
 }
+
+// —— TabStrip：深色像素标签 ——
+// 外圈黑色立体描边（三边：上 / 左 / 右）。
+// 用 box-shadow 而不是 border，避免真实边框缺底边时在角上向内斜接。
+@mixin dw-skin-tabstrip-frame($color: var(--dw-color-tabstrip-bg)) {
+  box-shadow:
+    3px -3px 0 $color,
+    -3px -3px 0 $color,
+    3px 0 0 $color,
+    -3px 0 0 $color;
+}
+
+// 外圈黑色立体描边（只画上缘与两角，两侧交给白色描边继续向下延伸）
+@mixin dw-skin-tabstrip-frame-top($color: var(--dw-color-tabstrip-bg)) {
+  box-shadow:
+    3px -3px 0 $color,
+    -3px -3px 0 $color;
+}
+
+// 未选中标签的高光描边：上 / 左 / 右 + 底部实色
+@mixin dw-skin-tabstrip-edge(
+  $edge: var(--dw-color-tabstrip-highlight),
+  $floor: var(--dw-color-tabstrip-bg)
+) {
+  box-shadow:
+    3px -3px 0 $edge,
+    -3px -3px 0 $edge,
+    3px 0 0 $edge,
+    -3px 0 0 $edge,
+    0 3px 0 $floor;
+}
+
+// hover / 选中标签的白色描边：四边闭合
+@mixin dw-skin-tabstrip-edge-active($color: var(--dw-color-border-active)) {
+  box-shadow:
+    3px -3px 0 $color,
+    -3px 3px 0 $color,
+    3px 3px 0 $color,
+    -3px -3px 0 $color;
+}
+
+// 选中标签的白色描边：上 / 左 / 右，底边留空交给 TabStripGroup 的线元素
+@mixin dw-skin-tabstrip-edge-open($color: var(--dw-color-border-active)) {
+  box-shadow:
+    3px -3px 0 $color,
+    -3px -3px 0 $color,
+    3px 0 0 $color,
+    -3px 0 0 $color;
+}

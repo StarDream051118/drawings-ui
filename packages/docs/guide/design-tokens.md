@@ -60,6 +60,20 @@ DrawingsUI 通过 CSS 自定义属性实现主题系统，你可以在运行时�
 | `--dw-font-size-base` | `16px` | 基础 |
 | `--dw-font-size-lg` | `18px` | 大号 |
 
+## TabStrip 页签栏
+
+| 变量名 | 默认值 | 说明 |
+|--------|--------|------|
+| `--dw-tabstrip-gap` | `6px` | 页签之间的缝隙 |
+| `--dw-tabstrip-tab-width` | `300px` | 单个页签宽度（会被 `size` 覆盖） |
+| `--dw-tabstrip-tab-height` | `40px` | 未选中页签高度 |
+| `--dw-tabstrip-tab-height-selected` | `55px` | 选中页签高度 |
+| `--dw-tabstrip-line-height` | `6px` | 描边线高度（3px 高光 + 3px 实色） |
+| `--dw-tabstrip-blur` | `3px` | 背景模糊程度（会被 `bg-blur` 覆盖） |
+| `--dw-color-tabstrip-bg` | `rgba(0, 0, 0, 0.9)` | 未选中页签底色 / 描边线实色 |
+| `--dw-color-tabstrip-content` | `rgba(0, 0, 0, 0.3)` | 内容区与选中页签底色 |
+| `--dw-color-tabstrip-highlight` | `rgba(255, 255, 255, 0.2)` | 高光描边色 |
+
 ## 字体
 
 | 变量名 | 默认值 | 说明 |
