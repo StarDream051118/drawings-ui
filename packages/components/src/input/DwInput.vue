@@ -80,8 +80,13 @@ function measure() {
   const barHeight = Math.min(fontSize, contentHeight)
   const barTop = input.offsetTop + borderTop + paddingTop + (contentHeight - barHeight) / 2
 
+  // 祖先带 transform: scale 时 rect 是缩放后的值，用 input 自身 rect / offsetWidth 换回布局坐标
+  const inputRect = input.getBoundingClientRect()
+  const scaleX = input.offsetWidth > 0 ? inputRect.width / input.offsetWidth : 1
+  const mirrorWidth = mirror.getBoundingClientRect().width / (scaleX || 1)
+
   root.style.setProperty('--dw-input-caret-origin', `${input.offsetLeft + borderLeft + paddingLeft}px`)
-  root.style.setProperty('--dw-input-caret-x', `${mirror.getBoundingClientRect().width - input.scrollLeft}px`)
+  root.style.setProperty('--dw-input-caret-x', `${mirrorWidth - input.scrollLeft}px`)
   root.style.setProperty('--dw-input-caret-color', style.color)
   root.style.setProperty('--dw-input-caret-top', `${barTop}px`)
   root.style.setProperty('--dw-input-caret-height', `${barHeight}px`)
