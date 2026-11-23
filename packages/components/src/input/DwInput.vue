@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 defineOptions({ name: 'DwInput', inheritAttrs: false })
 
-// 只有 v-model，没有其它可调 props；边框、底色、字体等全部由使用方的 class / CSS 决定
+interface Props {
+  /** 光标闪烁周期（秒）；传 0 或负数时停止闪烁 */
+  blinkDuration?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  blinkDuration: 0.6,
+})
+
+// 只有 v-model 与 blink-duration，没有其它可调 props；边框、底色、字体等全部由使用方的 class / CSS 决定
 const model = defineModel<string>({ default: '' })
 
 const rootEl = ref<HTMLElement | null>(null)
@@ -16,6 +25,10 @@ const caretCollapsed = ref(true)
 // 折叠光标是否停在文字末尾：末尾画下划线，其余位置画竖线
 const caretAtEnd = ref(true)
 let frame = 0
+
+const rootStyle = computed(() => ({
+  '--dw-input-caret-blink': `${Math.max(props.blinkDuration, 0)}s`,
+}))
 
 // 镜像测量：用隐藏元素量出光标前的文字宽度，再定位自绘光标
 function measure() {
@@ -110,6 +123,7 @@ onBeforeUnmount(() => {
       'dw-input--caret-end': caretAtEnd,
       'dw-input--selecting': !caretCollapsed,
     }"
+    :style="rootStyle"
   >
     <input
       ref="inputEl"

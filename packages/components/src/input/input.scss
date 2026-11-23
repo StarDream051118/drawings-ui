@@ -45,7 +45,7 @@
 // 聚焦且未选中文字时显示；选中文字交给系统选区高亮
 .dw-input--focused:not(.dw-input--selecting) .dw-input__caret {
   opacity: 1;
-  animation: dw-input-caret-blink 0.6s steps(1) infinite;
+  animation: dw-input-caret-blink var(--dw-input-caret-blink, 0.6s) steps(1) infinite;
 }
 
 @keyframes dw-input-caret-blink {
