@@ -24,13 +24,13 @@ const bgImage = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
 
 <template>
   <div class="row1">
-    <DwTabStrip v-model="active" :bg-image="bgImage">
+    <DwTabStrip v-model="active" :bg-image="bgImage" :bg-blur="3">
       <DwTabStripGroup>
         <DwTabStripButton value="game">游戏</DwTabStripButton>
         <DwTabStripButton value="world">世界</DwTabStripButton>
         <DwTabStripButton value="more">更多</DwTabStripButton>
       </DwTabStripGroup>
-      <DwTabStripContent :bg-blur="3" :content-height="180">
+      <DwTabStripContent :content-height="180">
         <p class="tab-strip-demo-text">背景图 + 模糊</p>
       </DwTabStripContent>
     </DwTabStrip>

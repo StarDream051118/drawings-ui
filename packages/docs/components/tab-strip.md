@@ -92,22 +92,22 @@ const active = ref('world')
 
 ## 背景图与模糊
 
-背景图属于整条页签栏，铺满后**覆盖页签区**；模糊属于内容层。
+背景图与模糊都属于整条页签栏，页签区和内容区共用同一个模糊值。
 
 - `bg-image`：背景图片地址，作用在 `DwTabStrip` 内的 `.dw-tabstrip-background` 元素上，铺满整条栏
-- `bg-blur`：内容层的模糊程度（px），默认 `3`
+- `bg-blur`：背景模糊程度（px），默认 `3`，同时作用于页签组和内容区
 
 <tab-strip-demos-background />
 
 ```vue
 <template>
-  <DwTabStrip v-model="active" :bg-image="bgImage">
+  <DwTabStrip v-model="active" :bg-image="bgImage" :bg-blur="3">
     <DwTabStripGroup>
       <DwTabStripButton value="game">游戏</DwTabStripButton>
       <DwTabStripButton value="world">世界</DwTabStripButton>
       <DwTabStripButton value="more">更多</DwTabStripButton>
     </DwTabStripGroup>
-    <DwTabStripContent :bg-blur="3" :content-height="200">
+    <DwTabStripContent :content-height="200">
       内容区域
     </DwTabStripContent>
   </DwTabStrip>
@@ -115,7 +115,7 @@ const active = ref('world')
 ```
 
 ::: tip
-背景层是绝对定位铺满整条栏的，层级在页签和内容之下，所以页签之间的缝隙、内容区四周露出的都是同一张背景图。内容区额外留了 3px 底部高度，用来放它下移 3px 后的上下分隔线。
+背景层是绝对定位铺满整条栏的，层级在页签和内容之下，所以页签之间的缝隙、内容区四周露出的都是同一张背景图。页签组和内容区都带同一套 `backdrop-filter`，两者交界处不会出现一段没模糊的图像。
 :::
 
 ## 内容高度
@@ -170,6 +170,7 @@ const active = ref('world')
 | `bg-color` | 未选中页签的底色 | `string` | `--dw-color-tabstrip-bg` |
 | `bg-selected-color` | 选中页签底色，同时作为内容区底色 | `string` | `--dw-color-tabstrip-content` |
 | `bg-image` | 背景图片地址，铺满整条页签栏 | `string` | `''` |
+| `bg-blur` | 背景模糊程度（px），页签区与内容区共用 | `number` | `3` |
 
 ### DwTabStrip Events
 
@@ -206,7 +207,6 @@ const active = ref('world')
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `bg-blur` | 背景模糊程度（px） | `number` | `3` |
 | `content-height` | 内容区高度，数字按 px 处理 | `number \| string` | `'auto'` |
 
 ## 设计 Token

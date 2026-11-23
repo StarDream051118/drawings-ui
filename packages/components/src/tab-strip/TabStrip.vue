@@ -26,12 +26,15 @@ interface Props {
   bgSelectedColor?: string
   /** 背景图片地址；铺满整条页签栏（含页签区），为空时不铺 */
   bgImage?: string
+  /** 背景模糊程度（px），页签区与内容区共用同一个值 */
+  bgBlur?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'default',
   sound: true,
   bgImage: '',
+  bgBlur: 3,
 })
 
 const emit = defineEmits<{
@@ -67,7 +70,7 @@ provide(TAB_STRIP_CONTEXT, {
 </script>
 
 <template>
-  <div class="dw-tab-strip">
+  <div class="dw-tab-strip" :style="{ '--dw-tabstrip-blur': `${bgBlur}px` }">
     <div
       v-if="bgImage"
       class="dw-tabstrip-background"

@@ -41,7 +41,7 @@ const tabStripBg = '/images/star.png'
 <template>
   <div class="demo">
     <h1>DrawingsUI 组件预览</h1>
-    <DwTabStrip v-model="activeNewTab" :size="newTabWidth" :bg-image="tabStripBg">
+    <DwTabStrip v-model="activeNewTab" :size="newTabWidth" :bg-image="tabStripBg" :bg-blur="3">
       <DwTabStripGroup>
         <DwTabStripButton
           v-for="item in newTabs"
@@ -51,7 +51,7 @@ const tabStripBg = '/images/star.png'
           {{ item.label }}
         </DwTabStripButton>
       </DwTabStripGroup>
-      <DwTabStripContent :bg-blur="3" :content-height="387">
+      <DwTabStripContent :content-height="387">
         <div class="tabstrip-demo-content">内容区域</div>
       </DwTabStripContent>
     </DwTabStrip>

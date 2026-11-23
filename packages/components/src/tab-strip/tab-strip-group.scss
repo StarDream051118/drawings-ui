@@ -6,6 +6,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  // 与内容区共用同一个模糊值，背景图在页签区不会露出未模糊的一段
+  backdrop-filter: blur(var(--dw-tabstrip-blur, 3px));
 }
 
 // 页签行：整条栏按内容居中，线元素用同一个 100% 基准推导挖洞位置

@@ -1,15 +1,12 @@
 @use '../styles/css-vars.scss';
 @use '../styles/reset.scss';
 
-// 内容层：底色跟随选中页签，毛玻璃靠 backdrop-filter 模糊下层的背景图
+// 内容层：紧贴页签组，底色跟随选中页签，毛玻璃靠 backdrop-filter 模糊下层的背景图
 .dw-tabstrip-content {
   position: relative;
   background: var(--dw-color-tabstrip-content);
+  // 上沿由页签组的描边线收口，这里只画底部分隔线
   border-bottom: 3px solid var(--dw-color-border);
-  // 上 3px 是内容区顶端的分隔线，下 3px 是底端高光
-  box-shadow:
-    0 -3px 0 var(--dw-color-tabstrip-content),
-    0 3px 0 var(--dw-color-tabstrip-highlight);
-  transform: translateY(3px);
+  box-shadow: 0 3px 0 var(--dw-color-tabstrip-highlight);
   backdrop-filter: blur(var(--dw-tabstrip-blur, 3px));
 }
