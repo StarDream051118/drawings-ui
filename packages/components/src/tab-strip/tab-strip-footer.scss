@@ -5,4 +5,5 @@
 .dw-tabstrip-footer {
   position: relative;
   height: calc(var(--dw-tabstrip-tab-height-selected) + var(--dw-tabstrip-line-height));
+  transform: translateY(3px);
 }

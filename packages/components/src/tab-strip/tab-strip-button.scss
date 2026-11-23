@@ -21,6 +21,7 @@
   // 边框只做描边宽度的占位，描边由 ::after 的 box-shadow 绘制
   border: var(--dw-tabstrip-border-width, 3px) solid var(--dw-color-tabstrip-highlight);
   color: var(--dw-tabstrip-tab-color, var(--dw-color-text));
+  text-shadow: var(--dw-text-color-shadow);
   font-family: inherit;
   font-size: var(--dw-font-size-base);
   cursor: pointer;
