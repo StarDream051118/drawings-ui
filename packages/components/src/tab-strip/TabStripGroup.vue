@@ -36,7 +36,12 @@ interface Props {
   bgSelectedColor?: string
 }
 
-const props = defineProps<Props>()
+// disabled / sound 必须显式给 undefined 默认值：否则 Vue 会把「未传」的 Boolean prop
+// 转成 false，`props.x ?? 父级` 就永远拿不到父级的值
+const props = withDefaults(defineProps<Props>(), {
+  sound: undefined,
+  disabled: undefined,
+})
 
 const emit = defineEmits<{
   'update:modelValue': [value: TabStripKey]

@@ -173,6 +173,31 @@ const active = ref('world')
 背景图铺满整条栏，所以页签区、内容区、页脚三块露出的都是同一张图。内容区底部的 3px 边线就是内容与页脚的分界。
 :::
 
+## 禁用
+
+`disabled` 作用于**整条栏**：禁用后点击与键盘导航都失效、不播放音效，所有页签按未选中样式显示，描边线也不再挖洞。
+
+<tab-strip-demos-disabled />
+
+```vue
+<template>
+  <DwTabStrip v-model="active" disabled>
+    <DwTabStripGroup>
+      <DwTabStripButton value="game">游戏</DwTabStripButton>
+      <DwTabStripButton value="world">世界</DwTabStripButton>
+      <DwTabStripButton value="more">更多</DwTabStripButton>
+    </DwTabStripGroup>
+    <DwTabStripContent :content-height="200">内容区域</DwTabStripContent>
+  </DwTabStrip>
+</template>
+```
+
+::: tip
+禁用只去掉选中态，不改变页签本身的配色。想让禁用整体变灰，覆盖 `--dw-color-tabstrip-bg` 和 `--dw-color-text` 即可。
+
+`DwTabStripGroup` 独立使用时也接受 `disabled`；放在 `DwTabStrip` 内则不传即继承父级。
+:::
+
 ## 单独使用 DwTabStripGroup
 
 只需要页签条、内容区自己接管时，直接用 `DwTabStripGroup` 并给它自己的 `v-model`：

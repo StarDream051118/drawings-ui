@@ -24,6 +24,7 @@ import TabStripBasic from './demos/TabStripBasic.vue'
 import TabStripBackground from './demos/TabStripBackground.vue'
 import TabStripGroupBasic from './demos/TabStripGroupBasic.vue'
 import TabStripFooter from './demos/TabStripFooter.vue'
+import TabStripDisabled from './demos/TabStripDisabled.vue'
 
 export default {
   extends: DefaultTheme,
@@ -50,5 +51,6 @@ export default {
     app.component('tab-strip-demos-background', TabStripBackground)
     app.component('tab-strip-demos-group', TabStripGroupBasic)
     app.component('tab-strip-demos-footer', TabStripFooter)
+    app.component('tab-strip-demos-disabled', TabStripDisabled)
   },
 }
