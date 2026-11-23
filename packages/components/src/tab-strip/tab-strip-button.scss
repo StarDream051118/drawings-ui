@@ -18,6 +18,8 @@
   transform: translateY(-3px);
   background: var(--dw-color-tabstrip-bg);
   background-clip: padding-box;
+  // 像素风直角，避免 outline 跟着圆角变弯
+  border-radius: 0;
   // 边框只做描边宽度的占位，描边由 ::after 的 box-shadow 绘制
   border: var(--dw-tabstrip-border-width, 3px) solid var(--dw-color-tabstrip-highlight);
   color: var(--dw-tabstrip-tab-color, var(--dw-color-text));
@@ -43,6 +45,13 @@
 
   &:hover::after {
     @include dw-skin-tabstrip-edge-active;
+  }
+
+  // 键盘可见焦点（鼠标点击不显示）
+  &:focus-visible {
+    outline: 1px solid var(--dw-color-border-active);
+    outline-offset: 2px;
+    border-radius: 0;
   }
 
   // 禁用时保留未选中描边，不响应 hover 白边
