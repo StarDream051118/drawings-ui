@@ -68,7 +68,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2025 DrawingsUI',
+      copyright: 'Copyright © 2026 DrawingsUI',
     },
 
     outline: {

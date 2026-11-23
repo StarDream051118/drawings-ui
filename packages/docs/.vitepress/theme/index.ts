@@ -22,6 +22,7 @@ import TabsDisabled from './demos/TabsDisabled.vue'
 import TabsSound from './demos/TabsSound.vue'
 import TabsActiveLine from './demos/TabsActiveLine.vue'
 import TabStripBasic from './demos/TabStripBasic.vue'
+import TabStripShowcase from './demos/TabStripShowcase.vue'
 import TabStripBackground from './demos/TabStripBackground.vue'
 import TabStripGroupBasic from './demos/TabStripGroupBasic.vue'
 import TabStripFooter from './demos/TabStripFooter.vue'
@@ -50,6 +51,7 @@ export default {
     app.component('tabs-demos-sound', TabsSound)
     app.component('tabs-demos-active-line', TabsActiveLine)
     app.component('tab-strip-demos-basic', TabStripBasic)
+    app.component('tab-strip-demos-showcase', TabStripShowcase)
     app.component('tab-strip-demos-background', TabStripBackground)
     app.component('tab-strip-demos-group', TabStripGroupBasic)
     app.component('tab-strip-demos-footer', TabStripFooter)
