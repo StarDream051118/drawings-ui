@@ -45,7 +45,7 @@ const tabStripBg = '/images/star.png'
     <h1>DrawingsUI 组件预览</h1>
     <section>
       <h2>TabStrip组件预览</h2>
-      <DwTabStrip v-model="activeNewTab" :size="newTabWidth" :bg-image="tabStripBg" bg-selected-color="rgba(255,255,0,0.5)" :bg-blur="3">
+      <DwTabStrip v-model="activeNewTab" :size="newTabWidth" :bg-image="tabStripBg" :bg-blur="3">
         <DwTabStripGroup>
           <DwTabStripButton
             v-for="item in newTabs"
