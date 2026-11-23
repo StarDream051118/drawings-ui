@@ -55,12 +55,4 @@ const slowValue = ref('慢速闪烁')
   outline: none;
   border-color: #ffffff;
 }
-
-/* 文档站全局会按 prefers-reduced-motion 压缩动画，演示里恢复光标闪烁 */
-@media (prefers-reduced-motion: reduce) {
-  .input-demo .dw-input__caret {
-    animation-duration: var(--dw-input-caret-blink, 0.6s) !important;
-    animation-iteration-count: infinite !important;
-  }
-}
 </style>

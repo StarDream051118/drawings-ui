@@ -1,0 +1,8 @@
+/* 文档站全局会在 prefers-reduced-motion 下把动画压成 1ms，
+   这里只对演示里的 DwInput 光标恢复闪烁，不影响站点其它动画 */
+@media (prefers-reduced-motion: reduce) {
+  .vp-doc .dw-input__caret {
+    animation-duration: var(--dw-input-caret-blink, 0.6s) !important;
+    animation-iteration-count: infinite !important;
+  }
+}
