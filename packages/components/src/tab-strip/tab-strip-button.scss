@@ -10,6 +10,9 @@
   align-items: center;
   // 固定尺寸时用变量；'default' 先按内容撑开，再由 DwTabStripGroup 量出统一宽度
   width: var(--dw-tabstrip-tab-width, auto);
+  // size 小于文字宽度时以文字宽度为准，文字不换行
+  min-width: max-content;
+  white-space: nowrap;
   height: var(--dw-tabstrip-tab-height);
   padding: 0 var(--dw-spacing-md);
   transform: translateY(-3px);
