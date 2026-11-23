@@ -196,6 +196,8 @@ const active = ref('world')
 禁用只去掉选中态，不改变页签本身的配色。想让禁用整体变灰，覆盖 `--dw-color-tabstrip-bg` 和 `--dw-color-text` 即可。
 
 `DwTabStripGroup` 独立使用时也接受 `disabled`；放在 `DwTabStrip` 内则不传即继承父级。
+
+单个页签也可以禁用：给 `DwTabStripButton` 加 `disabled`，它不响应点击与 hover、不参与键盘导航，也不会成为选中项。
 :::
 
 ## 单独使用 DwTabStripGroup
@@ -281,6 +283,7 @@ const active = ref('world')
 |------|------|------|--------|
 | `value` | 唯一标识，和 `v-model` 比对；不传时回退成顺序索引 | `string \| number` | — |
 | `icon` | 单个页签的图标：内置图标名（如 `heart`）或图片 URL | `string` | 跟随 `DwTabStrip` |
+| `disabled` | 单独禁用该页签；不参与点击、键盘导航与选中 | `boolean` | `false` |
 
 ::: tip
 图标颜色不由组件控制：内置图标统一用 `fill="currentColor"`，跟随页签文字颜色；传图片 URL 时按 `<img>` 渲染，保留图片自身颜色。组件目前只支持「内置图标名」和「图片 URL」两种，不支持直接传 SVG 字符串。

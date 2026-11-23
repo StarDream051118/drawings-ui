@@ -77,11 +77,15 @@ const defaults = computed<TabStripDefaults>(() => {
 
 const isDisabled = computed(() => defaults.value.disabled)
 
-// 父级持有的 key 对不上（或没传）时回落到第一个页签，和 DwTabs 的行为一致
+// 父级持有的 key 对不上（或没传）时回落到第一个可用页签，和 DwTabs 的行为一致
 const activeKey = computed<TabStripKey | undefined>(() => {
   const candidate = strip ? strip.activeKey.value : innerKey.value
-  if (candidate !== undefined && keys.value.includes(candidate)) return candidate
-  return keys.value[0]
+  if (candidate !== undefined) {
+    const match = order.value.find(tab => tab.key.value === candidate)
+    // 单独禁用的页签不显示选中态，也不参与描边线挖洞
+    if (match && !match.disabled.value) return candidate
+  }
+  return order.value.find(tab => !tab.disabled.value)?.key.value
 })
 
 const activeIndex = computed(() => keys.value.indexOf(activeKey.value as TabStripKey))
@@ -96,7 +100,8 @@ function unregister(tab: TabStripTabInstance) {
 
 function select(key: TabStripKey) {
   if (isDisabled.value) return
-  if (!order.value.some(tab => tab.key.value === key)) return
+  const tab = order.value.find(item => item.key.value === key)
+  if (!tab || tab.disabled.value) return
   if (key === activeKey.value) return
 
   if (strip) {
@@ -240,10 +245,12 @@ watch([() => defaults.value.size, activeIndex, () => order.value.length], () => 
 function onKeydown(event: KeyboardEvent) {
   if (isDisabled.value) return
 
-  const total = order.value.length
+  // 禁用页签不参与键盘导航，方向键直接跳过
+  const tabs = order.value.filter(tab => !tab.disabled.value)
+  const total = tabs.length
   if (total === 0) return
 
-  const current = activeIndex.value
+  const current = tabs.findIndex(tab => tab.key.value === activeKey.value)
   let next = current
 
   switch (event.key) {
@@ -264,7 +271,7 @@ function onKeydown(event: KeyboardEvent) {
   }
 
   event.preventDefault()
-  const tab = order.value[next]
+  const tab = tabs[next]
   if (!tab) return
   select(tab.key.value)
   tab.el.value?.focus()

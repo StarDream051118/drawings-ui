@@ -16,9 +16,13 @@ interface Props {
   value?: TabStripKey
   /** 图标：内置图标名或图片 URL；不传时跟随整条栏的 icon */
   icon?: string
+  /** 单独禁用该页签；整条栏禁用时也会一并失效 */
+  disabled?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  disabled: false,
+})
 
 const group = useTabStripGroupContext('DwTabStripButton')
 
@@ -30,6 +34,7 @@ const instance: TabStripTabInstance = {
   // key = value ?? 顺序索引（index 在下面声明，computed 是惰性的，首次读取时已初始化）
   key: computed<TabStripKey>(() => props.value ?? index.value),
   el: elRef,
+  disabled: computed(() => props.disabled || (group?.defaults.value.disabled ?? false)),
 }
 
 if (group) {
@@ -38,7 +43,7 @@ if (group) {
 }
 
 const index = computed(() => (group ? group.order.value.indexOf(instance) : -1))
-const isDisabled = computed(() => group?.defaults.value.disabled ?? false)
+const isDisabled = computed(() => instance.disabled.value)
 const isActive = computed(() => {
   if (!group || isDisabled.value) return false
   const key = instance.key.value

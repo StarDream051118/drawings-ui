@@ -38,6 +38,8 @@ export interface TabStripTabInstance {
   key: ComputedRef<TabStripKey>
   /** 根元素，键盘导航后用来聚焦 */
   el: Ref<HTMLElement | null>
+  /** 是否禁用（单个页签禁用或整条栏禁用），禁用项不参与选中与键盘导航 */
+  disabled: ComputedRef<boolean>
 }
 
 /** DwTabStripGroup 提供：页签顺序与选中状态，给 DwTabStripButton 消费 */
