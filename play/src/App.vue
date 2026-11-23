@@ -349,7 +349,7 @@ onBeforeUnmount(() => {
 
   .demo-input-wrap--focused:not(.demo-input-wrap--selecting) & {
     opacity: 1;
-    animation: demo-caret-blink 1s steps(1) infinite;
+    animation: demo-caret-blink 0.6s steps(1) infinite;
   }
 }
 

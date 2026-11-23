@@ -1,5 +1,6 @@
 import type { App } from 'vue'
 import { DwButton } from './button'
+import { DwInput } from './input'
 import { DwTabs, DwTabButton } from './tabs'
 import {
   DwTabStrip,
@@ -11,6 +12,7 @@ import {
 
 const components = [
   DwButton,
+  DwInput,
   DwTabs,
   DwTabButton,
   DwTabStrip,
