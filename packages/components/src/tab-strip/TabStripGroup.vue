@@ -45,6 +45,7 @@ const emit = defineEmits<{
 const strip = inject(TAB_STRIP_CONTEXT, null)
 
 const rootEl = ref<HTMLElement | null>(null)
+const lineEl = ref<HTMLElement | null>(null)
 const order = shallowRef<TabStripTabInstance[]>([])
 const innerKey = ref<TabStripKey | undefined>(props.modelValue)
 watch(() => props.modelValue, (value) => {
@@ -107,38 +108,57 @@ provide(TAB_STRIP_GROUP_CONTEXT, {
   select,
 })
 
-// 'default' 时先按内容撑开，再量出最宽那个页签统一宽度，线元素的挖洞公式才有固定值可用
-function syncAutoWidth() {
+// 线元素的断口用「实际渲染位置」定位，而不是索引 × 等宽：
+// size 小于文字宽度时页签会被 min-width 撑宽，靠公式推会错位
+function syncMeasure() {
   const el = rootEl.value
   if (!el) return
-  if (defaults.value.size !== 'default') return
 
-  // 先退回 auto 才能量到各页签自己的内容宽度；不能直接 removeProperty，
-  // 否则会继承 :root 里的 --dw-tabstrip-tab-width 默认值
-  el.style.setProperty('--dw-tabstrip-tab-width', 'auto')
+  // 'default' 没有固定宽度：先按内容撑开，量出最宽值后统一等宽
+  if (defaults.value.size === 'default') {
+    el.style.setProperty('--dw-tabstrip-tab-width', 'auto')
 
-  let max = 0
-  el.querySelectorAll<HTMLElement>('[role="tab"]').forEach((tab) => {
-    max = Math.max(max, tab.getBoundingClientRect().width)
-  })
+    let max = 0
+    el.querySelectorAll<HTMLElement>('[role="tab"]').forEach((tab) => {
+      max = Math.max(max, tab.getBoundingClientRect().width)
+    })
 
-  if (max > 0) el.style.setProperty('--dw-tabstrip-tab-width', `${Math.ceil(max)}px`)
+    if (max > 0) el.style.setProperty('--dw-tabstrip-tab-width', `${Math.ceil(max)}px`)
+  }
+
+  const line = lineEl.value
+  if (!line) return
+
+  const index = activeIndex.value
+  const tab = el.querySelectorAll<HTMLElement>('[role="tab"]')[index]
+
+  // 没有选中项时撤掉测量值，交给 --no-selection 的整条线
+  if (!tab) {
+    line.style.removeProperty('--dw-tabstrip-window-left')
+    line.style.removeProperty('--dw-tabstrip-window-right')
+    return
+  }
+
+  const left = tab.offsetLeft
+  const right = left + tab.offsetWidth
+  line.style.setProperty('--dw-tabstrip-window-left', `${left + 3}px`)
+  line.style.setProperty('--dw-tabstrip-window-right', `${right - 3}px`)
 }
 
 onMounted(() => {
-  syncAutoWidth()
-  window.addEventListener('resize', syncAutoWidth)
-  document.fonts?.ready.then(() => syncAutoWidth()).catch(() => {})
+  syncMeasure()
+  window.addEventListener('resize', syncMeasure)
+  document.fonts?.ready.then(() => syncMeasure()).catch(() => {})
 })
 
-onUpdated(syncAutoWidth)
+onUpdated(syncMeasure)
 
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', syncAutoWidth)
+  window.removeEventListener('resize', syncMeasure)
 })
 
 watch(() => defaults.value.size, () => {
-  nextTick(syncAutoWidth)
+  nextTick(syncMeasure)
 })
 
 function onKeydown(event: KeyboardEvent) {
@@ -182,7 +202,7 @@ const rootStyle = computed(() => {
   if (size === 'medium') style['--dw-tabstrip-tab-width'] = 'var(--dw-width-md)'
   else if (size === 'large') style['--dw-tabstrip-tab-width'] = 'var(--dw-width-xl)'
   else if (typeof size === 'number') style['--dw-tabstrip-tab-width'] = `${size}px`
-  else style['--dw-tabstrip-tab-width'] = 'auto' // 'default'：先撑开，再由 syncAutoWidth 写入测量值
+  else style['--dw-tabstrip-tab-width'] = 'auto' // 'default'：先撑开，再由 syncMeasure 写入测量值
 
   if (defaults.value.bgColor) style['--dw-color-tabstrip-bg'] = defaults.value.bgColor
   if (defaults.value.bgSelectedColor) style['--dw-color-tabstrip-content'] = defaults.value.bgSelectedColor
@@ -208,7 +228,7 @@ const rootStyle = computed(() => {
       <slot />
     </div>
 
-    <div class="dw-tab-strip-group__line" aria-hidden="true" />
+    <div ref="lineEl" class="dw-tab-strip-group__line" aria-hidden="true" />
   </div>
 </template>
 
