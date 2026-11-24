@@ -292,6 +292,15 @@ const tooltipName = ref('新的世界')
   background: #000000;
   color: var(--dw-color-text);
   font-size: 16px;
+
+  &:hover:not(:focus) {
+    border-color: #ffffff;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #ffffff;
+  }
 }
 
 
