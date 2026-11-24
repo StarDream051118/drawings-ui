@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import {
   DwButton,
   DwInput,
+  DwTooltip,
   DwTabs,
   DwTabButton,
   DwTabStrip,
@@ -42,6 +43,7 @@ const tabStripBg = '/images/star.png'
 
 // 镜像测量：用隐藏元素量出光标前的文字宽度，再定位自绘的下划线光标
 const worldName = ref('新的世界')
+const tooltipName = ref('新的世界')
 </script>
 
 <template>
@@ -198,6 +200,26 @@ const worldName = ref('新的世界')
         </DwTabs>
       </div>
     </section>
+    <section>
+      <h2>Tooltip 悬浮提示</h2>
+      <div class="row3">
+        <DwTooltip content="点击创建一个新的世界">
+          <DwButton>创建新的世界</DwButton>
+        </DwTooltip>
+        <DwTooltip content="优先显示在光标左下角" placement="bottom-left">
+          <DwButton>左下方位</DwButton>
+        </DwTooltip>
+        <DwTooltip placement="top-right" :show-delay="200">
+          <DwButton>右上（延迟 200ms）</DwButton>
+          <template #content>
+            支持<strong>富文本</strong>与换行
+          </template>
+        </DwTooltip>
+        <DwTooltip content="世界名称：修改后回车确认" class="tooltip-input-wrap">
+          <DwInput v-model="tooltipName" class="tooltip-input" />
+        </DwTooltip>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -255,6 +277,21 @@ const worldName = ref('新的世界')
 }
 .demo-button-footer {
   width: 100%;
+}
+
+.tooltip-input-wrap {
+  display: block;
+  width: 100%;
+}
+
+.tooltip-input {
+  width: 100%;
+  height: 46px;
+  padding: 5px;
+  border: 3px solid #a0a0a0;
+  background: #000000;
+  color: var(--dw-color-text);
+  font-size: 16px;
 }
 
 
