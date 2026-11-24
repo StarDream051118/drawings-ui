@@ -1,6 +1,6 @@
 # Tooltip 悬浮提示
 
-替代原生 `title` 的悬浮提示：黑底、无边框、无圆角的素框，显示在鼠标光标的对角方向并持续跟随。
+替代原生 `title` 的悬浮提示：黑底、无边框、无圆角的素框，显示在鼠标光标的对角方向并持续跟随。只有鼠标光标进入包裹范围才会触发，这是唯一的触发条件。
 
 ## 基础用法
 
@@ -41,6 +41,8 @@
 
 翻转后仍越界会夹紧到视口内；提示框 `pointer-events: none`，不会挡住鼠标操作。
 
+提示框**不自动换行**：只有 `content` 里的 `\n` 会换行。碰到屏幕边缘时不会压缩或折行，而是整体放到光标另一侧（右侧 ↔ 左侧、下侧 ↔ 上侧）。
+
 ## 延迟
 
 `show-delay` / `hide-delay` 单位为毫秒，默认都是 `0`（立即显示/隐藏）：
@@ -51,9 +53,9 @@
 </DwTooltip>
 ```
 
-## 键盘与禁用
+## 隐藏与禁用
 
-- 键盘聚焦触发元素时也会显示，位置以元素对应角为锚点；`Escape` 立即隐藏。
+- 鼠标离开包裹范围立即隐藏；`Escape` 也可立即隐藏。
 - 窗口滚动、失焦时自动隐藏，避免提示停留在错误位置。
 - `disabled` 可单独关闭某条提示。
 - 触摸端不触发（与原生 `title` 一致）。
@@ -68,7 +70,6 @@
 | `placement` | 优先方位 | `'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'` | `'bottom-right'` |
 | `show-delay` | 显示延迟（ms） | `number` | `0` |
 | `hide-delay` | 隐藏延迟（ms） | `number` | `0` |
-| `max-width` | 最大宽度，数字按 px 处理 | `number \| string` | `240` |
 | `disabled` | 是否禁用提示 | `boolean` | `false` |
 
 ### DwTooltip Slots
@@ -88,6 +89,5 @@
 |-------|--------|------|
 | `--dw-color-tooltip-bg` | `#000000` | 提示框背景 |
 | `--dw-color-tooltip-text` | `#FFFFFF` | 提示文字颜色 |
-| `--dw-tooltip-max-width` | `240px` | 最大宽度 |
 | `--dw-tooltip-gap` | `12px` | 与光标的间距 |
 | `--dw-tooltip-z-index` | `9999` | 层级 |

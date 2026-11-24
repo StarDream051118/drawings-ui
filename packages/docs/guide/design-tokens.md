@@ -104,7 +104,6 @@ import '@star-dream051118/drawings-ui/tokens.css'
 |--------|--------|------|
 | `--dw-color-tooltip-bg` | `#000000` | 提示框背景 |
 | `--dw-color-tooltip-text` | `#FFFFFF` | 提示文字颜色 |
-| `--dw-tooltip-max-width` | `240px` | 最大宽度 |
 | `--dw-tooltip-gap` | `12px` | 与光标的间距 |
 | `--dw-tooltip-z-index` | `9999` | 层级 |
 
