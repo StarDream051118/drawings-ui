@@ -2,7 +2,6 @@
 import { computed, inject, onUnmounted, ref } from 'vue'
 import { useSound } from '../composables/useSound'
 import { useIcon } from '../composables/useIcon'
-import { SOUNDS } from '../utils/sounds'
 import { TABS_CONTEXT, type TabInstance, type TabKey } from './context'
 
 defineOptions({ name: 'DwTabButton' })
@@ -78,7 +77,7 @@ const isTabbable = computed(() => {
   return isActive.value || (!tabs.hasSelection.value && isFirstEnabled.value)
 })
 
-const { play } = useSound()
+const { playClick } = useSound()
 const { getIconSvg } = useIcon()
 
 const isUrl = computed(() => {
@@ -102,9 +101,9 @@ const tabStyle = computed(() => {
   return Object.keys(style).length > 0 ? style : undefined
 })
 
-function onPointerDown() {
+function onPointerDown(event: PointerEvent) {
   if (resolvedDisabled.value || !resolvedSound.value) return
-  play(SOUNDS.click)
+  playClick(event)
 }
 
 function onClick() {
