@@ -1,0 +1,11 @@
+@use '../styles/css-vars.scss';
+@use '../styles/reset.scss';
+
+// 内容层：紧贴页签组，底色跟随选中页签
+.dw-tabstrip-content {
+  position: relative;
+  background: var(--dw-color-tabstrip-content);
+  border-bottom: var(--dw-tabstrip-border-width, 3px) solid var(--dw-color-border);
+  // 页签与内容之间的间隙由描边线自己补齐，这里只画底部高光
+  box-shadow: 0 var(--dw-tabstrip-border-width, 3px) 0 var(--dw-color-tabstrip-highlight);
+}

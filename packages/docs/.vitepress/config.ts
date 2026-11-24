@@ -55,7 +55,9 @@ export default defineConfig({
         text: '基础组件',
         items: [
           { text: 'Button 按钮', link: '/components/button' },
+          { text: 'Input 输入框', link: '/components/input' },
           { text: 'Tabs 标签栏', link: '/components/tabs' },
+          { text: 'TabStrip 页签栏', link: '/components/tab-strip' },
         ],
       },
     ],
@@ -66,7 +68,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2025 DrawingsUI',
+      copyright: 'Copyright © 2026 DrawingsUI',
     },
 
     outline: {

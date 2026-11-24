@@ -1,0 +1,118 @@
+@use '../styles/skin.scss' as *;
+
+.dw-tab-strip-button {
+  @include dw-skin-tabstrip-frame;
+
+  position: relative;
+  flex: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // 固定尺寸时用变量；'default' 先按内容撑开，再由 DwTabStripGroup 量出统一宽度
+  width: var(--dw-tabstrip-tab-width, auto);
+  // size 小于文字宽度时以文字宽度为准，文字不换行
+  min-width: max-content;
+  white-space: nowrap;
+  height: var(--dw-tabstrip-tab-height);
+  padding: 0 var(--dw-spacing-md);
+  transform: translateY(-3px);
+  background: var(--dw-color-tabstrip-bg);
+  background-clip: padding-box;
+  // 像素风直角，避免 outline 跟着圆角变弯
+  border-radius: 0;
+  // 边框只做描边宽度的占位，描边由 ::after 的 box-shadow 绘制
+  border: var(--dw-tabstrip-border-width, 3px) solid var(--dw-color-tabstrip-highlight);
+  color: var(--dw-tabstrip-tab-color, var(--dw-color-text));
+  text-shadow: var(--dw-text-color-shadow);
+  font-family: inherit;
+  font-size: var(--dw-font-size-base);
+  cursor: pointer;
+  user-select: none;
+
+  // 占位元素：让描边区域可点击、可触发 hover
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -6px -6px -3px;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: 0 var(--dw-tabstrip-border-width, 3px) 0 var(--dw-color-tabstrip-bg);
+  }
+
+  &:hover::after {
+    @include dw-skin-tabstrip-edge-active;
+  }
+
+  // 键盘可见焦点（鼠标点击不显示）
+  &:focus-visible {
+    outline: 1px solid var(--dw-color-border-active);
+    outline-offset: 2px;
+    border-radius: 0;
+  }
+
+  // 禁用时保留未选中描边，不响应 hover 白边
+  &:disabled {
+    cursor: not-allowed;
+
+    &:hover::after {
+      box-shadow: 0 var(--dw-tabstrip-border-width, 3px) 0 var(--dw-color-tabstrip-bg);
+    }
+  }
+}
+
+.dw-tab-strip-button--selected {
+  @include dw-skin-tabstrip-frame-top;
+
+  height: var(--dw-tabstrip-tab-height-selected);
+  transform: none;
+  background: var(--dw-color-tabstrip-content);
+  border-color: transparent;
+  text-shadow: var(--dw-text-color-shadow);
+
+  &::after {
+    height: calc(100% + var(--dw-tabstrip-border-width, 3px));
+    @include dw-skin-tabstrip-edge-open;
+  }
+
+  // 选中页签不参与 hover 换白边，保持底边缺口
+  &:hover::after {
+    @include dw-skin-tabstrip-edge-open;
+  }
+}
+
+.dw-tab-strip-button__label {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  transform: translateY(3px);
+}
+
+.dw-tab-strip-button--selected .dw-tab-strip-button__label {
+  transform: none;
+  text-decoration: underline var(--dw-color-border-active) solid 3px;
+  text-underline-offset: 18.5px;
+}
+
+.dw-tab-strip-button__icon {
+  display: inline-flex;
+  width: 1em;
+  height: 1em;
+  margin-right: var(--dw-spacing-xs);
+  vertical-align: middle;
+  filter: drop-shadow(1px 1px 0 var(--dw-text-color-shadow));
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}

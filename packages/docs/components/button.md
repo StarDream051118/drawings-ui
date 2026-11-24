@@ -186,6 +186,7 @@ import heartIcon from '../icons/heart.svg'
 | `type` | 按钮类型 | `'default' \| 'primary' \| 'danger'` | `'default'` |
 | `size` | 按钮尺寸，数字表示宽度 px | `'default' \| 'medium' \| 'large' \| number` | `'default'` |
 | `disabled` | 是否禁用 | `boolean` | `false` |
+| `loading` | 是否加载中（显示转圈，同时不可点击） | `boolean` | `false` |
 | `active` | 是否激活状态 | `boolean` | `false` |
 | `sound` | 是否播放音效 | `boolean` | `true` |
 | `icon` | 图标名称或 URL | `string` | — |

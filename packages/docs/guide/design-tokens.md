@@ -2,6 +2,15 @@
 
 DrawingsUI 通过 CSS 自定义属性实现主题系统，你可以在运行时动态切换。
 
+## 引入
+
+- 引入组件样式 `@star-dream051118/drawings-ui/style.css` 时，Token 已一并包含，无需额外引入。
+- 只想要变量、不引入组件样式时（例如在业务组件里复用配色），单独引入 `tokens.css`：
+
+```ts
+import '@star-dream051118/drawings-ui/tokens.css'
+```
+
 ## 按钮颜色
 
 ### 默认按钮
@@ -60,11 +69,34 @@ DrawingsUI 通过 CSS 自定义属性实现主题系统，你可以在运行时�
 | `--dw-font-size-base` | `16px` | 基础 |
 | `--dw-font-size-lg` | `18px` | 大号 |
 
+## TabStrip 页签栏
+
+| 变量名 | 默认值 | 说明 |
+|--------|--------|------|
+| `--dw-tabstrip-gap` | `6px` | 页签之间的缝隙 |
+| `--dw-tabstrip-tab-width` | `300px` | 单个页签宽度（会被 `size` 覆盖） |
+| `--dw-tabstrip-tab-height` | `40px` | 未选中页签高度 |
+| `--dw-tabstrip-tab-height-selected` | `55px` | 选中页签高度 |
+| `--dw-tabstrip-line-height` | `6px` | 描边线高度（3px 高光 + 3px 实色） |
+| `--dw-tabstrip-border-width` | `3px` | 像素描边宽度（页签边框、断口内缩、内容区底边共用） |
+| `--dw-tabstrip-blur` | `3px` | 背景模糊程度（会被 `bg-blur` 覆盖） |
+| `--dw-color-tabstrip-bg` | `rgba(0, 0, 0, 0.9)` | 未选中页签底色 / 描边线实色 |
+| `--dw-color-tabstrip-content` | `rgba(0, 0, 0, 0.3)` | 内容区与选中页签底色 |
+| `--dw-color-tabstrip-highlight` | `rgba(255, 255, 255, 0.2)` | 高光描边色 |
+
 ## 字体
 
 | 变量名 | 默认值 | 说明 |
 |--------|--------|------|
 | `--dw-font-family` | `'mc-font', -apple-system, ...` | 全局字体 |
+
+## 文本选区
+
+| 变量名 | 默认值 | 说明 |
+|--------|--------|------|
+| `--dw-color-selection-bg` | `#FFFFFF` | 选中文字的背景色 |
+| `--dw-color-selection-text` | `#201FFF` | 选中文字的颜色 |
+| `--dw-text-selection-shadow` | `1px 1px #C7C7FF` | 选中文字的压印阴影 |
 
 ## 使用示例
 

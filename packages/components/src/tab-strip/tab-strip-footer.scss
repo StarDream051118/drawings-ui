@@ -1,0 +1,9 @@
+@use '../styles/css-vars.scss';
+@use '../styles/reset.scss';
+
+// 页脚：只做底部留高与内容承载，不参与底色、描边和模糊
+.dw-tabstrip-footer {
+  position: relative;
+  height: calc(var(--dw-tabstrip-tab-height-selected) + var(--dw-tabstrip-line-height));
+  transform: translateY(3px);
+}

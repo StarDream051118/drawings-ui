@@ -1,0 +1,31 @@
+@use '../styles/css-vars.scss';
+@use '../styles/reset.scss';
+
+.dw-tab-strip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  // 页脚底部高光需要留高，背景层才能盖满
+  padding-bottom: var(--dw-tabstrip-border-width, 3px);
+}
+
+// 背景层：铺满整条页签栏（含页签区），只负责背景图，不参与交互与布局
+.dw-tabstrip-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+
+  // 比容器大一圈再模糊：filter: blur 会在边缘采样到透明像素，
+  // 不外扩就会在四边出现发虚的白边
+  &::before {
+    content: '';
+    position: absolute;
+    inset: calc(var(--dw-tabstrip-blur, 3px) * -1);
+    background-image: var(--dw-tabstrip-bg-image, none);
+    background-position: center;
+    background-size: cover;
+    filter: blur(var(--dw-tabstrip-blur, 3px));
+  }
+}

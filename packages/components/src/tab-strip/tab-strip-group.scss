@@ -1,0 +1,74 @@
+@use '../styles/css-vars.scss';
+@use '../styles/reset.scss';
+
+.dw-tab-strip-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+// 页签行：整条栏按内容居中，线元素用同一个 100% 基准推导挖洞位置
+.dw-tab-strip-group__tabs {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--dw-tabstrip-gap);
+  height: var(--dw-tabstrip-tab-height-selected);
+  transform: translateY(3px);
+}
+
+// 整条栏的描边线：一个元素画满，选中页签处用渐变硬停点挖空
+.dw-tab-strip-group__line {
+  position: relative;
+  width: 100%;
+  height: var(--dw-tabstrip-line-height);
+  pointer-events: none;
+
+  // 页签组总宽：n * 单宽 + (n - 1) * 间距
+  --dw-tabstrip-tabs-width: calc(
+    var(--dw-tabstrip-tab-count) * var(--dw-tabstrip-tab-width) +
+      (var(--dw-tabstrip-tab-count) - 1) * var(--dw-tabstrip-gap)
+  );
+  // 居中时页签组的左偏移 = (容器宽 - 页签组宽) / 2
+  --dw-tabstrip-tabs-offset: calc((100% - var(--dw-tabstrip-tabs-width)) / 2);
+  // 挖洞左右边界：前面已选页签的累计宽度，两端各让 3px 贴住选中页签的描边
+  --dw-tabstrip-window-left: calc(
+    var(--dw-tabstrip-tabs-offset) +
+      var(--dw-tabstrip-active-index) * (var(--dw-tabstrip-tab-width) + var(--dw-tabstrip-gap)) +
+      var(--dw-tabstrip-border-width, 3px)
+  );
+  --dw-tabstrip-window-right: calc(
+    var(--dw-tabstrip-window-left) + var(--dw-tabstrip-tab-width) -
+      var(--dw-tabstrip-border-width, 3px) * 2
+  );
+
+  // 上 3px 高光带：选中区间整段挖空，露出选中页签自身的底色
+  // 下 3px 实色带：选中区间换成内容区底色，把页签和内容区之间那 3px 补齐。
+  // 这一段必须画在线元素自己身上 —— 交给内容区的 box-shadow 会盖住线的颜色
+  background:
+    linear-gradient(
+        to right,
+        var(--dw-color-tabstrip-highlight) 0 var(--dw-tabstrip-window-left),
+        transparent var(--dw-tabstrip-window-left) var(--dw-tabstrip-window-right),
+        var(--dw-color-tabstrip-highlight) var(--dw-tabstrip-window-right) 100%
+      )
+      left top / 100% 3px no-repeat,
+    linear-gradient(
+        to right,
+        var(--dw-color-tabstrip-bg) 0 var(--dw-tabstrip-window-left),
+        var(--dw-color-tabstrip-content) var(--dw-tabstrip-window-left) var(--dw-tabstrip-window-right),
+        var(--dw-color-tabstrip-bg) var(--dw-tabstrip-window-right) 100%
+      )
+      left bottom / 100% 3px no-repeat;
+}
+
+// 没有能对上的选中项时，整条线保持连续
+.dw-tab-strip-group--no-selection .dw-tab-strip-group__line {
+  background:
+    linear-gradient(var(--dw-color-tabstrip-highlight), var(--dw-color-tabstrip-highlight))
+      left top / 100% 3px no-repeat,
+    linear-gradient(var(--dw-color-tabstrip-bg), var(--dw-color-tabstrip-bg))
+      left bottom / 100% 3px no-repeat;
+}

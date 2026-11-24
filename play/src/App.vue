@@ -1,7 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { DwButton, DwTabs, DwTabButton } from '@star-dream051118/drawings-ui'
-import '@star-dream051118/drawings-ui/styles/index.scss'
+import {
+  DwButton,
+  DwInput,
+  DwTabs,
+  DwTabButton,
+  DwTabStrip,
+  DwTabStripGroup,
+  DwTabStripButton,
+  DwTabStripContent,
+  DwTabStripFooter,
+} from '@star-dream051118/drawings-ui'
+import '@star-dream051118/drawings-ui/styles/base.scss'
 import '@star-dream051118/drawings-ui/styles/font.scss'
 
 const tab = ref(0)
@@ -12,12 +22,77 @@ const largeTab = ref(0)
 const equalTab = ref(0)
 const fillTab = ref(0)
 const valueTab = ref('a')
+
+interface NewTabItem {
+  value: string
+  label: string
+}
+
+const newTabs: NewTabItem[] = [
+  { value: 'game', label: '游戏' },
+  { value: 'world', label: '世界' },
+  { value: 'more', label: '更多' },
+]
+/** 新 Tab 栏所有标签共用同一个宽度（等长），对应已有 Tab 组件的自定义宽度 */
+const newTabWidth = ref(300)
+const activeTabStrip = ref('game')
+const activeTabStripGroup = ref('game')
+/** TabStrip 演示用背景图 */
+const tabStripBg = '/images/star.png'
+
+// 镜像测量：用隐藏元素量出光标前的文字宽度，再定位自绘的下划线光标
+const worldName = ref('新的世界')
 </script>
 
 <template>
   <div class="demo">
     <h1>DrawingsUI 组件预览</h1>
-
+    <section>
+      <h2>TabStrip组件预览</h2>
+      <DwTabStrip v-model="activeTabStrip" :size="newTabWidth" :bg-image="tabStripBg" :bg-blur="3">
+        <DwTabStripGroup>
+          <DwTabStripButton
+          style="font-size: 18px;"
+            v-for="item in newTabs"
+            :key="item.value"
+            :value="item.value"
+          >
+            {{ item.label }}
+          </DwTabStripButton>
+        </DwTabStripGroup>
+        <DwTabStripContent :content-height="500">
+          <div class="tabstrip-demo-frame">
+            <div class="tabstrip-demo-content">
+              <div class="world-title">世界名称</div>
+              <DwInput v-model="worldName" class="demo-input" />
+              <DwButton class="demo-button">游戏模式：生存</DwButton>
+              <DwButton class="demo-button">难度：普通</DwButton>
+              <DwButton class="demo-button">允许指令：关</DwButton>
+            </div>
+          </div>
+        </DwTabStripContent>
+        <DwTabStripFooter>
+          <div class="tabstrip-demo-footer-frame">
+            <div class="demo-button-group">
+              <DwButton class="demo-button-footer">创建新的世界</DwButton>
+              <DwButton class="demo-button-footer">取消</DwButton>
+            </div>
+          </div>
+        </DwTabStripFooter>
+      </DwTabStrip>
+    </section>
+    <section>
+      <h2>DwTabStripGroup组件预览</h2>
+      <DwTabStripGroup :size="300" v-model="activeTabStripGroup">
+        <DwTabStripButton
+          v-for="item in newTabs"
+          :key="item.value"
+          :value="item.value"
+        >
+          {{ item.label }}
+        </DwTabStripButton>
+      </DwTabStripGroup>
+    </section>
     <section>
       <h2>类型：一种原生 + 两种定制</h2>
       <div class="row2">
@@ -127,6 +202,62 @@ const valueTab = ref('a')
 </template>
 
 <style lang="scss">
+.tabstrip-demo-frame {
+  width: 550px;
+  margin: 20px auto;
+}
+.tabstrip-demo-content {
+  width: 100%;
+  height: 100%;
+}
+.world-title {
+  font-size: 18px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+.demo-input {
+  display: block;
+  width: 100%;
+  height: 46px;
+  margin-bottom: 20px;
+  border-radius: 0;
+  color: var(--dw-color-text);
+  text-shadow: var(--dw-text-color-shadow);
+  background-color: #000000;
+  border: 3px solid #A0A0A0;
+  font-size: 16px;
+  padding: 5px 5px;
+
+  &:hover:not(:focus) {
+    border-color: #ffffff;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #ffffff;
+  }
+}
+.demo-button {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.tabstrip-demo-footer-frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.demo-button-group {
+  display: flex;
+  gap: 20px;
+  width: 60%;
+}
+.demo-button-footer {
+  width: 100%;
+}
+
+
 html {
   color: #ffffff;
   background-color: #202020;
