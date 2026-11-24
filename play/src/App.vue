@@ -238,26 +238,8 @@ const tooltipName = ref('新的世界')
   margin-bottom: 10px;
 }
 .demo-input {
-  display: block;
   width: 100%;
-  height: 46px;
   margin-bottom: 20px;
-  border-radius: 0;
-  color: var(--dw-color-text);
-  text-shadow: var(--dw-text-color-shadow);
-  background-color: #000000;
-  border: 3px solid #A0A0A0;
-  font-size: 16px;
-  padding: 5px 5px;
-
-  &:hover:not(:focus) {
-    border-color: #ffffff;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #ffffff;
-  }
 }
 .demo-button {
   width: 100%;
