@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useSlots, watch } from 'vue'
+import type { CSSProperties } from 'vue'
 import { nextTooltipId } from './uid'
 
 defineOptions({ name: 'DwTooltip', inheritAttrs: false })
@@ -47,7 +48,7 @@ let describedEl: HTMLElement | null = null
 let previousDescribedBy: string | null = null
 let resizeObserver: ResizeObserver | null = null
 
-const tooltipStyle = computed(() => ({
+const tooltipStyle = computed<CSSProperties>(() => ({
   left: `${position.value.left}px`,
   top: `${position.value.top}px`,
   visibility: positioned.value ? 'visible' : 'hidden',
