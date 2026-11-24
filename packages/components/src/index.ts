@@ -1,6 +1,7 @@
 export { DwButton } from './button'
 export { DwInput } from './input'
 export { DwTabs, DwTabButton } from './tabs'
+export { DwTooltip } from './tooltip'
 export {
   DwTabStrip,
   DwTabStripGroup,

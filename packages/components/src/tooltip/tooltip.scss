@@ -1,0 +1,44 @@
+@use '../styles/css-vars.scss';
+
+// 触发器只负责监听，不改变内部元素的尺寸
+.dw-tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+}
+
+// 素框：黑底、无边框、无圆角、无阴影
+.dw-tooltip {
+  position: fixed;
+  z-index: var(--dw-tooltip-z-index, 9999);
+  max-width: var(--dw-tooltip-max-width, 240px);
+  padding: var(--dw-spacing-xs) var(--dw-spacing-sm);
+  border: 0;
+  border-radius: 0;
+  background: var(--dw-color-tooltip-bg);
+  box-shadow: none;
+  color: var(--dw-color-tooltip-text);
+  font-family: var(--dw-font-family);
+  font-size: var(--dw-font-size-sm);
+  line-height: 1.4;
+  text-shadow: var(--dw-text-color-shadow);
+  white-space: pre-line;
+  word-break: break-word;
+  pointer-events: none;
+  animation: dw-tooltip-in 120ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dw-tooltip {
+    animation: none;
+  }
+}
+
+@keyframes dw-tooltip-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

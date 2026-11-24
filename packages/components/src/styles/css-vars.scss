@@ -60,4 +60,11 @@
   --dw-color-selection-bg: #FFFFFF;
   --dw-color-selection-text: #201FFF;
   --dw-text-selection-shadow: 1px 1px #C7C7FF;
+
+  // Tooltip 悬浮提示
+  --dw-color-tooltip-bg: #000000;
+  --dw-color-tooltip-text: #FFFFFF;
+  --dw-tooltip-max-width: 240px;
+  --dw-tooltip-gap: 12px;
+  --dw-tooltip-z-index: 9999;
 }
