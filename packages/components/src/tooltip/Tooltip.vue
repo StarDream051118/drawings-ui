@@ -11,14 +11,12 @@ type HorizontalSide = 'left' | 'right'
 interface Props {
   /** 提示文字，支持 \n 换行；有 content 插槽时以插槽为准 */
   content?: string
-  /** 优先方位，越界时按轴翻转 */
+  /** 优先方位，越界时按轴翻转到光标另一侧 */
   placement?: TooltipPlacement
   /** 显示延迟（ms） */
   showDelay?: number
   /** 隐藏延迟（ms） */
   hideDelay?: number
-  /** 最大宽度，数字按 px 处理 */
-  maxWidth?: number | string
   /** 是否禁用提示 */
   disabled?: boolean
 }
@@ -28,7 +26,6 @@ const props = withDefaults(defineProps<Props>(), {
   placement: 'bottom-right',
   showDelay: 0,
   hideDelay: 0,
-  maxWidth: 240,
   disabled: false,
 })
 
@@ -42,8 +39,6 @@ const position = ref({ left: 0, top: 0 })
 
 const tooltipId = nextTooltipId()
 const cursor = { x: 0, y: 0 }
-const useElementAnchor = ref(false)
-const anchorRect = ref<DOMRect | null>(null)
 
 let showTimer = 0
 let hideTimer = 0
@@ -55,7 +50,6 @@ let resizeObserver: ResizeObserver | null = null
 const tooltipStyle = computed(() => ({
   left: `${position.value.left}px`,
   top: `${position.value.top}px`,
-  maxWidth: typeof props.maxWidth === 'number' ? `${props.maxWidth}px` : props.maxWidth,
   visibility: positioned.value ? 'visible' : 'hidden',
 }))
 
@@ -85,13 +79,8 @@ function place() {
   const vw = window.innerWidth
   const vh = window.innerHeight
 
-  // 鼠标触发以光标为锚点；键盘聚焦时以元素的对应角为锚点
-  const anchor = useElementAnchor.value && anchorRect.value
-    ? {
-        x: props.placement.endsWith('right') ? anchorRect.value.right : anchorRect.value.left,
-        y: props.placement.startsWith('bottom') ? anchorRect.value.bottom : anchorRect.value.top,
-      }
-    : cursor
+  // 只有鼠标光标一个触发来源，锚点始终是光标位置
+  const anchor = cursor
 
   let [vertical, horizontal] = props.placement.split('-') as [VerticalSide, HorizontalSide]
 
@@ -100,7 +89,7 @@ function place() {
     top: vertical === 'bottom' ? anchor.y + gap : anchor.y - gap - height,
   })
 
-  // 分轴翻转：只翻转越界的那一根轴，另一轴保持配置方向
+  // 分轴翻转：碰到哪一侧就整体放到光标另一侧，另一轴保持配置方向
   let next = calc()
   if (vertical === 'bottom' && next.top + height > vh) vertical = 'top'
   else if (vertical === 'top' && next.top < 0) vertical = 'bottom'
@@ -186,7 +175,6 @@ function onPointerEnter(event: PointerEvent) {
   if (event.pointerType === 'touch') return
   cursor.x = event.clientX
   cursor.y = event.clientY
-  useElementAnchor.value = false
   scheduleShow()
 }
 
@@ -194,7 +182,6 @@ function onPointerMove(event: PointerEvent) {
   if (event.pointerType === 'touch') return
   cursor.x = event.clientX
   cursor.y = event.clientY
-  useElementAnchor.value = false
   if (!visible.value || frame) return
 
   frame = requestAnimationFrame(() => {
@@ -205,20 +192,6 @@ function onPointerMove(event: PointerEvent) {
 
 function onPointerLeave(event: PointerEvent) {
   if (event.pointerType === 'touch') return
-  scheduleHide()
-}
-
-function onFocusIn() {
-  // 鼠标悬浮已经显示时不再跳到元素锚点
-  if (visible.value) return
-
-  const child = getTriggerChild() ?? triggerEl.value
-  anchorRect.value = child ? child.getBoundingClientRect() : null
-  useElementAnchor.value = true
-  scheduleShow()
-}
-
-function onFocusOut() {
   scheduleHide()
 }
 
@@ -311,8 +284,6 @@ onBeforeUnmount(() => {
     @pointerenter="onPointerEnter"
     @pointermove="onPointerMove"
     @pointerleave="onPointerLeave"
-    @focusin="onFocusIn"
-    @focusout="onFocusOut"
   >
     <slot />
   </span>
