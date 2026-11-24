@@ -7,8 +7,30 @@
 }
 
 .dw-input__native {
+  // 默认视觉：黑底 + 3px 像素描边；使用方可用 class / CSS 覆盖
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: var(--dw-input-height, 46px);
+  padding: 5px;
+  border: 3px solid var(--dw-color-input-border);
+  border-radius: 0;
+  background: var(--dw-color-input-bg);
+  color: var(--dw-color-text);
+  font-size: var(--dw-font-size-base);
+  text-shadow: var(--dw-text-color-shadow);
+
   // 竖线与下划线都由自绘元素画，原生光标隐藏；选区高亮保持不变
   caret-color: transparent;
+
+  &:hover:not(:focus) {
+    border-color: var(--dw-color-border-active);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--dw-color-border-active);
+  }
 
   &::selection {
     background-color: var(--dw-color-selection-bg);
