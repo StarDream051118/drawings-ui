@@ -279,7 +279,7 @@ const tooltipName = ref('新的世界')
   width: 100%;
 }
 
-.tooltip-input-wrap {
+.dw-tooltip-trigger.tooltip-input-wrap {
   display: block;
   width: 100%;
 }

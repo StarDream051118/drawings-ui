@@ -1,9 +1,11 @@
 @use '../styles/css-vars.scss';
 
-// 触发器只负责监听，不改变内部元素的尺寸
+// 触发器只负责监听，不改变内部元素的尺寸；
+// width: fit-content 防止作为 grid/flex 子项时被拉伸，导致元素右侧空白区域也触发提示
 .dw-tooltip-trigger {
   display: inline-flex;
   align-items: center;
+  width: fit-content;
 }
 
 // 素框：黑底、无边框、无圆角、无阴影

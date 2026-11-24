@@ -35,7 +35,7 @@ const name = ref('新的世界')
   background: #48494a;
 }
 
-.tooltip-demo-input-wrap {
+.dw-tooltip-trigger.tooltip-demo-input-wrap {
   display: block;
   width: 240px;
 }
