@@ -98,6 +98,14 @@ import '@star-dream051118/drawings-ui/tokens.css'
 | `--dw-color-selection-text` | `#201FFF` | 选中文字的颜色 |
 | `--dw-text-selection-shadow` | `1px 1px #C7C7FF` | 选中文字的压印阴影 |
 
+## Input 输入框
+
+| 变量名 | 默认值 | 说明 |
+|--------|--------|------|
+| `--dw-color-input-bg` | `#000000` | 输入框背景色 |
+| `--dw-color-input-border` | `#A0A0A0` | 默认描边色 |
+| `--dw-input-height` | `46px` | 输入框高度 |
+
 ## Tooltip 悬浮提示
 
 | 变量名 | 默认值 | 说明 |
