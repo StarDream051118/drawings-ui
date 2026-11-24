@@ -98,6 +98,16 @@ import '@star-dream051118/drawings-ui/tokens.css'
 | `--dw-color-selection-text` | `#201FFF` | 选中文字的颜色 |
 | `--dw-text-selection-shadow` | `1px 1px #C7C7FF` | 选中文字的压印阴影 |
 
+## Tooltip 悬浮提示
+
+| 变量名 | 默认值 | 说明 |
+|--------|--------|------|
+| `--dw-color-tooltip-bg` | `#000000` | 提示框背景 |
+| `--dw-color-tooltip-text` | `#FFFFFF` | 提示文字颜色 |
+| `--dw-tooltip-max-width` | `240px` | 最大宽度 |
+| `--dw-tooltip-gap` | `12px` | 与光标的间距 |
+| `--dw-tooltip-z-index` | `9999` | 层级 |
+
 ## 使用示例
 
 ### 全局覆盖
