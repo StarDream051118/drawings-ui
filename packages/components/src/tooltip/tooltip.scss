@@ -12,14 +12,14 @@
 .dw-tooltip {
   position: fixed;
   z-index: var(--dw-tooltip-z-index, 9999);
-  padding: var(--dw-spacing-xs) var(--dw-spacing-sm);
+  padding: var(--dw-spacing-base) var(--dw-spacing-base);
   border: 0;
   border-radius: 0;
   background: var(--dw-color-tooltip-bg);
-  box-shadow: none;
+  background-clip: border-box;
+  box-shadow: var(--dw-tooltip-shadow);
   color: var(--dw-color-tooltip-text);
-  font-family: var(--dw-font-family);
-  font-size: var(--dw-font-size-sm);
+  font-size: var(--dw-font-size-lg);
   line-height: 1.4;
   text-shadow: var(--dw-text-color-shadow);
   // 不自动换行：越界时整体翻到光标另一侧，只有 \n 才换行

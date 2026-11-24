@@ -67,8 +67,12 @@
   --dw-input-height: 46px;
 
   // Tooltip 悬浮提示
-  --dw-color-tooltip-bg: #000000;
+  --dw-color-tooltip-bg: #0F000F;
+  --dw-color-tooltip-shadow: #23015A;
   --dw-color-tooltip-text: #FFFFFF;
   --dw-tooltip-gap: 12px;
   --dw-tooltip-z-index: 9999;
+  --dw-tooltip-shadow: -3px 0 0 var(--dw-color-tooltip-shadow), 3px 0 0 var(--dw-color-tooltip-shadow), 0 -3px 0 var(--dw-color-tooltip-shadow), 0 3px 0 var(--dw-color-tooltip-shadow)
+                      , 3px 0 0 3px var(--dw-color-tooltip-bg), -3px 0 0 3px var(--dw-color-tooltip-bg)
+                      , 0 3px 0 3px var(--dw-color-tooltip-bg), 0 -3px 0 3px var(--dw-color-tooltip-bg);
 }

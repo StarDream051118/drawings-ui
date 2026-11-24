@@ -215,7 +215,7 @@ const tooltipName = ref('新的世界')
             支持<strong>富文本</strong>与换行
           </template>
         </DwTooltip>
-        <DwTooltip content="世界名称：修改后回车确认" class="tooltip-input-wrap">
+        <DwTooltip content="世界名称" class="tooltip-input-wrap">
           <DwInput v-model="tooltipName" class="tooltip-input" />
         </DwTooltip>
       </div>
