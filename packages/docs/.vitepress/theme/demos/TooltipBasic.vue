@@ -22,7 +22,13 @@ const name = ref('新的世界')
     <DwTooltip content="触屏设备长按 500ms 显示" touch>
       <DwButton>长按（触屏）</DwButton>
     </DwTooltip>
-    <DwTooltip content="世界名称：修改后回车确认">
+    <DwTooltip content="这是一段很长很长的提示文字，用于演示最大字符数截断" :max-length="12">
+      <DwButton>最大 12 字符</DwButton>
+    </DwTooltip>
+    <DwTooltip :max-length="12">
+      <template #content>
+        世界名称：{{ name }}
+      </template>
       <DwInput v-model="name" class="tooltip-demo-input" />
     </DwTooltip>
   </div>
