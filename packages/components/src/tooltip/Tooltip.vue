@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useSlots, watch } from 'vue'
+import { Comment, computed, nextTick, onBeforeUnmount, onMounted, ref, useSlots, watch } from 'vue'
 import type { CSSProperties } from 'vue'
 import TooltipTrigger from './TooltipTrigger'
 import { nextTooltipId } from './uid'
@@ -73,20 +73,43 @@ function hasContent() {
   return Boolean(props.content) || Boolean(slots.content)
 }
 
-// 只截断 content prop；content 插槽是富文本，不能按字符切
-const displayContent = computed(() => {
-  const text = props.content
-  const limit = Math.floor(Number(props.maxLength))
-  if (!text || !Number.isFinite(limit) || limit <= 0) return text
+// 提取插槽的纯文本：用于字符统计；注释节点忽略，组件节点（children 为插槽对象）不计入
+function collectText(value: unknown): string {
+  if (typeof value === 'string' || typeof value === 'number') return String(value)
+  if (Array.isArray(value)) return value.map(collectText).join('')
+  if (!value || typeof value !== 'object') return ''
 
-  // 按 Unicode 码点计数，中文 / emoji 各算 1 个
-  const chars = Array.from(text)
-  if (chars.length <= limit) return text
+  const vnode = value as { type?: unknown; children?: unknown }
+  if (vnode.type === Comment) return ''
+  return collectText(vnode.children)
+}
 
-  return `${chars.slice(0, limit).join('').replace(/\s+$/, '')}…`
+// 提示文字：content 插槽优先；插槽是富文本，超长时在渲染层降级为纯文本
+const fullText = computed(() => {
+  // 插槽类型由使用方决定，这里只按「无参函数」调用并提取文本
+  const contentSlot = slots.content as unknown as (() => unknown) | undefined
+  if (contentSlot) {
+    const nodes = contentSlot()
+    if (nodes) return collectText(nodes).trim()
+  }
+  return props.content
 })
 
-const truncated = computed(() => displayContent.value !== props.content)
+const maxChars = computed(() => {
+  const limit = Math.floor(Number(props.maxLength))
+  return Number.isFinite(limit) && limit > 0 ? limit : 0
+})
+
+const truncated = computed(() => {
+  if (!maxChars.value) return false
+  return Array.from(fullText.value).length > maxChars.value
+})
+
+const displayText = computed(() => {
+  if (!truncated.value) return fullText.value
+  // 按 Unicode 码点截断，中文 / emoji 各算 1 个
+  return `${Array.from(fullText.value).slice(0, maxChars.value).join('').replace(/\s+$/, '')}…`
+})
 
 function readGap() {
   const tip = tooltipEl.value
@@ -423,10 +446,11 @@ onBeforeUnmount(() => {
       ref="tooltipEl"
       class="dw-tooltip"
       role="tooltip"
-      :aria-label="truncated ? content : undefined"
+      :aria-label="truncated ? fullText : undefined"
       :style="tooltipStyle"
     >
-      <slot name="content">{{ displayContent }}</slot>
+      <template v-if="truncated">{{ displayText }}</template>
+      <slot v-else name="content">{{ content }}</slot>
     </div>
   </Teleport>
 </template>
