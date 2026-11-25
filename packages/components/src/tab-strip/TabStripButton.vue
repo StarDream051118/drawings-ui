@@ -2,7 +2,6 @@
 import { computed, onUnmounted, ref } from 'vue'
 import { useSound } from '../composables/useSound'
 import { useIcon } from '../composables/useIcon'
-import { SOUNDS } from '../utils/sounds'
 import {
   useTabStripGroupContext,
   type TabStripKey,
@@ -26,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const group = useTabStripGroupContext('DwTabStripButton')
 
-const { play } = useSound()
+const { playClick } = useSound()
 const { getIconSvg } = useIcon()
 
 const elRef = ref<HTMLElement | null>(null)
@@ -67,10 +66,10 @@ const isUrl = computed(() => {
 })
 const iconSvg = computed(() => (resolvedIcon.value ? getIconSvg(resolvedIcon.value) : null))
 
-function onPointerDown() {
+function onPointerDown(event: PointerEvent) {
   if (!group || isDisabled.value) return
   if (!group.defaults.value.sound) return
-  play(SOUNDS.click)
+  playClick(event)
 }
 
 function onClick() {

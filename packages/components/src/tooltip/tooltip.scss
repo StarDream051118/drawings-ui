@@ -1,0 +1,45 @@
+@use '../styles/css-vars.scss';
+
+// 仅在默认插槽不是单一元素时作为回退包裹层使用；
+// width: fit-content 防止作为 grid/flex 子项时被拉伸，导致元素右侧空白区域也触发提示
+.dw-tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+}
+
+// 素框：深色底、无圆角、不用 border；四周 2px 像素描边由 box-shadow 绘制
+.dw-tooltip {
+  position: fixed;
+  z-index: var(--dw-tooltip-z-index, 9999);
+  padding: var(--dw-spacing-base) var(--dw-spacing-xs);
+  border: 0;
+  border-radius: 0;
+  background: var(--dw-color-tooltip-bg);
+  background-clip: border-box;
+  box-shadow: var(--dw-tooltip-shadow);
+  color: var(--dw-color-tooltip-text);
+  font-size: var(--dw-font-size-lg);
+  line-height: 1.4;
+  text-shadow: var(--dw-text-color-shadow);
+  // 不自动换行：越界时整体翻到光标另一侧，只有 \n 才换行
+  white-space: pre;
+  pointer-events: none;
+  animation: dw-tooltip-in 120ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dw-tooltip {
+    animation: none;
+  }
+}
+
+@keyframes dw-tooltip-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

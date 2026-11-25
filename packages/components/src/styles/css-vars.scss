@@ -60,4 +60,28 @@
   --dw-color-selection-bg: #FFFFFF;
   --dw-color-selection-text: #201FFF;
   --dw-text-selection-shadow: 1px 1px #C7C7FF;
+
+  // Input 输入框
+  --dw-color-input-bg: #000000;
+  --dw-color-input-border: #A0A0A0;
+  --dw-input-height: 46px;
+  --dw-color-input-placeholder-text: #545454;
+  --dw-color-input-placeholder-shadow-text: 1px 1px #141414;
+
+  // Tooltip 悬浮提示
+  --dw-color-tooltip-bg: #0F000F;
+  --dw-color-tooltip-shadow: #23015A;
+  --dw-color-tooltip-text: #FFFFFF;
+  --dw-tooltip-inset: 2px;
+  --dw-tooltip-border: calc(var(--dw-tooltip-inset) * -1);
+  --dw-tooltip-gap: 25px;
+  --dw-tooltip-z-index: 9999;
+  --dw-tooltip-shadow: var(--dw-tooltip-border) 0 0 var(--dw-color-tooltip-shadow)
+                      , var(--dw-tooltip-inset) 0 0 var(--dw-color-tooltip-shadow)
+                      , 0 var(--dw-tooltip-border) 0 var(--dw-color-tooltip-shadow)
+                      , 0 var(--dw-tooltip-inset) 0 var(--dw-color-tooltip-shadow)
+                      , var(--dw-tooltip-inset) 0 0 var(--dw-tooltip-inset) var(--dw-color-tooltip-bg)
+                      , var(--dw-tooltip-border) 0 0 var(--dw-tooltip-inset) var(--dw-color-tooltip-bg)
+                      , 0 var(--dw-tooltip-inset) 0 var(--dw-tooltip-inset) var(--dw-color-tooltip-bg)
+                      , 0 var(--dw-tooltip-border) 0 var(--dw-tooltip-inset) var(--dw-color-tooltip-bg);
 }

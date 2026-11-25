@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import {
   DwButton,
   DwInput,
+  DwTooltip,
   DwTabs,
   DwTabButton,
   DwTabStrip,
@@ -42,6 +43,60 @@ const tabStripBg = '/images/star.png'
 
 // 镜像测量：用隐藏元素量出光标前的文字宽度，再定位自绘的下划线光标
 const worldName = ref('新的世界')
+const tooltipName = ref('新的世界')
+
+
+interface GameMode {
+  mode: string
+  tooltip: string
+}
+interface Difficulty {
+  difficulty: string
+  tooltip: string
+}
+const gamemode: GameMode[] = [
+  { mode: '生存', tooltip: `探索未知的世界，尽情建造、收集合成
+并与怪物战斗。` },
+  { mode: '极限', tooltip: `难度锁定为“困难”的生存模式，且死亡后
+无法重生。` },
+  { mode: '创造', tooltip: `无拘无束地探索创造。可以飞行，材料取
+之不尽，且不受怪物伤害。` },
+] 
+const difficulties: Difficulty[] = [
+  { difficulty: '普通', tooltip: `敌对生物会生成，且伤害适中。生命值在
+饥饿值耗尽后最终会降至半颗心。` },
+  { difficulty: '困难', tooltip: `敌对生物会生成，且伤害较高。饥饿值耗
+尽后最终会饿死。` },
+  { difficulty: '和平', tooltip: `不会生成绝大多数敌对生物。饥饿值不会
+消耗，且生命值会自然恢复。` },
+  { difficulty: '简单', tooltip: `敌对生物会生成，但伤害较低。生命值在
+饥饿值耗尽后最终会降至5颗心。` },
+] 
+
+const gameModeIndex = ref(0)
+const gameMode = computed(() => gamemode[gameModeIndex.value])
+
+const isHardcore = computed(() => gameMode.value.mode === '极限')
+
+const difficultyIndex = ref(0)
+const difficulty = computed(() => (isHardcore.value ? difficulties[1] : difficulties[difficultyIndex.value]))
+
+const allowCommandsOverride = ref< boolean | null >(null)
+const defaultAllowCommands = computed(() => gameMode.value.mode === '创造')
+const allowCommands = computed(() =>  allowCommandsOverride.value ?? defaultAllowCommands.value)
+const commandText = computed(() => allowCommands.value ? '开' : '关')
+
+function toggleGameMode() {
+  gameModeIndex.value = (gameModeIndex.value + 1) % gamemode.length
+}
+
+function toggleDifficulty() {
+  difficultyIndex.value = (difficultyIndex.value + 1) % difficulties.length
+}
+
+function toggleCommands() {
+  allowCommandsOverride.value = !allowCommands.value
+}
 </script>
 
 <template>
@@ -64,10 +119,25 @@ const worldName = ref('新的世界')
           <div class="tabstrip-demo-frame">
             <div class="tabstrip-demo-content">
               <div class="world-title">世界名称</div>
-              <DwInput v-model="worldName" class="demo-input" />
-              <DwButton class="demo-button">游戏模式：生存</DwButton>
-              <DwButton class="demo-button">难度：普通</DwButton>
-              <DwButton class="demo-button">允许指令：关</DwButton>
+              <DwTooltip>
+                <template #content>
+                  存档文件夹：<span style="font-style: italic;">{{ worldName }}</span>
+                </template>
+                <DwInput v-model="worldName" class="demo-input" />
+              </DwTooltip>
+              <DwTooltip :content=gameMode.tooltip>
+                <DwButton class="demo-button" @click="toggleGameMode">游戏模式：{{ gameMode.mode }}</DwButton>
+              </DwTooltip>
+              <DwTooltip :content=difficulty.tooltip>
+                <DwButton class="demo-button" :disabled="isHardcore" @click="toggleDifficulty">
+                  难度：{{ difficulty.difficulty }}
+                </DwButton>
+              </DwTooltip>
+              <DwTooltip content="例如/gamemode、/experience等命令">
+                <DwButton class="demo-button" :disabled="isHardcore" @click="toggleCommands">
+                  允许指令：{{ commandText }}
+                </DwButton>
+              </DwTooltip>
             </div>
           </div>
         </DwTabStripContent>
@@ -198,6 +268,26 @@ const worldName = ref('新的世界')
         </DwTabs>
       </div>
     </section>
+    <section>
+      <h2>Tooltip 悬浮提示</h2>
+      <div class="row3">
+        <DwTooltip content="点击创建一个新的世界">
+          <DwButton>创建新的世界</DwButton>
+        </DwTooltip>
+        <DwTooltip content="优先显示在光标左下角" placement="bottom-left">
+          <DwButton>左下方位</DwButton>
+        </DwTooltip>
+        <DwTooltip placement="top-right" :show-delay="200">
+          <DwButton>右上（延迟 200ms）</DwButton>
+          <template #content>
+            支持<strong>富文本</strong>与换行
+          </template>
+        </DwTooltip>
+        <DwTooltip content="世界名称" class="tooltip-input-wrap">
+          <DwInput v-model="tooltipName" class="tooltip-input" />
+        </DwTooltip>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -215,27 +305,12 @@ const worldName = ref('新的世界')
   margin-top: 30px;
   margin-bottom: 10px;
 }
-.demo-input {
-  display: block;
+.demo-tooltip {
   width: 100%;
-  height: 46px;
+}
+.demo-input {
+  width: 100%;
   margin-bottom: 20px;
-  border-radius: 0;
-  color: var(--dw-color-text);
-  text-shadow: var(--dw-text-color-shadow);
-  background-color: #000000;
-  border: 3px solid #A0A0A0;
-  font-size: 16px;
-  padding: 5px 5px;
-
-  &:hover:not(:focus) {
-    border-color: #ffffff;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #ffffff;
-  }
 }
 .demo-button {
   width: 100%;
@@ -255,6 +330,30 @@ const worldName = ref('新的世界')
 }
 .demo-button-footer {
   width: 100%;
+}
+
+.tooltip-input-wrap {
+  display: block;
+  width: 100%;
+}
+
+.tooltip-input {
+  width: 100%;
+  height: 46px;
+  padding: 5px;
+  border: 3px solid #a0a0a0;
+  background: #000000;
+  color: var(--dw-color-text);
+  font-size: 16px;
+
+  &:hover:not(:focus) {
+    border-color: #ffffff;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #ffffff;
+  }
 }
 
 

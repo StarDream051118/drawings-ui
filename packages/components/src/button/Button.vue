@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import { useSound } from '../composables/useSound'
 import { useIcon, type BuiltInIcon } from '../composables/useIcon'
-import { SOUNDS } from '../utils/sounds'
 
 defineOptions({ name: 'DwButton' })
 
@@ -32,7 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
   active: false,
 })
 
-const { play } = useSound()
+const { playClick } = useSound()
 const { getIconSvg } = useIcon()
 
 const isUrl = computed(() => {
@@ -51,9 +50,9 @@ const buttonStyle = computed(() => {
   return style
 })
 
-function onPointerDown() {
+function onPointerDown(event: PointerEvent) {
   if (props.disabled || props.loading || !props.sound) return
-  play(SOUNDS.click)
+  playClick(event)
 }
 </script>
 

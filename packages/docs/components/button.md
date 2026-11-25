@@ -48,6 +48,20 @@
 </template>
 ```
 
+### `loading`
+
+`loading` 是加载中状态：图标位置换成旋转的圆圈（取 `currentColor`，`0.6s` 一圈），文字保留；同时按钮按原生 `disabled` 处理，不响应点击与键盘激活，也不播放音效。
+
+<button-demos-loading />
+
+```vue
+<template>
+  <DwButton :loading="true">默认</DwButton>
+  <DwButton :loading="true" type="primary">主要</DwButton>
+  <DwButton :loading="true" type="danger">危险</DwButton>
+</template>
+```
+
 ## 按钮尺寸
 上述类型演示均使用默认尺寸，默认尺寸仅设置了基础的 `padding`，可根据需求调整 `width` 与 `height`，也可使用 `size` prop来设置已有的尺寸。
 
@@ -186,7 +200,7 @@ import heartIcon from '../icons/heart.svg'
 | `type` | 按钮类型 | `'default' \| 'primary' \| 'danger'` | `'default'` |
 | `size` | 按钮尺寸，数字表示宽度 px | `'default' \| 'medium' \| 'large' \| number` | `'default'` |
 | `disabled` | 是否禁用 | `boolean` | `false` |
-| `loading` | 是否加载中（显示转圈，同时不可点击） | `boolean` | `false` |
+| `loading` | 是否加载中：显示转圈、隐藏图标，同时禁用点击与音效 | `boolean` | `false` |
 | `active` | 是否激活状态 | `boolean` | `false` |
 | `sound` | 是否播放音效 | `boolean` | `true` |
 | `icon` | 图标名称或 URL | `string` | — |

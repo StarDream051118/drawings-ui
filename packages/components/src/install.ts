@@ -2,6 +2,7 @@ import type { App } from 'vue'
 import { DwButton } from './button'
 import { DwInput } from './input'
 import { DwTabs, DwTabButton } from './tabs'
+import { DwTooltip } from './tooltip'
 import {
   DwTabStrip,
   DwTabStripGroup,
@@ -15,6 +16,7 @@ const components = [
   DwInput,
   DwTabs,
   DwTabButton,
+  DwTooltip,
   DwTabStrip,
   DwTabStripGroup,
   DwTabStripButton,

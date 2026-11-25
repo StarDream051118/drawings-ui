@@ -40,7 +40,7 @@ export default defineConfig({
 
     nav: [
       { text: '文档', link: '/guide/getting-started' },
-      { text: '组件', link: '/components/button' },
+      { text: '组件', link: '/components/' },
     ],
 
     sidebar: [
@@ -49,13 +49,16 @@ export default defineConfig({
         items: [
           { text: '快速开始', link: '/guide/getting-started' },
           { text: '设计 Token', link: '/guide/design-tokens' },
+          { text: '常见问题', link: '/guide/faq' },
         ],
       },
       {
         text: '基础组件',
         items: [
+          { text: '组件总览', link: '/components/' },
           { text: 'Button 按钮', link: '/components/button' },
           { text: 'Input 输入框', link: '/components/input' },
+          { text: 'Tooltip 悬浮提示', link: '/components/tooltip' },
           { text: 'Tabs 标签栏', link: '/components/tabs' },
           { text: 'TabStrip 页签栏', link: '/components/tab-strip' },
         ],

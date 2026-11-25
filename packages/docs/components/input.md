@@ -1,6 +1,6 @@
 # Input 输入框
 
-单行输入框，内置 Minecraft 风格的自绘光标。组件只提供 `v-model` 和 `blink-duration`：其余属性全部透传到内部 `<input>`。
+单行输入框，内置 Minecraft 风格的自绘光标。默认黑底、3px 像素描边，聚焦时描边变白。组件只提供 `v-model` 和 `blink-duration`：其余属性全部透传到内部 `<input>`。
 
 ## 基础用法
 
@@ -19,7 +19,7 @@ const value = ref('新的世界')
 ```
 
 ::: tip
-组件不绘制边框、底色和字体，这些由使用方的 class / CSS 决定；`class`、`placeholder`、`disabled`、原生事件都通过 attrs 透传到内部 `<input>`。
+组件自带黑底、3px 像素描边与聚焦白边的默认样式；需要自定义时覆盖 `.dw-input__native` 或给它传 class。`class`、`placeholder`、`disabled`、原生事件仍通过 attrs 透传到内部 `<input>`。
 :::
 
 ## 光标
@@ -41,6 +41,16 @@ const value = ref('新的世界')
 ```vue
 <template>
   <DwInput v-model="value" :blink-duration="1.5" />
+</template>
+```
+
+## 占位符
+
+`placeholder` 与其它原生属性一样通过 attrs 透传到内部 `<input>`，组件只负责配色：文字取 `--dw-color-input-placeholder-text`（默认 `#545454`），压印阴影取 `--dw-color-input-placeholder-shadow-text`（默认 `1px 1px #141414`）；字体、字号仍沿用输入框本身。
+
+```vue
+<template>
+  <DwInput v-model="value" placeholder="请输入世界名称" />
 </template>
 ```
 
@@ -67,6 +77,11 @@ const value = ref('新的世界')
 
 | Token | 默认值 | 说明 |
 |-------|--------|------|
+| `--dw-color-input-bg` | `#000000` | 输入框背景色 |
+| `--dw-color-input-border` | `#A0A0A0` | 默认描边色（hover / focus 用 `--dw-color-border-active`） |
+| `--dw-input-height` | `46px` | 输入框高度 |
+| `--dw-color-input-placeholder-text` | `#545454` | 占位符文字颜色 |
+| `--dw-color-input-placeholder-shadow-text` | `1px 1px #141414` | 占位符压印阴影 |
 | `--dw-color-selection-bg` | `#FFFFFF` | 选中文字的背景色 |
 | `--dw-color-selection-text` | `#201FFF` | 选中文字的颜色 |
 | `--dw-text-selection-shadow` | `1px 1px #C7C7FF` | 选中文字的压印阴影 |

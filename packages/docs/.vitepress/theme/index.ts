@@ -2,11 +2,11 @@ import DefaultTheme from 'vitepress/theme'
 import type { EnhanceAppContext } from 'vitepress'
 import './custom.css'
 import '@star-dream051118/drawings-ui/styles/base.scss'
-import '@star-dream051118/drawings-ui/styles/font.scss'
 import ButtonBasic from './demos/ButtonBasic.vue'
 import ButtonSize from './demos/ButtonSize.vue'
 import ButtonActive from './demos/ButtonActive.vue'
 import ButtonDisabled from './demos/ButtonDisabled.vue'
+import ButtonLoading from './demos/ButtonLoading.vue'
 import ButtonIcon from './demos/ButtonIcon.vue'
 import ButtonCustom from './demos/ButtonCustom.vue'
 import ButtonIconColor from './demos/ButtonIconColor.vue'
@@ -14,7 +14,9 @@ import ButtonBgColor from './demos/ButtonBgColor.vue'
 import ButtonBgColorChange from './demos/ButtonBgColorChange.vue'
 import ButtonSound from './demos/ButtonSound.vue'
 import InputBasic from './demos/InputBasic.vue'
+import TooltipBasic from './demos/TooltipBasic.vue'
 import TabsBasic from './demos/TabsBasic.vue'
+import TabsType from './demos/TabsType.vue'
 import TabsActiveEffect from './demos/TabsActiveEffect.vue'
 import TabsSize from './demos/TabsSize.vue'
 import TabsWidthMode from './demos/TabsWidthMode.vue'
@@ -36,6 +38,7 @@ export default {
     app.component('button-demos-size', ButtonSize)
     app.component('button-demos-active', ButtonActive)
     app.component('button-demos-disabled', ButtonDisabled)
+    app.component('button-demos-loading', ButtonLoading)
     app.component('button-demos-icon', ButtonIcon)
     app.component('button-demos-icon-color', ButtonIconColor)
     app.component('button-demos-custom', ButtonCustom)
@@ -43,7 +46,9 @@ export default {
     app.component('button-demos-bg-color-change', ButtonBgColorChange)
     app.component('button-demos-sound', ButtonSound)
     app.component('input-demos-basic', InputBasic)
+    app.component('tooltip-demos-basic', TooltipBasic)
     app.component('tabs-demos-basic', TabsBasic)
+    app.component('tabs-demos-type', TabsType)
     app.component('tabs-demos-active-effect', TabsActiveEffect)
     app.component('tabs-demos-size', TabsSize)
     app.component('tabs-demos-width-mode', TabsWidthMode)
