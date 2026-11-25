@@ -19,7 +19,7 @@ const name = ref('新的世界')
         支持<strong>富文本</strong>的提示
       </template>
     </DwTooltip>
-    <DwTooltip content="世界名称：修改后回车确认" class="tooltip-demo-input-wrap">
+    <DwTooltip content="世界名称：修改后回车确认">
       <DwInput v-model="name" class="tooltip-demo-input" />
     </DwTooltip>
   </div>
@@ -35,14 +35,9 @@ const name = ref('新的世界')
   background: #48494a;
 }
 
-.dw-tooltip-trigger.tooltip-demo-input-wrap {
-  display: block;
-  width: 240px;
-}
-
 .tooltip-demo-input {
   display: block;
-  width: 100%;
+  width: 240px;
   height: 40px;
   padding: 4px 6px;
   border: 3px solid #a0a0a0;

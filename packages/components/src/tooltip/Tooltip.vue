@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useSlots, watch } from 'vue'
 import type { CSSProperties } from 'vue'
+import TooltipTrigger from './TooltipTrigger'
 import { nextTooltipId } from './uid'
 
 defineOptions({ name: 'DwTooltip', inheritAttrs: false })
@@ -20,6 +21,10 @@ interface Props {
   hideDelay?: number
   /** 是否禁用提示 */
   disabled?: boolean
+  /** 是否启用触屏长按显示 */
+  touch?: boolean
+  /** 触屏长按触发时长（ms） */
+  touchDelay?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -28,6 +33,8 @@ const props = withDefaults(defineProps<Props>(), {
   showDelay: 0,
   hideDelay: 0,
   disabled: false,
+  touch: false,
+  touchDelay: 500,
 })
 
 const slots = useSlots()
@@ -43,9 +50,10 @@ const cursor = { x: 0, y: 0 }
 
 let showTimer = 0
 let hideTimer = 0
+let touchTimer = 0
 let frame = 0
-let describedEl: HTMLElement | null = null
-let previousDescribedBy: string | null = null
+let touchShown = false
+const touchStart = { x: 0, y: 0 }
 let resizeObserver: ResizeObserver | null = null
 
 const tooltipStyle = computed<CSSProperties>(() => ({
@@ -56,10 +64,6 @@ const tooltipStyle = computed<CSSProperties>(() => ({
 
 function hasContent() {
   return Boolean(props.content) || Boolean(slots.content)
-}
-
-function getTriggerChild() {
-  return (triggerEl.value?.firstElementChild as HTMLElement | null) ?? null
 }
 
 function readGap() {
@@ -119,21 +123,31 @@ function open() {
     place()
     if (!visible.value) return
     observeSize()
-    bindDescribedBy()
   })
 }
 
 function hide() {
   clearTimeout(showTimer)
   clearTimeout(hideTimer)
+  clearTouchTimer()
+  if (frame) {
+    cancelAnimationFrame(frame)
+    frame = 0
+  }
   showTimer = 0
   hideTimer = 0
+  touchShown = false
   if (!visible.value) return
 
   visible.value = false
   positioned.value = false
   resizeObserver?.disconnect()
-  restoreDescribedBy()
+}
+
+function clearTouchTimer() {
+  if (!touchTimer) return
+  clearTimeout(touchTimer)
+  touchTimer = 0
 }
 
 function scheduleShow() {
@@ -174,13 +188,17 @@ function scheduleHide() {
 
 function onPointerEnter(event: PointerEvent) {
   if (event.pointerType === 'touch') return
+  rememberTrigger(event)
   cursor.x = event.clientX
   cursor.y = event.clientY
   scheduleShow()
 }
 
 function onPointerMove(event: PointerEvent) {
-  if (event.pointerType === 'touch') return
+  if (event.pointerType === 'touch') {
+    onTouchMove(event)
+    return
+  }
   cursor.x = event.clientX
   cursor.y = event.clientY
   if (!visible.value || frame) return
@@ -194,6 +212,77 @@ function onPointerMove(event: PointerEvent) {
 function onPointerLeave(event: PointerEvent) {
   if (event.pointerType === 'touch') return
   scheduleHide()
+}
+
+function onFocusIn(event: FocusEvent) {
+  if (props.disabled || !hasContent()) return
+
+  const target = event.target as HTMLElement | null
+  if (!target) return
+  rememberTrigger(event)
+
+  // 只响应键盘焦点：鼠标/触摸点击导致的聚焦不额外弹出提示
+  let focusVisible = true
+  try {
+    focusVisible = target.matches(':focus-visible')
+  } catch {
+    // 不支持 :focus-visible 的浏览器按普通焦点处理
+  }
+  if (!focusVisible) return
+
+  // 没有鼠标光标时，以触发元素右下角作为锚点
+  const rect = target.getBoundingClientRect()
+  cursor.x = rect.right
+  cursor.y = rect.bottom
+  scheduleShow()
+}
+
+function onFocusOut() {
+  scheduleHide()
+}
+
+function onPointerDown(event: PointerEvent) {
+  if (event.pointerType !== 'touch' || !props.touch) return
+  if (props.disabled || !hasContent()) return
+  rememberTrigger(event)
+
+  touchStart.x = event.clientX
+  touchStart.y = event.clientY
+  clearTouchTimer()
+  touchTimer = window.setTimeout(() => {
+    touchTimer = 0
+    cursor.x = touchStart.x
+    cursor.y = touchStart.y
+    open()
+    touchShown = true
+  }, Math.max(props.touchDelay, 0))
+}
+
+function onTouchMove(event: PointerEvent) {
+  if (event.pointerType !== 'touch' || !touchTimer) return
+
+  // 移动超过 10px 视为滚动/拖拽，取消长按
+  const dx = event.clientX - touchStart.x
+  const dy = event.clientY - touchStart.y
+  if (Math.hypot(dx, dy) > 10) clearTouchTimer()
+}
+
+function onPointerUp(event: PointerEvent) {
+  if (event.pointerType === 'touch') clearTouchTimer()
+}
+
+function onPointerCancel(event: PointerEvent) {
+  if (event.pointerType !== 'touch') return
+  clearTouchTimer()
+  if (touchShown) hide()
+}
+
+// 触摸长按显示后，点击其它位置关闭
+function onDocumentPointerDown(event: PointerEvent) {
+  if (!touchShown) return
+  const wrap = triggerEl.value
+  if (wrap && event.target instanceof Node && wrap.contains(event.target)) return
+  hide()
 }
 
 function onScroll() {
@@ -219,24 +308,9 @@ function observeSize() {
   resizeObserver.observe(tooltipEl.value)
 }
 
-function bindDescribedBy() {
-  const el = getTriggerChild()
-  if (!el) return
-
-  describedEl = el
-  previousDescribedBy = el.getAttribute('aria-describedby')
-  const ids = previousDescribedBy?.trim()
-  el.setAttribute('aria-describedby', ids ? `${ids} ${tooltipId}` : tooltipId)
-}
-
-function restoreDescribedBy() {
-  if (!describedEl) return
-
-  if (previousDescribedBy === null) describedEl.removeAttribute('aria-describedby')
-  else describedEl.setAttribute('aria-describedby', previousDescribedBy)
-
-  describedEl = null
-  previousDescribedBy = null
+function rememberTrigger(event: Event) {
+  const el = event.currentTarget
+  if (el instanceof HTMLElement) triggerEl.value = el
 }
 
 watch(() => props.content, () => {
@@ -257,6 +331,7 @@ watch(() => props.disabled, (value) => {
 })
 
 onMounted(() => {
+  document.addEventListener('pointerdown', onDocumentPointerDown, true)
   window.addEventListener('keydown', onKeydown)
   window.addEventListener('scroll', onScroll, true)
   window.addEventListener('resize', onResize)
@@ -264,6 +339,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  document.removeEventListener('pointerdown', onDocumentPointerDown, true)
   window.removeEventListener('keydown', onKeydown)
   window.removeEventListener('scroll', onScroll, true)
   window.removeEventListener('resize', onResize)
@@ -271,27 +347,31 @@ onBeforeUnmount(() => {
 
   clearTimeout(showTimer)
   clearTimeout(hideTimer)
+  clearTouchTimer()
   if (frame) cancelAnimationFrame(frame)
   resizeObserver?.disconnect()
-  restoreDescribedBy()
 })
 </script>
 
 <template>
-  <span
-    ref="triggerEl"
+  <TooltipTrigger
     v-bind="$attrs"
-    class="dw-tooltip-trigger"
+    :described-by="tooltipId"
     @pointerenter="onPointerEnter"
     @pointermove="onPointerMove"
     @pointerleave="onPointerLeave"
+    @pointerdown="onPointerDown"
+    @pointerup="onPointerUp"
+    @pointercancel="onPointerCancel"
+    @focusin="onFocusIn"
+    @focusout="onFocusOut"
   >
     <slot />
-  </span>
+  </TooltipTrigger>
 
   <Teleport to="body">
     <div
-      v-if="visible"
+      v-show="visible"
       :id="tooltipId"
       ref="tooltipEl"
       class="dw-tooltip"
