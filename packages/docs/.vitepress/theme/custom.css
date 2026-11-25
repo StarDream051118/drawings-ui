@@ -1,3 +1,16 @@
+/* 文档站全局使用 Minecraft 像素字体（与组件库同一字体文件） */
+@font-face {
+  font-family: 'mc-font';
+  src: url('./demos/assets/mc_font.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --vp-font-family-base: 'mc-font', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 /* 文档站全局会在 prefers-reduced-motion 下把动画压成 1ms，
    这里只对演示里的 DwInput 光标恢复闪烁，不影响站点其它动画 */
 @media (prefers-reduced-motion: reduce) {
