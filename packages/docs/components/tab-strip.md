@@ -49,6 +49,8 @@ const active = ref('world')
 
 ::: tip
 `v-model` 绑定的是页签的 `value`，同一条栏内必须唯一；不写 `value` 时自动用**自己的顺序索引**作为 key（与 `DwTabButton` 一致）。不传 `v-model` 时默认选中第一项。
+
+`value` 重复时只有第一个能选中，控制台会给出警告；`v-model` 指向一个不存在的 key 时会回落到第一个可用页签。
 :::
 
 ## 页签宽度
@@ -80,6 +82,8 @@ const active = ref('world')
 页签带 `min-width: max-content` 且文字 `white-space: nowrap`：`size` 小于文字实际宽度时按文字宽度显示，不会被压缩或换行。此时各页签宽度可能不一致，描边线的断口按**实际渲染位置**测量（不是按「索引 × 等宽」推算），所以依然对齐。
 
 `'default'` 的测量时机：挂载、页签增删、页签文字变化、选中项变化、`size` 变化、窗口缩放、字体加载完成。测量结果没变化时会直接跳过，不会反复触发重排。
+
+页签行按固定宽度居中排布，`.dw-tab-strip` 设置了 `overflow: hidden`：页签总宽（页签数 × 单宽 + 间隙）超过容器时不会收缩、也不会横向滚动，超出部分会被直接裁切。窄屏下建议减小 `size` 或减少页签数量。
 :::
 
 ## 底色
@@ -201,7 +205,7 @@ const active = ref('world')
 
 `DwTabStripGroup` 独立使用时也接受 `disabled`；放在 `DwTabStrip` 内则不传即继承父级。
 
-单个页签也可以禁用：给 `DwTabStripButton` 加 `disabled`，它不响应点击与 hover、不参与键盘导航，也不会成为选中项。
+单个页签也可以禁用：给 `DwTabStripButton` 加 `disabled`，它不响应点击与 hover、不参与键盘导航，也不会成为选中项。若 `v-model` 指向的页签被单独禁用，选中态会回落到第一个可用页签，描边线也不会为它挖洞。
 :::
 
 ## 单独使用 DwTabStripGroup

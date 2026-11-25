@@ -17,6 +17,7 @@ import ButtonSound from './demos/ButtonSound.vue'
 import InputBasic from './demos/InputBasic.vue'
 import TooltipBasic from './demos/TooltipBasic.vue'
 import TabsBasic from './demos/TabsBasic.vue'
+import TabsType from './demos/TabsType.vue'
 import TabsActiveEffect from './demos/TabsActiveEffect.vue'
 import TabsSize from './demos/TabsSize.vue'
 import TabsWidthMode from './demos/TabsWidthMode.vue'
@@ -48,6 +49,7 @@ export default {
     app.component('input-demos-basic', InputBasic)
     app.component('tooltip-demos-basic', TooltipBasic)
     app.component('tabs-demos-basic', TabsBasic)
+    app.component('tabs-demos-type', TabsType)
     app.component('tabs-demos-active-effect', TabsActiveEffect)
     app.component('tabs-demos-size', TabsSize)
     app.component('tabs-demos-width-mode', TabsWidthMode)

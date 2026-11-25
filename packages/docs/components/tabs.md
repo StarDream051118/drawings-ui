@@ -124,6 +124,31 @@ const active = ref('home')
 ```
 :::
 
+## 类型
+
+`type` 与 Button 的三种类型一致，设置在整条栏上；单个 `DwTabButton` 也可以覆盖自己的 `type`。
+
+<tabs-demos-type />
+
+```vue
+<template>
+  <DwTabs v-model="active">
+    <DwTabButton value="a">默认</DwTabButton>
+    <DwTabButton value="b">标签</DwTabButton>
+  </DwTabs>
+
+  <DwTabs v-model="primaryActive" type="primary">
+    <DwTabButton value="a">主要</DwTabButton>
+    <DwTabButton value="b">标签</DwTabButton>
+  </DwTabs>
+
+  <DwTabs v-model="dangerActive" type="danger">
+    <DwTabButton value="a">危险</DwTabButton>
+    <DwTabButton value="b">标签</DwTabButton>
+  </DwTabs>
+</template>
+```
+
 ## 标签尺寸
 
 `size` 只在 `DwTabs` 上设置，作用于整条标签栏里的每个标签，`DwTabButton` 不提供 `size`。取值与 Button 一致：字符串走已有的尺寸 token，数字表示**每个标签的宽度多少 px**。
@@ -158,6 +183,10 @@ const active = ref('home')
 ```
 
 整条栏的宽度 = 标签数 × 单标签宽度 + 标签之间的间距（`--dw-spacing-base`）。
+
+::: warning
+标签总宽超过容器时，标签不会收缩或换行，`.dw-tabs` 的 `overflow: hidden` 会直接裁掉超出部分，也没有横向滚动。窄屏下可以减小 `size`、使用 `fill` 让标签均分，或在外面套一个可横向滚动的容器。
+:::
 
 ::: tip
 不同栏要各自用一个 `ref`。几条栏共用同一个 `ref` 时，点在任意一条上另外几条也会跟着变 —— 那是数据源相同，不是组件联动。
