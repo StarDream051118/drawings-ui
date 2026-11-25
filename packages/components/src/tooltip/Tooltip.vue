@@ -345,7 +345,11 @@ function onDocumentPointerDown(event: PointerEvent) {
   hide()
 }
 
-function onScroll() {
+function onScroll(event: Event) {
+  // 触发元素内部的滚动（如输入框文字过长时的横向滚动）不隐藏提示
+  const el = triggerEl.value
+  if (el && event.target instanceof Node && el.contains(event.target)) return
+
   if (visible.value || showTimer) hide()
 }
 
