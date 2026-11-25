@@ -87,7 +87,7 @@
 
 - **单一根节点**：多根节点或纯文本无法注入属性，会自动回退为 `<span class="dw-tooltip-trigger">` 包裹层，并在控制台打印一次提示。回退时传给 `DwTooltip` 的 `class` 落在这个包裹层上，内部元素需自行设置宽度。
 - **disabled 触发器**：原生 `disabled` 的按钮不派发鼠标/指针事件，提示不会显示；可在外层再包一个元素或改用未被禁用的触发器。
-- **祖先 transform**：提示框 `Teleport` 到 `body` 并使用 `position: fixed`；若祖先元素带 `transform` / `filter` / `perspective`，部分浏览器会改变 `fixed` 的参照系，导致定位偏移。
+- **body transform**：提示框 `Teleport` 到 `body` 并使用 `position: fixed`，鼠标按 `clientX/clientY`、键盘按元素右下角定位；只有 `body` 自身带 `transform` / `filter` / `perspective` 时才会改变 `fixed` 的参照系，导致定位偏移。
 - **键盘 / 触屏**：键盘依赖 `:focus-visible`，触屏需显式开启 `touch`；两者都以元素边角而非光标为锚点。
 
 ## API

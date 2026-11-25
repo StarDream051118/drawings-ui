@@ -11,7 +11,7 @@ hero:
       link: /guide/getting-started
     - theme: alt
       text: 组件总览
-      link: /components/button
+      link: /components/
 
 features:
   - title: TypeScript
