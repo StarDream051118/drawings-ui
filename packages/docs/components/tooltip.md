@@ -1,12 +1,16 @@
 # Tooltip 悬浮提示
 
-替代原生 `title` 的悬浮提示：黑底、无边框、无圆角的素框，显示在鼠标光标的对角方向并持续跟随。
+替代原生 `title` 的悬浮提示：Minecraft 风格的深色提示框，带 2px 像素描边，显示在鼠标光标的对角方向并持续跟随。
 
 触发方式：
 
 - **鼠标**：光标进入触发元素内显示，离开立即隐藏，提示持续跟随光标。
 - **键盘**：`Tab` 聚焦触发元素时显示（仅 `:focus-visible`，鼠标点击导致的聚焦不弹出），没有光标时以元素右下角为锚点，失焦隐藏。
 - **触屏**：默认不触发；开启 `touch` 后长按 `touch-delay` 毫秒显示，点击提示外区域关闭。
+
+## 默认外观
+
+提示框是素框：深紫黑底（`--dw-color-tooltip-bg`，默认 `#0F000F`）、无圆角、不使用 `border`。四周 2px 的像素描边由 `box-shadow`（`--dw-tooltip-shadow`）绘制，颜色取 `--dw-color-tooltip-shadow`（默认 `#23015A`）；文字带 `--dw-text-color-shadow` 压印阴影。背景与描边都可以通过 Token 覆盖。
 
 ## 基础用法
 
@@ -35,7 +39,7 @@
 | `top-right` | 光标右上 |
 | `top-left` | 光标左上 |
 
-- 鼠标在触发元素内移动时提示**持续跟随**，与光标保持 `--dw-tooltip-gap`（默认 12px）的距离，不遮挡光标。
+- 鼠标在触发元素内移动时提示**持续跟随**，与光标保持 `--dw-tooltip-gap`（默认 25px）的距离，不遮挡光标。
 - 越界时**按轴翻转**，另一轴保持配置方向：
 
 | 配置 | 越界 | 结果 |
@@ -64,6 +68,8 @@
 - 鼠标离开触发元素立即隐藏；`Escape` 也可立即隐藏。
 - 窗口滚动、失焦时自动隐藏，避免提示停留在错误位置。
 - `disabled` 可单独关闭某条提示。
+- `content` 为空且没有 `content` 插槽时不显示提示。
+- 设置了 `show-delay` 时，延迟期间移出触发元素会取消本次显示。
 
 ## 无包裹渲染
 
@@ -113,7 +119,11 @@
 
 | Token | 默认值 | 说明 |
 |-------|--------|------|
-| `--dw-color-tooltip-bg` | `#000000` | 提示框背景 |
+| `--dw-color-tooltip-bg` | `#0F000F` | 提示框背景 |
 | `--dw-color-tooltip-text` | `#FFFFFF` | 提示文字颜色 |
-| `--dw-tooltip-gap` | `12px` | 与光标的间距 |
+| `--dw-color-tooltip-shadow` | `#23015A` | 像素描边颜色 |
+| `--dw-tooltip-inset` | `2px` | 描边厚度 / 内缩尺寸 |
+| `--dw-tooltip-border` | `calc(var(--dw-tooltip-inset) * -1)` | 外侧描边偏移，一般不用改 |
+| `--dw-tooltip-shadow` | 组合好的 `box-shadow` | 完整描边阴影，可整体替换 |
+| `--dw-tooltip-gap` | `25px` | 与光标的间距 |
 | `--dw-tooltip-z-index` | `9999` | 层级 |

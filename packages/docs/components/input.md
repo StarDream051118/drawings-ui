@@ -70,6 +70,8 @@ const value = ref('新的世界')
 | `--dw-color-input-bg` | `#000000` | 输入框背景色 |
 | `--dw-color-input-border` | `#A0A0A0` | 默认描边色（hover / focus 用 `--dw-color-border-active`） |
 | `--dw-input-height` | `46px` | 输入框高度 |
+| `--dw-color-input-placeholder-text` | `#545454` | 占位符文字颜色 |
+| `--dw-color-input-placeholder-shadow-text` | `1px 1px #141414` | 占位符压印阴影 |
 | `--dw-color-selection-bg` | `#FFFFFF` | 选中文字的背景色 |
 | `--dw-color-selection-text` | `#201FFF` | 选中文字的颜色 |
 | `--dw-text-selection-shadow` | `1px 1px #C7C7FF` | 选中文字的压印阴影 |

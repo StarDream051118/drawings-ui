@@ -25,8 +25,9 @@ import '@star-dream051118/drawings-ui/tokens.css'
 | `--dw-color-border` | `#000000` | 边框色 |
 | `--dw-color-border-active` | `#FFFFFF` | hover / 选中描边色 |
 | `--dw-color-hover-border` | `var(--dw-color-border-active)` | 旧名，保留兼容 |
-| `--dw-text-color-shadow` | `#3F3F3F` | 文字阴影色 |
-| `--dw-text-disabled-color-shadow` | `#282828` | 禁用阴影色 |
+| `--dw-text-color-shadow` | `1px 1px #3F3F3F` | 文字压印阴影 |
+| `--dw-text-disabled-color-shadow` | `1px 1px #282828` | 禁用文字压印阴影 |
+| `--dw-shadow-base` | `inset -3px 0 #00000038, inset 0 -6px #00000038, inset 3px 3px #FFFFFF66` | 按钮立体阴影 |
 
 ### Primary 按钮
 
@@ -48,7 +49,7 @@ import '@star-dream051118/drawings-ui/tokens.css'
 
 | 变量名 | 默认值 | 说明 |
 |--------|--------|------|
-| `--dw-spacing-base` | `3px` | 基础间距（Tab 之间的缝隙） |
+| `--dw-spacing-base` | `3px` | 基础间距（Tabs 标签缝隙、Tooltip 纵向内边距等） |
 | `--dw-spacing-xs` | `4px` | 超小间距 |
 | `--dw-spacing-sm` | `8px` | 小间距 |
 | `--dw-spacing-md` | `12px` | 中间距 |
@@ -105,14 +106,20 @@ import '@star-dream051118/drawings-ui/tokens.css'
 | `--dw-color-input-bg` | `#000000` | 输入框背景色 |
 | `--dw-color-input-border` | `#A0A0A0` | 默认描边色 |
 | `--dw-input-height` | `46px` | 输入框高度 |
+| `--dw-color-input-placeholder-text` | `#545454` | 占位符文字颜色 |
+| `--dw-color-input-placeholder-shadow-text` | `1px 1px #141414` | 占位符压印阴影 |
 
 ## Tooltip 悬浮提示
 
 | 变量名 | 默认值 | 说明 |
 |--------|--------|------|
-| `--dw-color-tooltip-bg` | `#000000` | 提示框背景 |
+| `--dw-color-tooltip-bg` | `#0F000F` | 提示框背景 |
 | `--dw-color-tooltip-text` | `#FFFFFF` | 提示文字颜色 |
-| `--dw-tooltip-gap` | `12px` | 与光标的间距 |
+| `--dw-color-tooltip-shadow` | `#23015A` | 像素描边颜色 |
+| `--dw-tooltip-inset` | `2px` | 描边厚度 / 内缩尺寸 |
+| `--dw-tooltip-border` | `calc(var(--dw-tooltip-inset) * -1)` | 外侧描边偏移，一般不用改 |
+| `--dw-tooltip-shadow` | 组合好的 `box-shadow` | 完整描边阴影，可整体替换 |
+| `--dw-tooltip-gap` | `25px` | 与光标的间距 |
 | `--dw-tooltip-z-index` | `9999` | 层级 |
 
 ## 使用示例

@@ -8,7 +8,7 @@
   width: fit-content;
 }
 
-// 素框：黑底、无边框、无圆角、无阴影
+// 素框：深色底、无圆角、不用 border；四周 2px 像素描边由 box-shadow 绘制
 .dw-tooltip {
   position: fixed;
   z-index: var(--dw-tooltip-z-index, 9999);
