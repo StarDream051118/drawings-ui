@@ -4,6 +4,7 @@ import { DwInput } from '@star-dream051118/drawings-ui'
 
 const value = ref('新的世界')
 const slowValue = ref('慢速闪烁')
+const placeholderValue = ref('')
 </script>
 
 <template>
@@ -13,6 +14,9 @@ const slowValue = ref('慢速闪烁')
 
     <div class="input-demo-title input-demo-title--gap">慢速闪烁（1.5 秒）</div>
     <DwInput v-model="slowValue" :blink-duration="1.5" class="input-demo-field" />
+
+    <div class="input-demo-title input-demo-title--gap">占位符</div>
+    <DwInput v-model="placeholderValue" class="input-demo-field" placeholder="请输入世界名称" />
   </div>
 </template>
 

@@ -44,6 +44,16 @@ const value = ref('新的世界')
 </template>
 ```
 
+## 占位符
+
+`placeholder` 与其它原生属性一样通过 attrs 透传到内部 `<input>`，组件只负责配色：文字取 `--dw-color-input-placeholder-text`（默认 `#545454`），压印阴影取 `--dw-color-input-placeholder-shadow-text`（默认 `1px 1px #141414`）；字体、字号仍沿用输入框本身。
+
+```vue
+<template>
+  <DwInput v-model="value" placeholder="请输入世界名称" />
+</template>
+```
+
 ## API
 
 ### DwInput Props
