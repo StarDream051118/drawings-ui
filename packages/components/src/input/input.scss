@@ -31,6 +31,11 @@
     border-color: var(--dw-color-border-active);
   }
 
+  &::placeholder {
+    color: var(--dw-color-input-placeholder-text);
+    text-shadow: var(--dw-color-input-placeholder-shadow-text);
+  }
+
   &::selection {
     background-color: var(--dw-color-selection-bg);
     color: var(--dw-color-selection-text);

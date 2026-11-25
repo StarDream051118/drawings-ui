@@ -3,6 +3,7 @@
 .dw-tabs {
   display: flex;
   flex-direction: row;
+  overflow: hidden;
   align-items: stretch;
   gap: var(--dw-spacing-base);
   max-width: 100%;

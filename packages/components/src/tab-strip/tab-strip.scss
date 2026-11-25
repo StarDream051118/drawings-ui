@@ -5,6 +5,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   width: 100%;
   // 页脚底部高光需要留高，背景层才能盖满
   padding-bottom: var(--dw-tabstrip-border-width, 3px);
