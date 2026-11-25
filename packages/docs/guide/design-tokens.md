@@ -89,7 +89,7 @@ import '@star-dream051118/drawings-ui/tokens.css'
 
 | 变量名 | 默认值 | 说明 |
 |--------|--------|------|
-| `--dw-font-family` | `'mc-font', -apple-system, ...` | 全局字体 |
+| `--dw-font-family` | `'mc-font', -apple-system, BlinkMacSystemFont, sans-serif` | 全局字体 |
 
 ## 文本选区
 
