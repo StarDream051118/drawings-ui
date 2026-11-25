@@ -56,6 +56,8 @@ let touchShown = false
 // 指针聚焦标记：鼠标/触摸按下紧随其后的 focusin 不应把锚点切到元素右下角
 let pointerFocus = false
 let pointerFocusTimer = 0
+// 锚点来源：pointer 跟随光标，element 用键盘聚焦元素当前的右下角
+let anchorMode: 'pointer' | 'element' = 'pointer'
 const touchStart = { x: 0, y: 0 }
 let resizeObserver: ResizeObserver | null = null
 
@@ -87,8 +89,12 @@ function place() {
   const vw = document.documentElement.clientWidth
   const vh = document.documentElement.clientHeight
 
-  // 只有鼠标光标一个触发来源，锚点始终是光标位置
-  const anchor = cursor
+  // 鼠标触发跟随光标；键盘聚焦按触发元素**当前**的右下角，窗口缩放后重新取
+  let anchor = cursor
+  if (anchorMode === 'element' && triggerEl.value) {
+    const triggerRect = triggerEl.value.getBoundingClientRect()
+    anchor = { x: triggerRect.right, y: triggerRect.bottom }
+  }
 
   let [vertical, horizontal] = props.placement.split('-') as [VerticalSide, HorizontalSide]
 
@@ -202,6 +208,7 @@ function scheduleHide() {
 function onPointerEnter(event: PointerEvent) {
   if (event.pointerType === 'touch') return
   rememberTrigger(event)
+  anchorMode = 'pointer'
   cursor.x = event.clientX
   cursor.y = event.clientY
   scheduleShow()
@@ -212,6 +219,7 @@ function onPointerMove(event: PointerEvent) {
     onTouchMove(event)
     return
   }
+  anchorMode = 'pointer'
   cursor.x = event.clientX
   cursor.y = event.clientY
   if (!visible.value || frame) return
@@ -247,7 +255,8 @@ function onFocusIn(event: FocusEvent) {
   }
   if (!focusVisible) return
 
-  // 没有鼠标光标时，以触发元素右下角作为锚点
+  // 键盘聚焦：以触发元素右下角作为锚点
+  anchorMode = 'element'
   const rect = target.getBoundingClientRect()
   cursor.x = rect.right
   cursor.y = rect.bottom
@@ -269,6 +278,7 @@ function onPointerDown(event: PointerEvent) {
   clearTouchTimer()
   touchTimer = window.setTimeout(() => {
     touchTimer = 0
+    anchorMode = 'pointer'
     cursor.x = touchStart.x
     cursor.y = touchStart.y
     open()
@@ -308,7 +318,20 @@ function onScroll() {
 }
 
 function onResize() {
-  if (visible.value) place()
+  if (!visible.value) return
+
+  // 指针锚点：窗口尺寸变化会重排布局，光标可能已不在触发元素上。
+  // 此时隐藏，避免提示停在旧坐标；鼠标再次移入会重新显示
+  if (anchorMode === 'pointer') {
+    const el = triggerEl.value
+    const hit = el ? document.elementFromPoint(cursor.x, cursor.y) : null
+    if (el && (!hit || !el.contains(hit))) {
+      hide()
+      return
+    }
+  }
+
+  place()
 }
 
 function onKeydown(event: KeyboardEvent) {
