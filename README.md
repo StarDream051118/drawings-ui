@@ -68,6 +68,14 @@ import '@star-dream051118/drawings-ui/fonts.css'
 
 不引入则使用系统默认字体。
 
+### 设计 Token
+
+`style.css` 已包含全部 Token，无需额外引入；只需要变量、不引入组件样式时，单独引入：
+
+```ts
+import '@star-dream051118/drawings-ui/tokens.css'
+```
+
 ### 组件命名
 
 所有组件统一使用 `Dw` 前缀，避免与项目中已有组件重名：
@@ -75,7 +83,10 @@ import '@star-dream051118/drawings-ui/fonts.css'
 | 组件 | 标签名 |
 |------|--------|
 | Button | `<DwButton>` |
+| Input | `<DwInput>` |
+| Tooltip | `<DwTooltip>` |
 | Tabs | `<DwTabs>` + `<DwTabButton>` |
+| TabStrip | `<DwTabStrip>` + `<DwTabStripGroup>` + `<DwTabStripButton>` + `<DwTabStripContent>` + `<DwTabStripFooter>` |
 
 ### 音效
 
