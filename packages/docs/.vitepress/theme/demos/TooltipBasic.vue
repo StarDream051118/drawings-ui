@@ -19,6 +19,9 @@ const name = ref('新的世界')
         支持<strong>富文本</strong>的提示
       </template>
     </DwTooltip>
+    <DwTooltip content="触屏设备长按 500ms 显示" touch>
+      <DwButton>长按（触屏）</DwButton>
+    </DwTooltip>
     <DwTooltip content="世界名称：修改后回车确认">
       <DwInput v-model="name" class="tooltip-demo-input" />
     </DwTooltip>
