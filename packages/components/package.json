@@ -1,6 +1,25 @@
 {
   "name": "@star-dream051118/drawings-ui",
   "version": "0.1.0",
+  "description": "Minecraft Java 风格的 Vue 3 组件库",
+  "keywords": [
+    "vue",
+    "vue3",
+    "ui",
+    "component-library",
+    "minecraft",
+    "pixel",
+    "typescript",
+    "scss",
+    "tooltip",
+    "tabs"
+  ],
+  "homepage": "https://stardream051118.github.io/drawings-ui/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StarDream051118/drawings-ui.git",
+    "directory": "packages/components"
+  },
   "license": "MIT",
   "type": "module",
   "main": "./dist/drawings-ui.cjs",
@@ -21,11 +40,15 @@
   "files": [
     "dist"
   ],
+   "sideEffects": [
+    "**/*.css"
+  ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "vite build && sass src/styles/css-vars.scss dist/tokens.css --no-source-map && sass src/fonts.scss dist/fonts.css --no-source-map && node -e \"require('fs').copyFileSync('src/fonts/mc_font.woff2','dist/mc_font.woff2')\""
+    "build": "vite build && sass src/styles/css-vars.scss dist/tokens.css --no-source-map && sass src/fonts.scss dist/fonts.css --no-source-map && node -e \"require('fs').copyFileSync('src/fonts/mc_font.woff2','dist/mc_font.woff2')\"",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "vue": "^3.4.0"
