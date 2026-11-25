@@ -119,7 +119,7 @@ function toggleCommands() {
           <div class="tabstrip-demo-frame">
             <div class="tabstrip-demo-content">
               <div class="world-title">世界名称</div>
-              <DwTooltip class="demo-tooltip">
+              <DwTooltip>
                 <template #content>
                   存档文件夹：<span style="font-style: italic;">{{ worldName }}</span>
                 </template>
