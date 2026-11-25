@@ -53,6 +53,9 @@ let hideTimer = 0
 let touchTimer = 0
 let frame = 0
 let touchShown = false
+// 指针聚焦标记：鼠标/触摸按下紧随其后的 focusin 不应把锚点切到元素右下角
+let pointerFocus = false
+let pointerFocusTimer = 0
 const touchStart = { x: 0, y: 0 }
 let resizeObserver: ResizeObserver | null = null
 
@@ -150,6 +153,16 @@ function clearTouchTimer() {
   touchTimer = 0
 }
 
+function markPointerFocus() {
+  pointerFocus = true
+  clearTimeout(pointerFocusTimer)
+  // focusin 在 pointerdown 的默认行为里同步派发，下一轮任务再复位
+  pointerFocusTimer = window.setTimeout(() => {
+    pointerFocus = false
+    pointerFocusTimer = 0
+  }, 0)
+}
+
 function scheduleShow() {
   clearTimeout(hideTimer)
   hideTimer = 0
@@ -221,6 +234,10 @@ function onFocusIn(event: FocusEvent) {
   if (!target) return
   rememberTrigger(event)
 
+  // 指针聚焦不切换锚点：文本输入框在 Chrome 中鼠标点击也会匹配 :focus-visible，
+  // 不排除的话提示会从光标位置跳到元素右下角
+  if (pointerFocus) return
+
   // 只响应键盘焦点：鼠标/触摸点击导致的聚焦不额外弹出提示
   let focusVisible = true
   try {
@@ -242,6 +259,7 @@ function onFocusOut() {
 }
 
 function onPointerDown(event: PointerEvent) {
+  markPointerFocus()
   if (event.pointerType !== 'touch' || !props.touch) return
   if (props.disabled || !hasContent()) return
   rememberTrigger(event)
@@ -347,6 +365,7 @@ onBeforeUnmount(() => {
 
   clearTimeout(showTimer)
   clearTimeout(hideTimer)
+  clearTimeout(pointerFocusTimer)
   clearTouchTimer()
   if (frame) cancelAnimationFrame(frame)
   resizeObserver?.disconnect()
