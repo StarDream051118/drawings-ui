@@ -53,9 +53,8 @@ let hideTimer = 0
 let touchTimer = 0
 let frame = 0
 let touchShown = false
-// 指针聚焦标记：鼠标/触摸按下紧随其后的 focusin 不应把锚点切到元素右下角
-let pointerFocus = false
-let pointerFocusTimer = 0
+// 只有键盘 Tab 导航引发的聚焦才使用元素锚点；指针聚焦、窗口恢复聚焦都忽略
+let keyboardFocus = false
 // 锚点来源：pointer 跟随光标，element 用键盘聚焦元素当前的右下角
 let anchorMode: 'pointer' | 'element' = 'pointer'
 const touchStart = { x: 0, y: 0 }
@@ -159,16 +158,6 @@ function clearTouchTimer() {
   touchTimer = 0
 }
 
-function markPointerFocus() {
-  pointerFocus = true
-  clearTimeout(pointerFocusTimer)
-  // focusin 在 pointerdown 的默认行为里同步派发，下一轮任务再复位
-  pointerFocusTimer = window.setTimeout(() => {
-    pointerFocus = false
-    pointerFocusTimer = 0
-  }, 0)
-}
-
 function scheduleShow() {
   clearTimeout(hideTimer)
   hideTimer = 0
@@ -208,6 +197,7 @@ function scheduleHide() {
 function onPointerEnter(event: PointerEvent) {
   if (event.pointerType === 'touch') return
   rememberTrigger(event)
+  keyboardFocus = false
   anchorMode = 'pointer'
   cursor.x = event.clientX
   cursor.y = event.clientY
@@ -219,6 +209,7 @@ function onPointerMove(event: PointerEvent) {
     onTouchMove(event)
     return
   }
+  keyboardFocus = false
   anchorMode = 'pointer'
   cursor.x = event.clientX
   cursor.y = event.clientY
@@ -242,9 +233,9 @@ function onFocusIn(event: FocusEvent) {
   if (!target) return
   rememberTrigger(event)
 
-  // 指针聚焦不切换锚点：文本输入框在 Chrome 中鼠标点击也会匹配 :focus-visible，
-  // 不排除的话提示会从光标位置跳到元素右下角
-  if (pointerFocus) return
+  // 指针聚焦、窗口恢复聚焦都不切换锚点：文本输入框在 Chrome 中即使鼠标聚焦
+  // 也会匹配 :focus-visible，不区分来源会让提示跳到元素右下角
+  if (!keyboardFocus) return
 
   // 只响应键盘焦点：鼠标/触摸点击导致的聚焦不额外弹出提示
   let focusVisible = true
@@ -268,7 +259,7 @@ function onFocusOut() {
 }
 
 function onPointerDown(event: PointerEvent) {
-  markPointerFocus()
+  keyboardFocus = false
   if (event.pointerType !== 'touch' || !props.touch) return
   if (props.disabled || !hasContent()) return
   rememberTrigger(event)
@@ -318,24 +309,21 @@ function onScroll() {
 }
 
 function onResize() {
-  if (!visible.value) return
-
-  // 指针锚点：窗口尺寸变化会重排布局，光标可能已不在触发元素上。
-  // 此时隐藏，避免提示停在旧坐标；鼠标再次移入会重新显示
-  if (anchorMode === 'pointer') {
-    const el = triggerEl.value
-    const hit = el ? document.elementFromPoint(cursor.x, cursor.y) : null
-    if (el && (!hit || !el.contains(hit))) {
-      hide()
-      return
-    }
-  }
-
-  place()
+  // 窗口尺寸变化会重排布局，屏幕坐标和元素位置都可能失效；
+  // 直接隐藏，等鼠标再次进入或重新聚焦后再显示，避免停在旧位置
+  if (visible.value || showTimer) hide()
 }
 
 function onKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape') hide()
+  // 只有 Tab 导航才算键盘聚焦，窗口恢复等被动 focus 不参与
+  if (event.key === 'Tab') keyboardFocus = true
+}
+
+function onWindowBlur() {
+  hide()
+  // 窗口失焦后再回来时浏览器可能补发 focusin，不能当成键盘导航
+  keyboardFocus = false
 }
 
 function observeSize() {
@@ -376,7 +364,7 @@ onMounted(() => {
   window.addEventListener('keydown', onKeydown)
   window.addEventListener('scroll', onScroll, true)
   window.addEventListener('resize', onResize)
-  window.addEventListener('blur', hide)
+  window.addEventListener('blur', onWindowBlur)
 })
 
 onBeforeUnmount(() => {
@@ -384,11 +372,10 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
   window.removeEventListener('scroll', onScroll, true)
   window.removeEventListener('resize', onResize)
-  window.removeEventListener('blur', hide)
+  window.removeEventListener('blur', onWindowBlur)
 
   clearTimeout(showTimer)
   clearTimeout(hideTimer)
-  clearTimeout(pointerFocusTimer)
   clearTouchTimer()
   if (frame) cancelAnimationFrame(frame)
   resizeObserver?.disconnect()
