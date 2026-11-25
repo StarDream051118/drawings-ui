@@ -13,6 +13,8 @@ type HorizontalSide = 'left' | 'right'
 interface Props {
   /** 提示文字，支持 \n 换行；有 content 插槽时以插槽为准 */
   content?: string
+  /** 提示文字最大字符数；0 或负数不限制，超出时截断并追加 … */
+  maxLength?: number
   /** 优先方位，越界时按轴翻转到光标另一侧 */
   placement?: TooltipPlacement
   /** 显示延迟（ms） */
@@ -29,6 +31,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   content: '',
+  maxLength: 0,
   placement: 'bottom-right',
   showDelay: 0,
   hideDelay: 0,
@@ -69,6 +72,21 @@ const tooltipStyle = computed<CSSProperties>(() => ({
 function hasContent() {
   return Boolean(props.content) || Boolean(slots.content)
 }
+
+// 只截断 content prop；content 插槽是富文本，不能按字符切
+const displayContent = computed(() => {
+  const text = props.content
+  const limit = Math.floor(Number(props.maxLength))
+  if (!text || !Number.isFinite(limit) || limit <= 0) return text
+
+  // 按 Unicode 码点计数，中文 / emoji 各算 1 个
+  const chars = Array.from(text)
+  if (chars.length <= limit) return text
+
+  return `${chars.slice(0, limit).join('').replace(/\s+$/, '')}…`
+})
+
+const truncated = computed(() => displayContent.value !== props.content)
 
 function readGap() {
   const tip = tooltipEl.value
@@ -405,9 +423,10 @@ onBeforeUnmount(() => {
       ref="tooltipEl"
       class="dw-tooltip"
       role="tooltip"
+      :aria-label="truncated ? content : undefined"
       :style="tooltipStyle"
     >
-      <slot name="content">{{ content }}</slot>
+      <slot name="content">{{ displayContent }}</slot>
     </div>
   </Teleport>
 </template>

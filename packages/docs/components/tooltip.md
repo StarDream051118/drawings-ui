@@ -63,6 +63,20 @@
 </DwTooltip>
 ```
 
+## 最大字符数
+
+`max-length` 限制 `content` 文字的最大字符数，超出时截断并追加 `…`；`0`（默认）不限制。
+
+```vue
+<DwTooltip content="这是一段很长很长的提示文字，用于演示最大字符数截断" :max-length="12">
+  <DwButton>截断到 12 个字符</DwButton>
+</DwTooltip>
+```
+
+::: tip
+按 Unicode 码点计数，中文与 emoji 各算 1 个；只作用于 `content` prop，`content` 插槽（富文本）不受影响。截断后仍会通过 `aria-label` 保留完整文字给读屏软件。
+:::
+
 ## 隐藏与禁用
 
 - 鼠标离开触发元素立即隐藏；`Escape` 也可立即隐藏。
@@ -97,6 +111,7 @@
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | `content` | 提示文字，支持 `\n` 换行；有 `content` 插槽时以插槽为准 | `string` | `''` |
+| `max-length` | 提示文字最大字符数；`0` 或负数不限制，超出追加 `…` | `number` | `0` |
 | `placement` | 优先方位 | `'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'` | `'bottom-right'` |
 | `show-delay` | 显示延迟（ms） | `number` | `0` |
 | `hide-delay` | 隐藏延迟（ms） | `number` | `0` |
