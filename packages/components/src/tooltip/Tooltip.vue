@@ -64,9 +64,9 @@ function getTriggerChild() {
 
 function readGap() {
   const tip = tooltipEl.value
-  if (!tip) return 12
+  if (!tip) return 25
   const gap = Number.parseFloat(getComputedStyle(tip).getPropertyValue('--dw-tooltip-gap'))
-  return Number.isFinite(gap) ? gap : 12
+  return Number.isFinite(gap) ? gap : 25
 }
 
 function place() {
@@ -77,8 +77,8 @@ function place() {
   const width = rect.width
   const height = rect.height
   const gap = readGap()
-  const vw = window.innerWidth
-  const vh = window.innerHeight
+  const vw = document.documentElement.clientWidth
+  const vh = document.documentElement.clientHeight
 
   // 只有鼠标光标一个触发来源，锚点始终是光标位置
   const anchor = cursor

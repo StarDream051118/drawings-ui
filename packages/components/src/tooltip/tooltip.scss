@@ -12,7 +12,7 @@
 .dw-tooltip {
   position: fixed;
   z-index: var(--dw-tooltip-z-index, 9999);
-  padding: var(--dw-spacing-base) var(--dw-spacing-base);
+  padding: var(--dw-spacing-base) var(--dw-spacing-xs);
   border: 0;
   border-radius: 0;
   background: var(--dw-color-tooltip-bg);
